@@ -23,6 +23,37 @@ class Activity {
   Activity(this.img, this.title, this.description, this.lifepoints) {
     _activityID = new UniqueKey();
   }
+  // "winsorizes" lifepoints
+  int getLifePointsCategory() {
+    if (lifepoints < -2) {
+      return -3;
+    } else if (lifepoints < -2) {
+      return 3;
+    } else {
+      return lifepoints;
+    }
+  }
+  Color getLifePointsColor()
+  {
+    switch(getLifePointsCategory())
+    { 
+      case -3:
+        return Colors.red[300];
+      case -2:
+        return Colors.red[200];
+      case -1:
+        return Colors.red[100];
+      case 0:
+        return Colors.white;
+      case 1:
+        return Colors.green[100];
+      case 2:
+        return Colors.green[200];
+      case 3:
+        return Colors.green[300];
+      break; // might be redundant
+    }  
+  }
 }
 
 class MyApp extends StatefulWidget {
@@ -32,25 +63,29 @@ class MyApp extends StatefulWidget {
 
 class MyAppState extends State<MyApp> {
   List<Activity> _activities = List<Activity>();
+  List<Activity> _selectedActivities = List<Activity>();
 
   @override
   Widget build(BuildContext context) {
-    // will split all this, doesn't need to happen every time.
+    // this part obviously doesn't go here, done every build
     // will come from db anyhow...
     _activities.add(Activity(Image.asset('assets/images/yoga.jpg'), "Yoga!",
         "this is yoga description", 2));
     _activities.add(Activity(Image.asset('assets/images/work.jpg'), "work...!",
         "this is a description for work", -1));
     _activities.add(Activity(Image.asset('assets/images/write.jpg'),
-        "write...!", "this is a description for write", -1));
+        "write...!", "this is a description for write", -6));
     _activities.add(Activity(Image.asset('assets/images/tv.jpg'), "tv...!",
         "this is a description for tv", 0));
     _activities.add(Activity(Image.asset('assets/images/eat.jpg'), "eat...!",
-        "this is a description for eat", 0));
+        "this is a description for eat", 7));
     _activities.add(Activity(Image.asset('assets/images/teach.jpg'),
         "teach...!", "this is a description for teach", -1));
     _activities.add(Activity(Image.asset('assets/images/chores.jpg'),
         "chores...!", "this is a description for chores", -2));
+
+    /// careful w.r.t destructors. also use id when actually doing. 
+    _selectedActivities.add(_activities[1]);
 
     Widget titleSection = Container(
       padding: const EdgeInsets.all(32),
@@ -65,18 +100,22 @@ class MyAppState extends State<MyApp> {
                 Container(
                   padding: const EdgeInsets.only(bottom: 8),
                   child: Text(
-                    'Performing Yoga for fun',
+                    _activities[0].title,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
+                //if(_activities[0].lifepoints > 0)
+                //{
                 Text(
                   'a restorative activity',
                   style: TextStyle(
                     color: Colors.grey[500],
                   ),
                 ),
+                //}
+                //else
               ],
             ),
           ),
@@ -94,7 +133,8 @@ class MyAppState extends State<MyApp> {
         children: [
           _buildButtonColumn(color, Icons.add_circle_outline, 'ADD'),
           _buildButtonColumn(color, Icons.remove_circle_outline, 'REMOVE'),
-          _buildButtonColumn(color, Icons.delete_forever, 'Delete'), // just let them edit...
+          _buildButtonColumn(
+              color, Icons.delete_forever, 'DELETE'), // just let them edit...
         ],
       ),
     );
@@ -102,15 +142,15 @@ class MyAppState extends State<MyApp> {
     Widget textSection = Container(
       padding: const EdgeInsets.all(32),
       child: Text(
-        'Yoga! Doing yoga restores life energy, most of the time. Take care to not overdo it. '
-        'This represents doing yoga, not teaching it. Teaching is hard! '
-        'Think about if you want gentle or difficult yoga. Default is Youtube.',
+        _activities[0].description,
         softWrap: true,
       ),
     );
+   
 
     Widget _buildViewSection() {
-      // may eventually return to just one column...
+      // may eventually return to just one column....
+      // may want a sliver app bar here ... 
       return SliverGrid(
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: 200.0,
@@ -124,21 +164,48 @@ class MyAppState extends State<MyApp> {
             // performance considerations.
             // if index >= _activities.length...
             // probably return a Card or something
-            if (index < _activities.length) {
-              // could extract below to a funcion
-              return Column(children: [
-                Expanded(
-                  child: _activities[index].img,
-                ),
-                Text(_activities[index].title),
-              ]);
-              // TODO: add onTap or similar interactivity...
-              // this is drag-to-day or long tap to edit?
-              // that's super annoying to maybe 1 colum swipe...
-            }
+            // could extract below to a funcion
+
+            //gradient was just messing around.
+            // https://stackoverflow.com/questions/51686868/gradient-text-in-flutter
+            // all colors are not final.
+            /*final Shader linearGradient = LinearGradient(
+              colors: [
+                Theme.of(context).accentColor,
+                Theme.of(context).hintColor,
+              ],
+            ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));*/
+            /* do we need to say only if index is shorter than the length of _activities.*/ 
+            return Card(
+              // weight this color
+            
+              //color: _activities[index].getLifePointsCategory() < 0 ? Colors.red : Colors.green,
+              color: _activities[index].getLifePointsColor(),
+              shadowColor: Theme.of(context).primaryColorDark,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: _activities[index].img,
+                    ),
+                    Text(_activities[index].title,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.black.withOpacity(0.6),
+                          //foreground: Paint()..shader = linearGradient,
+                        )),
+                  ]),
+            );
+
+            // TODO: add onTap or similar interactivity...
+            // this is drag-to-day or long tap to edit?
+            // that's super annoying to maybe 1 colum swipe...
+            //onTap: () {
+            //setState(() {
           },
           childCount: _activities.length,
         ),
+      ),
       );
     }
 
@@ -155,13 +222,19 @@ class MyAppState extends State<MyApp> {
       ],
     );
 
+    Widget todaySection = ListView.builder(
+      
+
+    );
+
     return MaterialApp(
       title: 'nah',
       home: Scaffold(
         appBar: AppBar(
           title: Text('nah. do less'),
         ),
-        body: viewSection,
+        body: Row(
+                children: <Widget>[viewSection, todaySection]),
       ),
     );
   }
