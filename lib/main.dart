@@ -8,7 +8,27 @@ void main() {
   runApp(MyApp());
 }
 
+// this needs to be better to pass from screen to screen...
+class Activity {
+  
+  // pls no do this way, btw, if storing in db...
+  //https://api.flutter.dev/flutter/widgets/UniqueKey-class.html
+  UniqueKey _activityID;
+  
+  // these will be set and read
+  Image img;
+  String title;
+  String description;
+  int lifepoints = 0;
+
+  Activity (this.img, this.title, this.description, this.lifepoints)
+  {
+    _activityID = new UniqueKey();
+  }
+}
+
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     Widget titleSection = Container(
@@ -39,12 +59,7 @@ class MyApp extends StatelessWidget {
               ],
             ),
           ),
-          /*3*/
-          /*Icon(
-            Icons.star,
-            color: Colors.green[500],
-          ),
-          Text('+2'),*/
+          // this is not right of course. applies to wrong 'page'..
           RestorativeValWidget(),
         ],
       ),
@@ -58,7 +73,7 @@ class MyApp extends StatelessWidget {
         children: [
           _buildButtonColumn(color, Icons.add_circle_outline, 'ADD'),
           _buildButtonColumn(color, Icons.remove_circle_outline, 'REMOVE'),
-          //_buildButtonColumn(color, Icons.edit, 'EDIT'),
+          //_buildButtonColumn(color, Icons.edit, 'EDIT'), // just let them edit...
         ],
       ),
     );
@@ -67,11 +82,93 @@ class MyApp extends StatelessWidget {
       padding: const EdgeInsets.all(32),
       child: Text(
         'Yoga! Doing yoga restores life energy, most of the time. Take care to not overdo it. '
-            'This represents doing yoga, not teaching it. Teaching is hard! '
-            'Think about if you want gentle or difficult yoga. Default is Youtube.',
+        'This represents doing yoga, not teaching it. Teaching is hard! '
+        'Think about if you want gentle or difficult yoga. Default is Youtube.',
         softWrap: true,
       ),
     );
+
+    Widget activity = Column(
+      children: <Widget>[
+        Expanded(
+          child: Image.asset('assets/images/teach.jpg'),
+        ),
+      ],
+    );
+
+    Widget viewSection = CustomScrollView(
+      primary: false,
+      slivers: <Widget>[
+        SliverPadding(
+          padding: const EdgeInsets.all(20),
+          sliver: SliverGrid.count(
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              crossAxisCount: 2,
+              // TODO: load these, probably lazy load...
+              children: <Widget>[
+                Expanded(
+                  child: Image.asset(
+                    'assets/images/yoga.jpg',
+                  ),
+                ),
+                Expanded(
+                  child: Image.asset(
+                    'assets/images/work.jpg',
+                  ),
+                ),
+                Expanded(
+                  child: Image.asset(
+                    'assets/images/write.jpg',
+                  ),
+                ),
+                Expanded(
+                  child: Image.asset(
+                    'assets/images/tarot.jpg',
+                  ),
+                ),
+                Expanded(
+                  child: Image.asset(
+                    'assets/images/walk.jpg',
+                  ),
+                ),
+                Expanded(
+                  child: Image.asset(
+                    'assets/images/teach.jpg',
+                  ),
+                ),
+                Expanded(
+                  child: Image.asset(
+                    'assets/images/sims.jpg',
+                  ),
+                ),
+                Expanded(
+                  child: Image.asset(
+                    'assets/images/learn.jpg',
+                  ),
+                ),
+                Expanded(
+                  child: Image.asset(
+                    'assets/images/eat.jpg',
+                  ),
+                ),
+                Expanded(
+                  child: Image.asset(
+                    'assets/images/chores.jpg',
+                  ),
+                ),
+                Expanded(
+                  child: Image.asset(
+                    'assets/images/workout.jpg',
+                  ),
+                ),
+                //
+                //)
+              ]),
+        ),
+      ],
+    );
+
 
     return MaterialApp(
       title: 'nah',
@@ -79,23 +176,12 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: Text('nah. do less'),
         ),
-        body: ListView(
-          children: [
-            Image.asset(
-              'assets/images/yoga.jpg',
-              width: 600,
-              height: 240,
-              fit: BoxFit.cover,
-            ),
-            titleSection,
-            buttonSection,
-            textSection,
-          ],
-        ),
+        body: viewSection,
       ),
     );
   }
 
+// builds bottom buttons on edit page..
   Column _buildButtonColumn(Color color, IconData icon, String label) {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -118,10 +204,13 @@ class MyApp extends StatelessWidget {
   }
 }
 
+// these will be heroanimation eventually
 class RestorativeValWidget extends StatefulWidget {
   @override
   _RestorativeValWidgetState createState() => _RestorativeValWidgetState();
 }
+
+//TODO: editable text...
 class _RestorativeValWidgetState extends State<RestorativeValWidget> {
   bool _isRestorative = true;
   int _restorePoints = 2;
@@ -140,20 +229,17 @@ class _RestorativeValWidgetState extends State<RestorativeValWidget> {
           ),
         ),
         SizedBox(
-          width: 18,
-          child: Container(
-            child: Text(
-              (_isRestorative ? "+" : "-") + _restorePoints.toString()
-            )
-          )
-        )
+            width: 18,
+            child: Container(
+                child: Text(
+                    (_isRestorative ? "+" : "-") + _restorePoints.toString())))
       ],
     );
   }
+
   void _toggleRestorative() {
     setState(() {
       _isRestorative = !_isRestorative;
     });
   }
-
 }
