@@ -27,16 +27,15 @@ class Activity {
   int getLifePointsCategory() {
     if (lifepoints < -2) {
       return -3;
-    } else if (lifepoints < -2) {
+    } else if (lifepoints > 2) {
       return 3;
     } else {
       return lifepoints;
     }
   }
-  Color getLifePointsColor()
-  {
-    switch(getLifePointsCategory())
-    { 
+
+  Color getLifePointsColor() {
+    switch (getLifePointsCategory()) {
       case -3:
         return Colors.red[300];
       case -2:
@@ -51,8 +50,8 @@ class Activity {
         return Colors.green[200];
       case 3:
         return Colors.green[300];
-      break; // might be redundant
-    }  
+        break; // might be redundant
+    }
   }
 }
 
@@ -84,7 +83,7 @@ class MyAppState extends State<MyApp> {
     _activities.add(Activity(Image.asset('assets/images/chores.jpg'),
         "chores...!", "this is a description for chores", -2));
 
-    /// careful w.r.t destructors. also use id when actually doing. 
+    /// careful w.r.t destructors. also use id when actually doing. can add same activity multiple times....
     _selectedActivities.add(_activities[1]);
 
     Widget titleSection = Container(
@@ -114,8 +113,6 @@ class MyAppState extends State<MyApp> {
                     color: Colors.grey[500],
                   ),
                 ),
-                //}
-                //else
               ],
             ),
           ),
@@ -146,11 +143,10 @@ class MyAppState extends State<MyApp> {
         softWrap: true,
       ),
     );
-   
 
     Widget _buildViewSection() {
       // may eventually return to just one column....
-      // may want a sliver app bar here ... 
+      // may want a sliver app bar here ... and an 'add' button
       return SliverGrid(
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: 200.0,
@@ -162,39 +158,28 @@ class MyAppState extends State<MyApp> {
           (BuildContext context, int index) {
             // load from db up front or lazy here directly?
             // performance considerations.
-            // if index >= _activities.length...
-            // probably return a Card or something
-            // could extract below to a funcion
-
-            //gradient was just messing around.
-            // https://stackoverflow.com/questions/51686868/gradient-text-in-flutter
-            // all colors are not final.
-            /*final Shader linearGradient = LinearGradient(
-              colors: [
-                Theme.of(context).accentColor,
-                Theme.of(context).hintColor,
-              ],
-            ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));*/
-            /* do we need to say only if index is shorter than the length of _activities.*/ 
+            // use ListTile instead of card....
             return Card(
               // weight this color
-            
-              //color: _activities[index].getLifePointsCategory() < 0 ? Colors.red : Colors.green,
               color: _activities[index].getLifePointsColor(),
               shadowColor: Theme.of(context).primaryColorDark,
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: _activities[index].img,
-                    ),
-                    Text(_activities[index].title,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.black.withOpacity(0.6),
-                          //foreground: Paint()..shader = linearGradient,
-                        )),
-                  ]),
+              child: InkWell(
+                splashColor: Theme.of(context).primaryColor.withAlpha(30),
+                onTap: () {},
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: _activities[index].img,
+                      ),
+                      Text(_activities[index].title,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black.withOpacity(0.6),
+                          )),
+                    ]),
+              ),
             );
 
             // TODO: add onTap or similar interactivity...
@@ -205,27 +190,40 @@ class MyAppState extends State<MyApp> {
           },
           childCount: _activities.length,
         ),
-      ),
       );
     }
 
     Widget viewSection = CustomScrollView(
       primary: false,
       slivers: <Widget>[
-        /*
-        SliverPadding(
-          padding: const EdgeInsets.all(20),
-          sliver: 
-        ),
-        */
+        SliverAppBar(
+            expandedHeight: 150.0,
+            floating: false,
+            pinned: true,
+            snap: false,
+            flexibleSpace: const FlexibleSpaceBar(
+              title: Text('Activities'),
+            ),
+            actions: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.add_circle),
+                tooltip: 'Add new',
+                onPressed: () {/* ... */},
+              ),
+            ]),
         _buildViewSection(),
       ],
     );
 
-    Widget todaySection = ListView.builder(
-      
-
-    );
+    Widget todaySection() {
+      return ListView.builder(itemBuilder: (context, i) {
+        return ListTile(
+          title: Text(
+            _selectedActivities[i].title,
+          ),
+        );
+      });
+    }
 
     return MaterialApp(
       title: 'nah',
@@ -233,8 +231,7 @@ class MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: Text('nah. do less'),
         ),
-        body: Row(
-                children: <Widget>[viewSection, todaySection]),
+        body: viewSection,
       ),
     );
   }
