@@ -80,17 +80,8 @@ class MyAppState extends State<MyApp> {
                           timeDilation = 5.0;
                           return Scaffold(
                             body: Container(
-                                //alignment: Alignment.topLeft,
-                                //padding: const EdgeInsets.all(16.0),
                                 child:
                                     DetailScreen(activity: _activities[index])),
-                            //Container(child: _activities[index].img
-                            //"'assets/images/work.jpg'",
-                            /*    onTap: () {
-                              Navigator.of(context).pop();
-                            }
-                          ),*/
-                            //),
                           );
                         }),
                       );
@@ -156,8 +147,6 @@ class MyAppState extends State<MyApp> {
         );
       });
     }
-
-    //HeroFlightShuttleBuilder()
 
     return MaterialApp(
       title: 'nah',

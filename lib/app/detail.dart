@@ -3,27 +3,24 @@ import 'package:nah/app/activity.dart';
 
 class DetailScreen extends StatelessWidget {
   final Activity activity;
-  
+
   DetailScreen({Key key, @required this.activity}) : super(key: key);
-
-
 
   @override
   Widget build(BuildContext context) {
-
     Widget fromhero = Hero(
       tag: activity.img,
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          //onTap: onTap,
+          onTap: () {
+            Navigator.of(context).pop();
+          },
           child: activity.img,
-          ),
         ),
-      );
+      ),
+    );
 
-      
- 
     Widget titleSection = Container(
       padding: const EdgeInsets.all(32),
       child: Row(
@@ -74,7 +71,6 @@ class DetailScreen extends StatelessWidget {
         ),
         body: ListView(
           children: [
-            //activity.img,
             fromhero,
             titleSection,
             buttonSection,
