@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:nah/app/activity.dart';
 import 'package:nah/app/detail.dart';
 
@@ -35,7 +36,7 @@ class MyAppState extends State<MyApp> {
 
     Widget _buildViewSection() {
       // may eventually return to just one column....
-      // may want a sliver app bar here ... and an 'add' button
+
       return SliverGrid(
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: 200.0,
@@ -52,29 +53,70 @@ class MyAppState extends State<MyApp> {
               // weight this color
               color: _activities[index].getLifePointsColor(),
               shadowColor: Theme.of(context).primaryColorDark,
-              child: InkWell(
-                splashColor: Theme.of(context).primaryColor.withAlpha(30),
-                onTap: () {},
-                onLongPress: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              DetailScreen(activity: _activities[index])));
-                },
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: _activities[index].img,
-                      ),
-                      Text(_activities[index].title,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.black.withOpacity(0.6),
-                          )),
-                    ]),
+              child: Hero(
+                tag: _activities[index].img,
+/*                flightShuttleBuilder: (
+                  BuildContext flightContext,
+                  Animation<double> animation,
+                  HeroFlightDirection flightDirection,
+                  BuildContext fromHeroContext,
+                  BuildContext toHeroContext,
+                ) {
+                  final Hero toHero = toHeroContext.widget;
+                  return RotationTransition(
+                    turns: animation,
+                    child: toHero.child,
+                  );
+                },*/
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    splashColor: Theme.of(context).primaryColor.withAlpha(30),
+                    onTap: () {},
+                    onLongPress: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                            builder: (BuildContext context) {
+                          timeDilation = 5.0;
+                          return Scaffold(
+                            body: Container(
+                                //alignment: Alignment.topLeft,
+                                //padding: const EdgeInsets.all(16.0),
+                                child:
+                                    DetailScreen(activity: _activities[index])),
+                            //Container(child: _activities[index].img
+                            //"'assets/images/work.jpg'",
+                            /*    onTap: () {
+                              Navigator.of(context).pop();
+                            }
+                          ),*/
+                            //),
+                          );
+                        }),
+                      );
+                    },
+                    /*Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                DetailScreen(activity: _activities[index])));
+                                */
+
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: _activities[index].img,
+                          ),
+                          Text(_activities[index].title,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.black.withOpacity(0.6),
+                              )),
+                        ]),
+                  ),
+                ),
               ),
             );
           },
@@ -115,12 +157,11 @@ class MyAppState extends State<MyApp> {
       });
     }
 
+    //HeroFlightShuttleBuilder()
+
     return MaterialApp(
       title: 'nah',
       home: Scaffold(
-        appBar: AppBar(
-          title: Text('nah. do less'),
-        ),
         body: viewSection,
       ),
     );

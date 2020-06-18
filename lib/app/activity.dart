@@ -42,7 +42,7 @@ class Activity {
         return Colors.green[200];
       case 3:
         return Colors.green[300];
-        break; // might be redundant
     }
+    return Colors.black;
   }
 }
