@@ -9,12 +9,14 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
+  // these are our global list of all activities and
+  // list of activities we've selected
   List<Activity> _activities = List<Activity>();
   List<Activity> _selectedActivities = List<Activity>();
 
   @override
   Widget build(BuildContext context) {
-    // this part obviously doesn't go here, done every build
+    // this part obviously doesn't go here, done every build, just testing
     // will come from db anyhow...
     _activities.add(Activity(Image.asset('assets/images/yoga.jpg'), "Yoga!",
         "this is yoga description", 2));
@@ -36,23 +38,29 @@ class MyAppState extends State<MyApp> {
 
     Widget _buildViewSection() {
       // may eventually return to just one column....
-
+      // this is a grid of slivers that will hold our activities
       return SliverGrid(
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: 200.0,
           mainAxisSpacing: 20.0,
           crossAxisSpacing: 10.0,
+          // change sizing of images here
           childAspectRatio: 2.0,
         ),
+        // this builds each individual activity
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
+            // this seems like a real bad way to do this.
+            final bool alreadyAdded =
+                _selectedActivities.contains(_activities[index].activityID);
             // load from db up front or lazy here directly?
             // performance considerations.
             // use ListTile instead of card....
             return Card(
-              // weight this color
+              // weight this color by lifepoint
               color: _activities[index].getLifePointsColor(),
               shadowColor: Theme.of(context).primaryColorDark,
+              // this enables cool animations when getting details
               child: Hero(
                 tag: _activities[index].img,
 /*                flightShuttleBuilder: (
@@ -69,10 +77,27 @@ class MyAppState extends State<MyApp> {
                   );
                 },*/
                 child: Material(
+                  // transparent enhances hero animation
                   color: Colors.transparent,
+                  // next 3 lines regarding border may go if Highlight/Selected or similar does the trick...
+                  // use callback to do this...
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Theme.of(context).primaryColor) 
+                      ),
                   child: InkWell(
                     splashColor: Theme.of(context).primaryColor.withAlpha(30),
-                    onTap: () {},
+                    onTap: () {
+                      setState(() {
+                        if (alreadyAdded) {
+                          _selectedActivities.remove(_activities[index]);
+                        } else {
+                          _selectedActivities.add(_activities[index]);
+                        }
+                        // update border, may have to put onTap on the container....
+                       // alreadyAdded ? Colors.red : null;
+                      });
+                    },
                     onLongPress: () {
                       Navigator.of(context).push(
                         MaterialPageRoute<void>(
@@ -86,6 +111,7 @@ class MyAppState extends State<MyApp> {
                         }),
                       );
                     },
+                    // this is vanilla routing..
                     /*Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -107,6 +133,7 @@ class MyAppState extends State<MyApp> {
                               )),
                         ]),
                   ),
+                ),
                 ),
               ),
             );
@@ -131,22 +158,12 @@ class MyAppState extends State<MyApp> {
               IconButton(
                 icon: const Icon(Icons.add_circle),
                 tooltip: 'Add new',
-                onPressed: () {/* ... */},
+                onPressed: () {/* TOOD: add a new item to activities */},
               ),
             ]),
         _buildViewSection(),
       ],
     );
-
-    Widget todaySection() {
-      return ListView.builder(itemBuilder: (context, i) {
-        return ListTile(
-          title: Text(
-            _selectedActivities[i].title,
-          ),
-        );
-      });
-    }
 
     return MaterialApp(
       title: 'nah',

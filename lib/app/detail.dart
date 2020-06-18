@@ -72,6 +72,8 @@ class DetailScreen extends StatelessWidget {
         body: ListView(
           children: [
             fromhero,
+            // maybe add an edit icon to the image here...
+            //trailing: Icon( 
             titleSection,
             buttonSection,
             textSection,

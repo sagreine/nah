@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 class Activity {
   // pls no do this way, btw, if storing in db...
   //https://api.flutter.dev/flutter/widgets/UniqueKey-class.html
-  UniqueKey _activityID;
+  // also
+  final UniqueKey activityID = new UniqueKey();
 
   // these will be set and read
   Image img;
@@ -13,7 +14,7 @@ class Activity {
   int lifepoints = 0;
 
   Activity(this.img, this.title, this.description, this.lifepoints) {
-    _activityID = new UniqueKey();
+    //activityID = 
   }
   // "winsorizes" lifepoints
   int getLifePointsCategory() {
