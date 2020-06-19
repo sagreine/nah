@@ -51,8 +51,8 @@ class MyAppState extends State<MyApp> {
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
             // this seems like a real bad way to do this.
-            final bool alreadyAdded =
-                _selectedActivities.contains(_activities[index].activityID);
+            
+                
             // load from db up front or lazy here directly?
             // performance considerations.
             // use ListTile instead of card....
@@ -79,63 +79,58 @@ class MyAppState extends State<MyApp> {
                 child: Material(
                   // transparent enhances hero animation
                   color: Colors.transparent,
-                  // next 3 lines regarding border may go if Highlight/Selected or similar does the trick...
-                  // use callback to do this...
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Theme.of(context).primaryColor) 
-                      ),
-                  child: InkWell(
-                    splashColor: Theme.of(context).primaryColor.withAlpha(30),
-                    onTap: () {
-                      setState(() {
-                        if (alreadyAdded) {
-                          _selectedActivities.remove(_activities[index]);
-                        } else {
-                          _selectedActivities.add(_activities[index]);
-                        }
-                        // update border, may have to put onTap on the container....
-                       // alreadyAdded ? Colors.red : null;
-                      });
-                    },
-                    onLongPress: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute<void>(
-                            builder: (BuildContext context) {
-                          timeDilation = 5.0;
-                          return Scaffold(
-                            body: Container(
-                                child:
-                                    DetailScreen(activity: _activities[index])),
-                          );
-                        }),
-                      );
-                    },
-                    // this is vanilla routing..
-                    /*Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                DetailScreen(activity: _activities[index])));
-                                */
-
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: _activities[index].img,
-                          ),
-                          Text(_activities[index].title,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.black.withOpacity(0.6),
-                              )),
-                        ]),
+                    child: InkWell(
+                      
+                      splashColor: Theme.of(context).primaryColor.withAlpha(30),
+                      onTap: () {
+                        setState(() {
+                          if (_selectedActivities.contains(_activities[index])) {
+                            _selectedActivities.remove(_activities[index]);
+                            print("removed!");
+                          } else {
+                            _selectedActivities.add(_activities[index]);
+                            print("added!");
+                          }
+                          // update border, may have to put onTap on the container....
+                          // alreadyAdded ? Colors.red : null;
+                        });
+                      },
+                      onLongPress: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute<void>(
+                              builder: (BuildContext context) {
+                            timeDilation = 2.5;
+                            return Scaffold(
+                              body: Container(
+                                  child: DetailScreen(
+                                      activity: _activities[index])),
+                            );
+                          }),
+                        );
+                      },
+                      child: Container (
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: _selectedActivities.contains(_activities[index]) ? Colors.red : Colors.green,
+                          )),
+                        //border: Colors.red,
+                        )
+                      /*child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: _activities[index].img,
+                            ),
+                            Text(_activities[index].title,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.black.withOpacity(0.6),
+                                )),
+                          ]),*/
+                    ),
                   ),
                 ),
-                ),
-              ),
             );
           },
           childCount: _activities.length,
@@ -169,6 +164,80 @@ class MyAppState extends State<MyApp> {
       title: 'nah',
       home: Scaffold(
         body: viewSection,
+      ),
+    );
+  }
+}
+
+/*class InkWellColor extends StatefulWidget{
+  final bool _isSelected;
+  VoidCallback _onTap;
+  InkWellColor(this._isSelected, this._onTap);
+
+}
+
+class InkWellColorState extends State<InkWellColor>{
+
+  @override
+  Widget build(BuildContext context) {
+    child: new InkWell(
+      onTap: widget._ontap,
+      );
+  }
+  new InkWellColor(false, () => onTap());
+*/
+
+class ParentWidget extends StatefulWidget {
+  @override
+  _ParentWidgetState createState() => _ParentWidgetState();
+}
+
+class _ParentWidgetState extends State<ParentWidget> {
+  bool _active = false;
+
+  void _handleTapboxChanged(bool newValue) {
+    setState(() {
+      _active = newValue;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: TapboxB(
+        active: _active,
+        onChanged: _handleTapboxChanged,
+      ),
+    );
+  }
+}
+
+class TapboxB extends StatelessWidget {
+  TapboxB({Key key, this.active: false, @required this.onChanged})
+      : super(key: key);
+
+  final bool active;
+  final ValueChanged<bool> onChanged;
+
+  void _handleTap() {
+    onChanged(!active);
+  }
+
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: _handleTap,
+      child: Container(
+        child: Center(
+          child: Text(
+            active ? 'Active' : 'Inactive',
+            style: TextStyle(fontSize: 32.0, color: Colors.white),
+          ),
+        ),
+        width: 200.0,
+        height: 200.0,
+        decoration: BoxDecoration(
+          color: active ? Colors.lightGreen[700] : Colors.grey[600],
+        ),
       ),
     );
   }
