@@ -84,7 +84,7 @@ class DetailScreen extends StatelessWidget {
   }
 
   // builds bottom buttons on edit page..
-  // TODO:
+  
   Column _buildButtonColumn(Color color, IconData icon, String label) {
     return Column(
       mainAxisSize: MainAxisSize.min,

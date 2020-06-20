@@ -2,13 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:nah/app/activity.dart';
 import 'package:nah/app/detail.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:motion_tab_bar/MotionTabBarView.dart';
+import 'package:motion_tab_bar/motiontabbar.dart';
+import 'package:motion_tab_bar/MotionTabController.dart';
+import 'package:motion_tab_bar/TabItem.dart';
 
 class MyApp extends StatefulWidget {
   @override
   MyAppState createState() => MyAppState();
 }
 
-class MyAppState extends State<MyApp> {
+class MyAppState extends State<MyApp> with TickerProviderStateMixin{
   // these are our global list of all activities and
   // list of activities we've selected
   List<Activity> _activities = List<Activity>();
@@ -134,8 +139,9 @@ class MyAppState extends State<MyApp> {
                                     )),
                               ]),
                           Icon(
-                            Icons.check_circle,
-                            size: 35.0,
+                            FontAwesomeIcons.solidCheckSquare,
+                            //Icons.check_circle,
+                            size: 37.0,
                             color:
                                 _selectedActivities.contains(_activities[index])
                                     ? Color(0xffA8D0DB)
@@ -154,6 +160,19 @@ class MyAppState extends State<MyApp> {
         ),
       );
     }
+
+MotionTabController _tabController;
+@override
+void initiState() {
+  super.initState();
+  _tabController = new MotionTabController(initialIndex: 1, vsync: this);
+}
+
+@override
+void dispose() {
+  super.dispose();
+  _tabController.dispose();
+}
 
     Widget viewSection = CustomScrollView(
       primary: false,
@@ -183,11 +202,55 @@ class MyAppState extends State<MyApp> {
         backgroundColor: Color(0xffE49273),
         //Color(0xFF7180AC),
         //Theme.of(context).primaryColorLight.withOpacity(0.9),
-        body: viewSection,
+        bottomNavigationBar: MotionTabBar(
+          tabOneName: "Activities",
+          tabOneIcon: FontAwesomeIcons.angrycreative,
+          tabTwoName: "Today's List",
+          tabTwoIcon: FontAwesomeIcons.dumpsterFire,
+          tabThreeIcon: FontAwesomeIcons.tractor,
+          tabThreeName: "Unusued",
+          tabIconColor: Theme.of(context).primaryColorLight,
+          tabSelectedColor: Theme.of(context).primaryColorDark,
+          initialSelectedTab: 1,
+          textStyle: TextStyle(color: Colors.red),
+          onTabItemSelected: (int value) {
+            print(value);
+            setState((){
+              _tabController.index = value;
+            });
+          },
+          ),
+        body: Column(
+          children: <Widget>[
+        viewSection,
+        MotionTabBarView(
+          controller: _tabController,
+          children: <Widget>[
+            Container(
+              child: Center(
+                child: Text ("Home"),
+              ),
+            ),
+            Container(
+              child: Center(
+                child: Text("Search"),
+                ),
+            ),
+            Container(
+              child: Center(
+                child: Text("Unusued"),
+                ),
+            ),
+          ],
+          ),
+          ],
+      ),
       ),
     );
   }
 }
+
+
 
 /*class InkWellColor extends StatefulWidget{
   final bool _isSelected;
