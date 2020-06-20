@@ -48,18 +48,19 @@ class MyAppState extends State<MyApp> {
           childAspectRatio: 2.0,
         ),
         // this builds each individual activity
+
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) {
             // this seems like a real bad way to do this.
-            
-                
+
             // load from db up front or lazy here directly?
             // performance considerations.
             // use ListTile instead of card....
             return Card(
               // weight this color by lifepoint
-              color: _activities[index].getLifePointsColor(),
+              //color: _activities[index].getLifePointsColor(),
               shadowColor: Theme.of(context).primaryColorDark,
+
               // this enables cool animations when getting details
               child: Hero(
                 tag: _activities[index].img,
@@ -79,58 +80,74 @@ class MyAppState extends State<MyApp> {
                 child: Material(
                   // transparent enhances hero animation
                   color: Colors.transparent,
-                    child: InkWell(
-                      
-                      splashColor: Theme.of(context).primaryColor.withAlpha(30),
-                      onTap: () {
-                        setState(() {
-                          if (_selectedActivities.contains(_activities[index])) {
-                            _selectedActivities.remove(_activities[index]);
-                            print("removed!");
-                          } else {
-                            _selectedActivities.add(_activities[index]);
-                            print("added!");
-                          }
-                          // update border, may have to put onTap on the container....
-                          // alreadyAdded ? Colors.red : null;
-                        });
-                      },
-                      onLongPress: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute<void>(
-                              builder: (BuildContext context) {
-                            timeDilation = 2.5;
-                            return Scaffold(
-                              body: Container(
-                                  child: DetailScreen(
-                                      activity: _activities[index])),
-                            );
-                          }),
-                        );
-                      },
-                      child: Container (
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: _selectedActivities.contains(_activities[index]) ? Colors.red : Colors.green,
-                          )),
-                        //border: Colors.red,
-                        )
-                      /*child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: _activities[index].img,
-                            ),
-                            Text(_activities[index].title,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.black.withOpacity(0.6),
-                                )),
-                          ]),*/
+                  child: InkWell(
+                    splashColor: Theme.of(context).primaryColor.withAlpha(30),
+                    onTap: () {
+                      setState(() {
+                        if (_selectedActivities.contains(_activities[index])) {
+                          _selectedActivities.remove(_activities[index]);
+                          print("removed!");
+                        } else {
+                          _selectedActivities.add(_activities[index]);
+                          print("added!");
+                        }
+                        // update border, may have to put onTap on the container....
+                        // alreadyAdded ? Colors.red : null;
+                      });
+                    },
+                    onLongPress: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                            builder: (BuildContext context) {
+                          timeDilation = 2.5;
+                          return Scaffold(
+                            body: Container(
+                                child:
+                                    DetailScreen(activity: _activities[index])),
+                          );
+                        }),
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: _selectedActivities.contains(_activities[index])
+                            ? Color(0xff2B4570)
+                            : Color(0xffA8D0DB),
+                        // color: _selectedActivities.contains(_activities[index]) ?  Theme.of(context).primaryColorDark :  Theme.of(context).primaryColorLight,
+                        /*border: Border.all(
+                            color: _activities[index].getLifePointsColor(),
+                          )*/
+                      ),
+                      child: Stack(
+                        children: <Widget>[
+                          Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: _activities[index].img,
+                                ),
+                                Text(_activities[index].title,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.black.withOpacity(0.9),
+                                    )),
+                              ]),
+                          Icon(
+                            Icons.check_circle,
+                            size: 35.0,
+                            color:
+                                _selectedActivities.contains(_activities[index])
+                                    ? Color(0xffA8D0DB)
+                                    : Colors.transparent,
+                          )
+                        ],
+                      ),
+                      //border: Colors.red,
                     ),
                   ),
                 ),
+              ),
             );
           },
           childCount: _activities.length,
@@ -163,6 +180,9 @@ class MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'nah',
       home: Scaffold(
+        backgroundColor: Color(0xffE49273),
+        //Color(0xFF7180AC),
+        //Theme.of(context).primaryColorLight.withOpacity(0.9),
         body: viewSection,
       ),
     );
