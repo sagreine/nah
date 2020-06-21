@@ -3,16 +3,22 @@ import 'package:flutter/scheduler.dart';
 import 'package:nah/app/activity.dart';
 import 'package:nah/app/detail.dart';
 
-class MyApp extends StatefulWidget {
+// push to a builder of slivers for selected day....
+// not a map though? or pushes to a map but reads
+// into a list so you can have multiple of one...
+
+class ListScreen extends StatefulWidget {
   @override
-  MyAppState createState() => MyAppState();
+  ListScreenState createState() => ListScreenState();
 }
 
-class MyAppState extends State<MyApp> {
+class ListScreenState extends State<ListScreen> {
+
+  
   // these are our global list of all activities and
   // list of activities we've selected
-  List<Activity> _activities = List<Activity>();
-  List<Activity> _selectedActivities = List<Activity>();
+  final List<Activity> _activities = List<Activity>();
+  final List<Activity> _selectedActivities = List<Activity>();
 
   @override
   Widget build(BuildContext context) {
@@ -189,76 +195,4 @@ class MyAppState extends State<MyApp> {
   }
 }
 
-/*class InkWellColor extends StatefulWidget{
-  final bool _isSelected;
-  VoidCallback _onTap;
-  InkWellColor(this._isSelected, this._onTap);
 
-}
-
-class InkWellColorState extends State<InkWellColor>{
-
-  @override
-  Widget build(BuildContext context) {
-    child: new InkWell(
-      onTap: widget._ontap,
-      );
-  }
-  new InkWellColor(false, () => onTap());
-*/
-
-class ParentWidget extends StatefulWidget {
-  @override
-  _ParentWidgetState createState() => _ParentWidgetState();
-}
-
-class _ParentWidgetState extends State<ParentWidget> {
-  bool _active = false;
-
-  void _handleTapboxChanged(bool newValue) {
-    setState(() {
-      _active = newValue;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: TapboxB(
-        active: _active,
-        onChanged: _handleTapboxChanged,
-      ),
-    );
-  }
-}
-
-class TapboxB extends StatelessWidget {
-  TapboxB({Key key, this.active: false, @required this.onChanged})
-      : super(key: key);
-
-  final bool active;
-  final ValueChanged<bool> onChanged;
-
-  void _handleTap() {
-    onChanged(!active);
-  }
-
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: _handleTap,
-      child: Container(
-        child: Center(
-          child: Text(
-            active ? 'Active' : 'Inactive',
-            style: TextStyle(fontSize: 32.0, color: Colors.white),
-          ),
-        ),
-        width: 200.0,
-        height: 200.0,
-        decoration: BoxDecoration(
-          color: active ? Colors.lightGreen[700] : Colors.grey[600],
-        ),
-      ),
-    );
-  }
-}
