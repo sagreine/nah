@@ -4,16 +4,21 @@ import 'package:nah/app/activity.dart';
 class DetailScreen extends StatelessWidget {
   final Activity activity;
 
+// this.activity was required, but let's not require it for a new on. or pass blank one?
   DetailScreen({Key key, @required this.activity}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    //if (context.)
     Widget fromhero = Hero(
       tag: activity.img,
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
+            // will want to pass the activity back?
+            // or, only if the activity was edited? comparison?
+            // Navigator.pop(context, activity);
             Navigator.of(context).pop();
           },
           child: activity.img,
@@ -64,10 +69,10 @@ class DetailScreen extends StatelessWidget {
     );
 
     return MaterialApp(
-      title: 'Detail for ' + activity.title,
+      title: activity.title,
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Detail for ' + activity.title),
+          title: Text(activity.title),
         ),
         body: ListView(
           children: [

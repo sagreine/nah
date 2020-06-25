@@ -10,6 +10,7 @@ class Activity {
   // these will be set and read
   Image img;
   String title;
+  String subtitle;
   String description;
   int lifepoints = 0;
 

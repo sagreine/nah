@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:nah/app/activity.dart';
 import 'package:nah/app/detail.dart';
+import 'package:nah/app/today.dart';
 
 // push to a builder of slivers for selected day....
 // not a map though? or pushes to a map but reads
@@ -13,10 +14,10 @@ class ListScreen extends StatefulWidget {
 }
 
 class ListScreenState extends State<ListScreen> {
-
-  
   // these are our global list of all activities and
   // list of activities we've selected
+  // these should be maps. but also when look at state again,
+  // because we should be able to delete them on the next page if we don't like them.
   final List<Activity> _activities = List<Activity>();
   final List<Activity> _selectedActivities = List<Activity>();
 
@@ -24,23 +25,20 @@ class ListScreenState extends State<ListScreen> {
   Widget build(BuildContext context) {
     // this part obviously doesn't go here, done every build, just testing
     // will come from db anyhow...
-    _activities.add(Activity(Image.asset('assets/images/yoga.jpg'), "Yoga!",
+    _activities.add(Activity(Image.asset('assets/images/yoga.jpg'), "Yoga!", "a Yoga subtitle",
         "this is yoga description", 2));
-    _activities.add(Activity(Image.asset('assets/images/work.jpg'), "work...!",
+    _activities.add(Activity(Image.asset('assets/images/work.jpg'), "work...!", "a work subtitle",
         "this is a description for work", -1));
     _activities.add(Activity(Image.asset('assets/images/write.jpg'),
-        "write...!", "this is a description for write", -6));
-    _activities.add(Activity(Image.asset('assets/images/tv.jpg'), "tv...!",
+        "write...!", "a write subtitle", "this is a description for write", -6));
+    _activities.add(Activity(Image.asset('assets/images/tv.jpg'), "tv...!", "a tv subtitle",
         "this is a description for tv", 0));
-    _activities.add(Activity(Image.asset('assets/images/eat.jpg'), "eat...!",
+    _activities.add(Activity(Image.asset('assets/images/eat.jpg'), "eat...!", "an eating subtitle",
         "this is a description for eat", 7));
     _activities.add(Activity(Image.asset('assets/images/teach.jpg'),
-        "teach...!", "this is a description for teach", -1));
+        "teach...!", "a teaching subtitle", "this is a description for teach", -1));
     _activities.add(Activity(Image.asset('assets/images/chores.jpg'),
-        "chores...!", "this is a description for chores", -2));
-
-    /// careful w.r.t destructors. also use id when actually doing. can add same activity multiple times....
-    _selectedActivities.add(_activities[1]);
+        "chores...!", "a chores subtitle", "this is a description for chores", -2));
 
     Widget _buildViewSection() {
       // may eventually return to just one column....
@@ -161,26 +159,60 @@ class ListScreenState extends State<ListScreen> {
       );
     }
 
-    Widget viewSection = CustomScrollView(
-      primary: false,
-      slivers: <Widget>[
-        SliverAppBar(
-            expandedHeight: 75.0,
-            floating: false,
-            pinned: true,
-            snap: false,
-            flexibleSpace: const FlexibleSpaceBar(
-              title: Text('Activities'),
-            ),
-            actions: <Widget>[
-              IconButton(
-                icon: const Icon(Icons.add_circle),
-                tooltip: 'Add new',
-                onPressed: () {/* TOOD: add a new item to activities */},
+    // or just handle through bottom abb par? or no button at all which is ideal anyway...
+    Widget viewSection = GestureDetector(
+      onPanUpdate: (details) {
+        // swipe right to look at today
+        if (details.delta.dx > 0) {
+          Navigator.of(context).push(
+            MaterialPageRoute<void>(builder: (context) => TodayScreen()),
+          );
+        }
+        // swipe left to add a new activity
+        // should we async await then save? what if they change their mind...
+        else {
+          Navigator.of(context).push(
+            MaterialPageRoute<void>(builder: (BuildContext context) {
+              timeDilation = 2.5;
+              return Scaffold(
+                body: Container(
+                  child: DetailScreen(activity:
+                     Activity(
+                     Image.asset('assets/images/default.jpg'), 
+                     "Add a title to this activity", 
+                     "Add a subtitle to this activity",
+                     "Add an activity description!", 
+                     7,
+                     ),                     
+                     ),
+                ),
+              );
+            }),
+          );
+        }
+      },
+      // the Activities you can select from
+      child: CustomScrollView(
+        primary: false,
+        slivers: <Widget>[
+          SliverAppBar(
+              expandedHeight: 75.0,
+              floating: false,
+              pinned: true,
+              snap: false,
+              flexibleSpace: const FlexibleSpaceBar(
+                title: Text('Activities'),
               ),
-            ]),
-        _buildViewSection(),
-      ],
+              actions: <Widget>[
+                IconButton(
+                  icon: const Icon(Icons.add_circle),
+                  tooltip: 'Add new',
+                  onPressed: () {/* TOOD: add a new item to activities */},
+                ),
+              ]),
+          _buildViewSection(),
+        ],
+      ),
     );
 
     return MaterialApp(
@@ -194,5 +226,3 @@ class ListScreenState extends State<ListScreen> {
     );
   }
 }
-
-
