@@ -7,6 +7,7 @@ import 'package:nah/app/today.dart';
 // push to a builder of slivers for selected day....
 // not a map though? or pushes to a map but reads
 // into a list so you can have multiple of one...
+// TODO: lifepoints check. on tap?
 
 class ListScreen extends StatefulWidget {
   @override
@@ -162,13 +163,13 @@ class ListScreenState extends State<ListScreen> {
     // or just handle through bottom abb par? or no button at all which is ideal anyway...
     Widget viewSection = GestureDetector(
       onPanUpdate: (details) {
-        // swipe right to look at today
-        if (details.delta.dx > 0) {
+        // swipe left to look at today
+        if (details.delta.dx < 0) {
           Navigator.of(context).push(
-            MaterialPageRoute<void>(builder: (context) => TodayScreen()),
+            MaterialPageRoute<void>(builder: (context) => TodayScreen(selectedActivities: _selectedActivities)),
           );
         }
-        // swipe left to add a new activity
+        // swipe right to add a new activity
         // should we async await then save? what if they change their mind...
         else {
           Navigator.of(context).push(

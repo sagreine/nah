@@ -18,6 +18,7 @@ class DetailScreen extends StatelessWidget {
           onTap: () {
             // will want to pass the activity back?
             // or, only if the activity was edited? comparison?
+            // need to do hero everywhere to ensure pop back to right place?
             // Navigator.pop(context, activity);
             Navigator.of(context).pop();
           },
@@ -48,6 +49,7 @@ class DetailScreen extends StatelessWidget {
 
     Color color = Theme.of(context).primaryColor;
 
+// TODO: what buttons do we actually want, and make them functional
     Widget buttonSection = Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -89,7 +91,6 @@ class DetailScreen extends StatelessWidget {
   }
 
   // builds bottom buttons on edit page..
-  // TODO:
   Column _buildButtonColumn(Color color, IconData icon, String label) {
     return Column(
       mainAxisSize: MainAxisSize.min,

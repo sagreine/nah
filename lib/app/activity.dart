@@ -14,7 +14,7 @@ class Activity {
   String description;
   int lifepoints = 0;
 
-  Activity(this.img, this.title, this.description, this.lifepoints) {
+  Activity(this.img, this.title, this.subtitle, this.description, this.lifepoints) {
     //activityID = 
   }
   // "winsorizes" lifepoints
