@@ -8,7 +8,6 @@ import 'package:nah/app/today.dart';
 // not a map though? or pushes to a map but reads
 // into a list so you can have multiple of one...
 // TODO: lifepoints check. but notify users
-// TODO: need lifepoint representation for unit, would be frustrating knowing you're 1 off or something
 
 class ListScreen extends StatefulWidget {
   @override
@@ -137,12 +136,20 @@ class ListScreenState extends State<ListScreen> {
                           timeDilation = 2.5;
                           return Scaffold(
                             body: Container(
+                              // if we want it small with the same background, do that here
+                              // but be consistent across ways to get this screen
+                              // just here for now as an example / another way to look at it. 
+                              alignment: Alignment.center,                              
+                              color:  Color(0xffE49273),
+                              padding: const EdgeInsets.all(16.0),
                                 child:
                                     DetailScreen(activity: _activities[index])),
                           );
                         }),
                       );
                     },
+                    // this is dumb. use a listTile... but image isn't great as it is too small
+                    // straightforward adaptation breaks things though..
                     child: Container(
                       decoration: BoxDecoration(
                         color: _selectedActivities.contains(_activities[index])
@@ -158,7 +165,7 @@ class ListScreenState extends State<ListScreen> {
                                 Expanded(
                                   child: _activities[index].img,
                                 ),
-                                Text(_activities[index].title,
+                                Text(_activities[index].title + " " +_activities[index].lifepoints.toString(),
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       color: Colors.black.withOpacity(0.9),
@@ -171,7 +178,10 @@ class ListScreenState extends State<ListScreen> {
                                 _selectedActivities.contains(_activities[index])
                                     ? Color(0xffA8D0DB)
                                     : Colors.transparent,
-                          )
+                          ),
+                          //Text(_activities[index].lifepoints.toString(),
+                          //textAlign: TextAlign.end,
+                          //),
                         ],
                       ),
                       //border: Colors.red,
@@ -206,12 +216,13 @@ class ListScreenState extends State<ListScreen> {
               return Scaffold(
                 body: Container(
                   child: DetailScreen(
+                    //default is a 0 score activity
                     activity: Activity(
                       Image.asset('assets/images/default.jpg'),
                       "Add a title to this activity",
                       "Add a subtitle to this activity",
                       "Add an activity description!",
-                      7,
+                      0,
                     ),
                   ),
                 ),

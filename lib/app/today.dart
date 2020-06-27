@@ -3,37 +3,50 @@ import 'package:nah/app/activity.dart';
 import 'package:nah/app/detail.dart';
 
 ///// needs to be a list, not a set, as activities can repeat here
-///  TODO: animatedList?
 /// TODO: retain reordering across life of screen (if i go back, then return, i want to save my order)
+/// TODO: custom timeline rather than reorderable list? more fun :)
+/// TODO: obviously, this is no longer a stateliss widget....
 class TodayScreen extends StatelessWidget {
   //DetailScreen({Key key, @required this.activity}) : super(key: key);
   final List<Activity> selectedActivities;
+  int _oldIndex;
+  int _newIndex;
   TodayScreen({Key key, @required this.selectedActivities}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Widget _buildViewSection() {
-      return ListView.separated(
+      return ReorderableListView(
         //shrinkWrap: true,
         padding: const EdgeInsets.all(8),
-        itemCount: selectedActivities.length,
-        itemBuilder: (BuildContext context, int index) {
+        onReorder: (_oldIndex, _newIndex) {
+          setState(() {
+             Activity tmpOld = selectedActivities.removeAt(_oldIndex);
+             selectedActivities.insert(_newIndex, tmpOld);
+          }
+          );
+          //setState(()
+           //{
+           //};
+           //),
+        },
+        header: Text("Drag to reorder"),
+        children: <Widget>[      
+          for (final activity in selectedActivities) 
+          
           // populated card, detail screen on long press
-          return Card(
+           Card(
+            key: ValueKey(activity),
             shadowColor: Theme.of(context).primaryColorDark,
             child: InkWell(
-              splashColor: Theme.of(context).primaryColor.withAlpha(30),
-              onTap: () {
-                //TODO: something? drag to reorder?
-                // how will we let them reorder if longpress does this.. maybe double replaces this tap?
-              },
+              splashColor: Theme.of(context).primaryColor.withAlpha(30),              
               onDoubleTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute<void>(builder: (BuildContext context) {
                     return Scaffold(
                       body: Container(
                           child: DetailScreen(
-                              activity: selectedActivities[index])),
+                              activity: activity)),
                     );
                   }),
                 );
@@ -41,26 +54,29 @@ class TodayScreen extends StatelessWidget {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisAlignment: MainAxisAlignment.center,
+                  // so they don't get huge when dragging..
+                  mainAxisSize: MainAxisSize.min,
 
                   // do we want these cards to be the same size? height?
                   // same as other page, same as each other, something else?
 
                   children: [
                     Image(
-                        height: 200,
-                        image: selectedActivities[index].img.image),
-                    Text(selectedActivities[index].title,
+                        height: 100,
+                        image: activity.img.image),
+                    Text(activity.title,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.black.withOpacity(0.9),
                         )),
                   ]),
             ),
-          );
-        },
-        separatorBuilder: (BuildContext context, int index) => const Divider(),
+          ),          
+        ] 
       );
+        //separatorBuilder: (BuildContext context, int index) => const Divider(),
     }
+    
 
     Widget viewSection = GestureDetector(
       onPanUpdate: (details) {
@@ -79,7 +95,7 @@ class TodayScreen extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text("Today's Activitiies. Drag to reorder"),
+          title: Text("Today's Activitiies"),
         ),
       body: viewSection,
       ),
