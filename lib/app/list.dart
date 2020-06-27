@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nah/app/activity.dart';
 import 'package:nah/app/detail.dart';
 import 'package:nah/app/today.dart';
@@ -136,12 +137,12 @@ class ListScreenState extends State<ListScreen> {
                           timeDilation = 2.5;
                           return Scaffold(
                             body: Container(
-                              // if we want it small with the same background, do that here
-                              // but be consistent across ways to get this screen
-                              // just here for now as an example / another way to look at it. 
-                              alignment: Alignment.center,                              
-                              color:  Color(0xffE49273),
-                              padding: const EdgeInsets.all(16.0),
+                                // if we want it small with the same background, do that here
+                                // but be consistent across ways to get this screen
+                                // just here for now as an example / another way to look at it.
+                                alignment: Alignment.center,
+                                color: Color(0xffE49273),
+                                padding: const EdgeInsets.all(16.0),
                                 child:
                                     DetailScreen(activity: _activities[index])),
                           );
@@ -154,7 +155,7 @@ class ListScreenState extends State<ListScreen> {
                       decoration: BoxDecoration(
                         color: _selectedActivities.contains(_activities[index])
                             ? Color(0xff2B4570)
-                            : Color(0xffA8D0DB),                               
+                            : Color(0xffA8D0DB),
                       ),
                       child: Stack(
                         children: <Widget>[
@@ -165,7 +166,12 @@ class ListScreenState extends State<ListScreen> {
                                 Expanded(
                                   child: _activities[index].img,
                                 ),
-                                Text(_activities[index].title + " " +_activities[index].lifepoints.toString(),
+                                Text(
+                                    _activities[index].title +
+                                        " " +
+                                        _activities[index]
+                                            .lifepoints
+                                            .toString(),
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       color: Colors.black.withOpacity(0.9),
@@ -262,6 +268,31 @@ class ListScreenState extends State<ListScreen> {
         //Color(0xFF7180AC),
         //Theme.of(context).primaryColorLight.withOpacity(0.9),
         body: viewSection,
+        // consider extended, with an icon and text, instead. e.g. "add to today"
+        floatingActionButton: Container(
+          height: 80,
+          width: 90,
+          child: FloatingActionButton(
+            onPressed: null,
+            tooltip: 'Add to Day',
+            child: Icon(Icons.add),
+            elevation: 12,
+          ),
+        ),
+        // add actual routing....
+        bottomNavigationBar: BottomAppBar(
+          shape: CircularNotchedRectangle(),
+          color: Colors.blueGrey,
+          notchMargin: 3.5,
+          clipBehavior: Clip.antiAlias,
+          child: BottomNavigationBar(items: [
+            BottomNavigationBarItem(
+                icon: Icon(FontAwesomeIcons.edit), title: Text("Add or Edit")),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.view_day), title: Text("View Today")),
+          ]),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );
   }
