@@ -20,15 +20,11 @@ class TodayScreen extends StatelessWidget {
         //shrinkWrap: true,
         padding: const EdgeInsets.all(8),
         onReorder: (_oldIndex, _newIndex) {
-          setState(() {
+          //setState(() {
              Activity tmpOld = selectedActivities.removeAt(_oldIndex);
              selectedActivities.insert(_newIndex, tmpOld);
-          }
-          );
-          //setState(()
-           //{
-           //};
-           //),
+          //}
+          //);
         },
         header: Text("Drag to reorder"),
         children: <Widget>[      
