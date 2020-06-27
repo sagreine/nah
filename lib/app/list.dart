@@ -148,43 +148,93 @@ class ListScreenState extends State<ListScreen> {
                         color: _selectedActivities.contains(_activities[index])
                             ? Color(0xff2B4570)
                             : Color(0xffA8D0DB),
+            return Card(
+              // weight this color by lifepoint
+              //color: _activities[index].getLifePointsColor(),
+              shadowColor: Theme.of(context).primaryColorDark,
+
+              // this enables cool animations when getting details
+              child: Hero(
+                tag: _activities[index].img,
+/*                flightShuttleBuilder: (
+                  BuildContext flightContext,
+                  Animation<double> animation,
+                  HeroFlightDirection flightDirection,
+                  BuildContext fromHeroContext,
+                  BuildContext toHeroContext,
+                ) {
+                  final Hero toHero = toHeroContext.widget;
+                  return RotationTransition(
+                    turns: animation,
+                    child: toHero.child,
+                  );
+                },*/
+                child: Material(
+                  // transparent enhances hero animation
+                  color: Colors.transparent,
+                  child: InkWell(
+                    splashColor: Theme.of(context).primaryColor.withAlpha(30),
+                    onTap: () {
+                      setState(() {
+                        if (_selectedActivities.contains(_activities[index])) {
+                          _selectedActivities.remove(_activities[index]);
+                          print("removed!");
+                        } else {
+                          _selectedActivities.add(_activities[index]);
+                          print("added!");
+                        }
+                        // update border, may have to put onTap on the container....
+                        // alreadyAdded ? Colors.red : null;
+                      });
+                    },
+                    onDoubleTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                            builder: (BuildContext context) {
+                          timeDilation = 2.5;
+                          return Scaffold(
+                            body: Container(
+                                child:
+                                    DetailScreen(activity: _activities[index])),
+                          );
+                        }),
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: _selectedActivities.contains(_activities[index])
+                            ? Color(0xff2B4570)
+                            : Color(0xffA8D0DB),
+                        // color: _selectedActivities.contains(_activities[index]) ?  Theme.of(context).primaryColorDark :  Theme.of(context).primaryColorLight,
+                        /*border: Border.all(
+                            color: _activities[index].getLifePointsColor(),
+                          )*/
                       ),
-                      width: 275,
-                        child:
-                          Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Stack(
+                        children: <Widget>[
+                          Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
                               mainAxisAlignment: MainAxisAlignment.center,
-                              //mainAxisSize: MainAxisSize.min,
-                              
                               children: [
-                                ListTile(
-                                  leading: Icon(
-                                    Icons.check_circle,
-                                    size: 35.0,
-                                    color: _selectedActivities
-                                            .contains(_activities[index])
-                                        ? Color(0xffA8D0DB)
-                                        : Colors.transparent,
-                                  ),
+                                Expanded(
+                                  child: _activities[index].img,
                                 ),
-                                //Expanded(
-                                  //flex: 1,
-                                  //child: 
-                                  Image(
-                        height: 200,
-                        image: _activities[index].img.image),
-                                  
-                                //),
-                               /* Expanded(child: 
                                 Text(_activities[index].title,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       color: Colors.black.withOpacity(0.9),
-                                      //Text(_activities[index].lifepoints.toString()),
                                     )),
-                                ),*/
                               ]),
-                        //],
+                          Icon(
+                            Icons.check_circle,
+                            size: 35.0,
+                            color:
+                                _selectedActivities.contains(_activities[index])
+                                    ? Color(0xffA8D0DB)
+                                    : Colors.transparent,
+                          )
+                        ],
+                      ),
                       //border: Colors.red,
                     ),
                   ),
