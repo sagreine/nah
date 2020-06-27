@@ -3,7 +3,6 @@ import 'package:nah/app/activity.dart';
 import 'package:nah/app/detail.dart';
 
 ///// needs to be a list, not a set, as activities can repeat here
-/// needs order-ability
 ///  TODO: animatedList?
 /// TODO: retain reordering across life of screen (if i go back, then return, i want to save my order)
 class TodayScreen extends StatelessWidget {
@@ -14,7 +13,7 @@ class TodayScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget _buildViewSection() {
-      return ListView.builder(
+      return ListView.separated(
         //shrinkWrap: true,
         padding: const EdgeInsets.all(8),
         itemCount: selectedActivities.length,
@@ -59,7 +58,7 @@ class TodayScreen extends StatelessWidget {
             ),
           );
         },
-        //separatorBuilder: (BuildContext context, int index) => const Divider(),
+        separatorBuilder: (BuildContext context, int index) => const Divider(),
       );
     }
 
@@ -78,9 +77,13 @@ class TodayScreen extends StatelessWidget {
     );
 
     return MaterialApp(
-        home: Scaffold(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text("Today's Activitiies. Drag to reorder"),
+        ),
       body: viewSection,
-    ));
+      ),
+    );
   }
 
   //@override

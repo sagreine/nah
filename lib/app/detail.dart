@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:nah/app/activity.dart';
 
+
+
+/// TODO: SliverAnimatedList instead? much more fun. also explicit animations instead of roll your own.. :)
+/// also also, naturally lends to the coming reorganziation/state-conscious editing of the code
 class DetailScreen extends StatelessWidget {
   final Activity activity;
 

@@ -7,7 +7,8 @@ import 'package:nah/app/today.dart';
 // push to a builder of slivers for selected day....
 // not a map though? or pushes to a map but reads
 // into a list so you can have multiple of one...
-// TODO: lifepoints check. on tap?
+// TODO: lifepoints check. but notify users
+// TODO: need lifepoint representation for unit, would be frustrating knowing you're 1 off or something
 
 class ListScreen extends StatefulWidget {
   @override
@@ -26,24 +27,39 @@ class ListScreenState extends State<ListScreen> {
   Widget build(BuildContext context) {
     // this part obviously doesn't go here, done every build, just testing
     // will come from db anyhow...
-    _activities.add(Activity(Image.asset('assets/images/yoga.jpg'), "Yoga!", "a Yoga subtitle",
-        "this is yoga description", 2));
-    _activities.add(Activity(Image.asset('assets/images/work.jpg'), "work...!", "a work subtitle",
-        "this is a description for work", -1));
-    _activities.add(Activity(Image.asset('assets/images/write.jpg'),
-        "write...!", "a write subtitle", "this is a description for write", -6));
-    _activities.add(Activity(Image.asset('assets/images/tv.jpg'), "tv...!", "a tv subtitle",
-        "this is a description for tv", 0));
-    _activities.add(Activity(Image.asset('assets/images/eat.jpg'), "eat...!", "an eating subtitle",
-        "this is a description for eat", 7));
-    _activities.add(Activity(Image.asset('assets/images/teach.jpg'),
-        "teach...!", "a teaching subtitle", "this is a description for teach", -1));
-    _activities.add(Activity(Image.asset('assets/images/chores.jpg'),
-        "chores...!", "a chores subtitle", "this is a description for chores", -2));
+    _activities.add(Activity(Image.asset('assets/images/yoga.jpg'), "Yoga!",
+        "a Yoga subtitle", "this is yoga description", -2));
+    _activities.add(Activity(Image.asset('assets/images/work.jpg'), "work...!",
+        "a work subtitle", "this is a description for work", 3));
+    _activities.add(Activity(
+        Image.asset('assets/images/write.jpg'),
+        "write...!",
+        "a write subtitle",
+        "this is a description for write",
+        -2));
+    _activities.add(Activity(Image.asset('assets/images/tv.jpg'), "tv...!",
+        "a tv subtitle", "this is a description for tv", 0));
+    _activities.add(Activity(Image.asset('assets/images/eat.jpg'), "eat...!",
+        "an eating subtitle", "this is a description for eat", 0));
+    _activities.add(Activity(
+        Image.asset('assets/images/teach.jpg'),
+        "teach...!",
+        "a teaching subtitle",
+        "this is a description for teach",
+        1));
+    _activities.add(Activity(
+        Image.asset('assets/images/chores.jpg'),
+        "chores...!",
+        "a chores subtitle",
+        "this is a description for chores",
+        2));
 
     Widget _buildViewSection() {
       // may eventually return to just one column....
       // this is a grid of slivers that will hold our activities
+      int _allowedSore = 6;
+      int _currentScore = 0;
+
       return SliverGrid(
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: 200.0,
@@ -91,10 +107,24 @@ class ListScreenState extends State<ListScreen> {
                       setState(() {
                         if (_selectedActivities.contains(_activities[index])) {
                           _selectedActivities.remove(_activities[index]);
+                          _currentScore -= _activities[index].lifepoints;
                           print("removed!");
+                          print(_allowedSore.toString());
+                          print(_currentScore.toString());
                         } else {
-                          _selectedActivities.add(_activities[index]);
-                          print("added!");
+                          if (_currentScore + _activities[index].lifepoints <=
+                              _allowedSore) {
+                            _selectedActivities.add(_activities[index]);
+                            _currentScore += _activities[index].lifepoints;
+                            print("added!");
+                            print(_allowedSore.toString());
+                            print(_currentScore.toString());
+                          } else {
+                            // need to notify user of course....
+                            print("Error, too many things");
+                            print(_allowedSore.toString());
+                            print(_currentScore.toString());
+                          }
                         }
                         // update border, may have to put onTap on the container....
                         // alreadyAdded ? Colors.red : null;
@@ -118,36 +148,43 @@ class ListScreenState extends State<ListScreen> {
                         color: _selectedActivities.contains(_activities[index])
                             ? Color(0xff2B4570)
                             : Color(0xffA8D0DB),
-                        // color: _selectedActivities.contains(_activities[index]) ?  Theme.of(context).primaryColorDark :  Theme.of(context).primaryColorLight,
-                        /*border: Border.all(
-                            color: _activities[index].getLifePointsColor(),
-                          )*/
                       ),
-                      child: Stack(
-                        children: <Widget>[
-                          Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                      width: 275,
+                        child:
+                          Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
+                              //mainAxisSize: MainAxisSize.min,
+                              
                               children: [
-                                Expanded(
-                                  child: _activities[index].img,
+                                ListTile(
+                                  leading: Icon(
+                                    Icons.check_circle,
+                                    size: 35.0,
+                                    color: _selectedActivities
+                                            .contains(_activities[index])
+                                        ? Color(0xffA8D0DB)
+                                        : Colors.transparent,
+                                  ),
                                 ),
+                                //Expanded(
+                                  //flex: 1,
+                                  //child: 
+                                  Image(
+                        height: 200,
+                        image: _activities[index].img.image),
+                                  
+                                //),
+                               /* Expanded(child: 
                                 Text(_activities[index].title,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       color: Colors.black.withOpacity(0.9),
+                                      //Text(_activities[index].lifepoints.toString()),
                                     )),
+                                ),*/
                               ]),
-                          Icon(
-                            Icons.check_circle,
-                            size: 35.0,
-                            color:
-                                _selectedActivities.contains(_activities[index])
-                                    ? Color(0xffA8D0DB)
-                                    : Colors.transparent,
-                          )
-                        ],
-                      ),
+                        //],
                       //border: Colors.red,
                     ),
                   ),
@@ -166,7 +203,9 @@ class ListScreenState extends State<ListScreen> {
         // swipe left to look at today
         if (details.delta.dx < 0) {
           Navigator.of(context).push(
-            MaterialPageRoute<void>(builder: (context) => TodayScreen(selectedActivities: _selectedActivities)),
+            MaterialPageRoute<void>(
+                builder: (context) =>
+                    TodayScreen(selectedActivities: _selectedActivities)),
           );
         }
         // swipe right to add a new activity
@@ -177,15 +216,15 @@ class ListScreenState extends State<ListScreen> {
               timeDilation = 2.5;
               return Scaffold(
                 body: Container(
-                  child: DetailScreen(activity:
-                     Activity(
-                     Image.asset('assets/images/default.jpg'), 
-                     "Add a title to this activity", 
-                     "Add a subtitle to this activity",
-                     "Add an activity description!", 
-                     7,
-                     ),                     
-                     ),
+                  child: DetailScreen(
+                    activity: Activity(
+                      Image.asset('assets/images/default.jpg'),
+                      "Add a title to this activity",
+                      "Add a subtitle to this activity",
+                      "Add an activity description!",
+                      7,
+                    ),
+                  ),
                 ),
               );
             }),
