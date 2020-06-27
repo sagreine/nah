@@ -12,7 +12,12 @@ class TodayScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget viewSection = ListView.builder(
+
+
+
+
+    Widget _buildViewSection () {
+      return ListView.builder(
       //shrinkWrap: true,
       padding: const EdgeInsets.all(8),
       itemCount: selectedActivities.length,
@@ -24,6 +29,7 @@ class TodayScreen extends StatelessWidget {
             splashColor: Theme.of(context).primaryColor.withAlpha(30),
             onTap: () {
               //TODO: something? drag to reorder?
+                          // how will we let them reorder if longpress does this.. maybe double replaces this tap?
             },
             onLongPress: () {
               Navigator.of(context).push(
@@ -58,6 +64,22 @@ class TodayScreen extends StatelessWidget {
       },
       //separatorBuilder: (BuildContext context, int index) => const Divider(),
     );
+    }
+
+
+    Widget viewSection = GestureDetector(
+      onPanUpdate: (details) {
+        // swipe left to look at today
+        if (details.delta.dx > 0) {
+          Navigator.of(context).pop();
+          /*Navigator.of(context).push(
+            MaterialPageRoute<void>(builder: (context) => TodayScreen(selectedActivities: _selectedActivities)),*/
+        }
+        // should we async await then save? what if they change their mind...
+      },
+      // the Activities for today...
+      child: _buildViewSection(),        
+      );
 
     return MaterialApp(
         home: Scaffold(

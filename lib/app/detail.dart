@@ -70,13 +70,19 @@ class DetailScreen extends StatelessWidget {
       ),
     );
 
-    return MaterialApp(
-      title: activity.title,
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(activity.title),
-        ),
-        body: ListView(
+    Widget viewSection = GestureDetector(
+      onPanUpdate: (details) {
+        // swipe left to look at today
+        if (details.delta.dx < 0) {
+          Navigator.of(context).pop();
+          /*Navigator.of(context).push(
+            MaterialPageRoute<void>(builder: (context) => TodayScreen(selectedActivities: _selectedActivities)),*/
+        }
+        // should we async await then save? what if they change their mind...
+      },
+      // the Activities for today...
+      // consider function for state.....
+      child: ListView(
           children: [
             fromhero,
             // maybe add an edit icon to the image here...
@@ -85,7 +91,17 @@ class DetailScreen extends StatelessWidget {
             buttonSection,
             textSection,
           ],
+        ),        
+      );
+
+
+    return MaterialApp(
+      title: activity.title,
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text(activity.title),
         ),
+        body: viewSection,
       ),
     );
   }
