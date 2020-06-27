@@ -18,7 +18,7 @@ class ListScreenState extends State<ListScreen> {
   // these are our global list of all activities and
   // list of activities we've selected
   // these should be maps. but also when look at state again,
-  // because we should be able to delete them on the next page if we don't like them.
+  // because we should be able to delete them on the next page if we don't like them - maybe, anyway? could just make them come back here...
   final List<Activity> _activities = List<Activity>();
   final List<Activity> _selectedActivities = List<Activity>();
 
@@ -100,7 +100,7 @@ class ListScreenState extends State<ListScreen> {
                         // alreadyAdded ? Colors.red : null;
                       });
                     },
-                    onLongPress: () {
+                    onDoubleTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute<void>(
                             builder: (BuildContext context) {

@@ -15,7 +15,8 @@ class DetailScreen extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () {
+          // doubletap may be inappropriate here, user expecting Tap instead...
+          onDoubleTap: () {
             // will want to pass the activity back?
             // or, only if the activity was edited? comparison?
             // need to do hero everywhere to ensure pop back to right place?
