@@ -5,11 +5,9 @@ import 'package:video_player/video_player.dart';
 import 'dart:async';
 import 'package:flutter/widgets.dart';
 
-// or just put this in main.....
 
 // borrowed here: https://github.com/syonip/flutter_login_video/blob/master/lib/sign_in.dart
 
-//TODO: fix it so back button doesn't break it but video stops once leaving..
 class MyApp extends StatelessWidget {
   @override
   //MyAppState createState() => MyAppState();
@@ -133,15 +131,15 @@ class _MyHomeState extends State<MyHome> {
             style: TextStyle(color: Colors.white),
           ),
           onPressed: () async {
-            Navigator.of(context).push(
+            // so this would change if we needed to verify login...
+            // also i kind of hate this but it seems like the standard approach
+            Navigator.of(context).pushReplacement(
               MaterialPageRoute<void>(builder: (BuildContext context) {
                 return Scaffold(
                   body: Container(child: ListScreen()),
                 );
               }),
             );
-            // this is a bad hack.
-           _controller.setVolume(0);
           },
         ),
       ),
