@@ -5,7 +5,6 @@ import 'package:video_player/video_player.dart';
 import 'dart:async';
 import 'package:flutter/widgets.dart';
 
-
 // borrowed here: https://github.com/syonip/flutter_login_video/blob/master/lib/sign_in.dart
 
 class MyApp extends StatelessWidget {
@@ -32,8 +31,7 @@ class _MyHomeState extends State<MyHome> {
 // this might not be a good idea, need to update every other tab....
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
-    ]
-    );
+    ]);
 
     _controller = VideoPlayerController.asset("assets/videos/science2.mp4");
     _controller.initialize().then((_) {
@@ -119,7 +117,7 @@ class _MyHomeState extends State<MyHome> {
   }
 
   _getLoginButtons() {
-    return <Widget>[      
+    return <Widget>[
       Container(
         margin: const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 45),
         width: double.infinity,
@@ -132,7 +130,19 @@ class _MyHomeState extends State<MyHome> {
           ),
           onPressed: () async {
             // so this would change if we needed to verify login...
-            // also i kind of hate this but it seems like the standard approach
+
+            // essentially, go back to auto mode after this...
+            SystemChrome.setPreferredOrientations([
+              DeviceOrientation.landscapeRight,
+              DeviceOrientation.landscapeLeft,
+              DeviceOrientation.portraitUp,
+              DeviceOrientation.portraitDown,
+            ]);
+
+            // close if you back out after logging in
+            // right now just avoids video running issues on login page (running after logged in)
+            // dispose, but then no video on back. otherwise, video runs in background
+            // easy to fix but ... why
             Navigator.of(context).pushReplacement(
               MaterialPageRoute<void>(builder: (BuildContext context) {
                 return Scaffold(
