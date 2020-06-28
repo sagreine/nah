@@ -5,12 +5,12 @@ import 'package:nah/app/detail.dart';
 ///// needs to be a list, not a set, as activities can repeat here
 /// TODO: retain reordering across life of screen (if i go back, then return, i want to save my order)
 /// TODO: custom timeline rather than reorderable list? more fun :)
-/// TODO: obviously, this is no longer a stateliss widget....
+/// TODO: obviously, this is no longer a stateless widget....
 class TodayScreen extends StatelessWidget {
   //DetailScreen({Key key, @required this.activity}) : super(key: key);
   final List<Activity> selectedActivities;
-  int _oldIndex;
-  int _newIndex;
+  final int oldIndex = 1;
+  final int newIndex = 2;
   TodayScreen({Key key, @required this.selectedActivities}) : super(key: key);
 
   @override

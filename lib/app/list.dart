@@ -5,10 +5,22 @@ import 'package:nah/app/activity.dart';
 import 'package:nah/app/detail.dart';
 import 'package:nah/app/today.dart';
 
+///// Generally thinking go away from strict navigator and prefer
+///   bottomNavBar and PageView, managed out of home, for simplicity...
+ /*if((currentIndex-index).abs()==1){
+      pageController.animateToPage(
+        index, duration: const Duration(milliseconds: 300),
+        curve: Curves.ease);
+    }else{
+      pageController.jumpToPage(index);
+    }*/
+
+
 // push to a builder of slivers for selected day....
 // not a map though? or pushes to a map but reads
 // into a list so you can have multiple of one...
 // TODO: lifepoints check. but notify users
+/// can we have that without error checking? e.g. make the button grayed out? or, toast instead...
 
 class ListScreen extends StatefulWidget {
   @override
@@ -22,6 +34,7 @@ class ListScreenState extends State<ListScreen> {
   // because we should be able to delete them on the next page if we don't like them - maybe, anyway? could just make them come back here...
   final List<Activity> _activities = List<Activity>();
   final List<Activity> _selectedActivities = List<Activity>();
+  int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -269,6 +282,8 @@ class ListScreenState extends State<ListScreen> {
         //Theme.of(context).primaryColorLight.withOpacity(0.9),
         body: viewSection,
         // consider extended, with an icon and text, instead. e.g. "add to today"
+        // still not sold on approach here. might prefer bottomNav with no add button...
+        // in fact probably will do that!
         floatingActionButton: Container(
           height: 80,
           width: 90,
@@ -279,17 +294,29 @@ class ListScreenState extends State<ListScreen> {
             elevation: 12,
           ),
         ),
-        // add actual routing....
+        
         bottomNavigationBar: BottomAppBar(
           shape: CircularNotchedRectangle(),
-          color: Colors.blueGrey,
+          color: Colors.blueGrey,          
           notchMargin: 3.5,
           clipBehavior: Clip.antiAlias,
-          child: BottomNavigationBar(items: [
+          child: BottomNavigationBar(
+            currentIndex: _currentIndex,
+            onTap: (int index) {
+              setState(() {
+                _currentIndex = index;
+                }
+              );
+          //_navigateToScreens(index);
+        },
+            items: [
             BottomNavigationBarItem(
-                icon: Icon(FontAwesomeIcons.edit), title: Text("Add or Edit")),
+                icon: Icon(FontAwesomeIcons.edit), 
+                title: Text("Add or Edit")),
             BottomNavigationBarItem(
-                icon: Icon(Icons.view_day), title: Text("View Today")),
+                icon: Icon(Icons.view_day), 
+                title: Text("View Today"),
+                ),
           ]),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
