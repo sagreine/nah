@@ -19,7 +19,7 @@ import "package:nah/app/state_container.dart";
 
 // not a map though? or pushes to a map but reads
 // into a list so you can have multiple of one...
-/// can we have that without error checking? e.g. make the button grayed out? or, toast instead...
+// just using list for now to not deal with it basically, iterable by index speed vs. math Set guarantees - not needed, though could be assumed so faster if searching non-index
 
 // TODO: Error by banner? or snackbar + brief red border highlight inkwell splash?
 
@@ -34,9 +34,10 @@ class ListScreenState extends State<ListScreen> {
   // these should be maps. but also when look at state again,
   // because we should be able to delete them on the next page if we don't like them - maybe, anyway? could just make them come back here...
   final List<Activity> _activities = List<Activity>();
+  List<Activity> _activitiesToAdd = List<Activity>();
   final List<Activity> _selectedActivities = List<Activity>();
+  
   int _currentIndex = 0;
-
   int _currentScore = 0;
   AppSettings appSettings;
 
@@ -135,13 +136,14 @@ class ListScreenState extends State<ListScreen> {
                         appSettings = container.appSettings;
                       }
                       setState(() {
+                        // unselect and remove
                         if (_selectedActivities.contains(_activities[index])) {
                           _selectedActivities.remove(_activities[index]);
                           _currentScore -= _activities[index].lifepoints;
                           print("removed!");
                           print(toString());
                           print(_currentScore.toString());
-                        } else {
+                        } else { // select if not going over the limit
                           if (_currentScore + _activities[index].lifepoints <=
                               appSettings.lifePointsCeilling) {
                             _selectedActivities.add(_activities[index]);
@@ -149,8 +151,7 @@ class ListScreenState extends State<ListScreen> {
                             print("added!");
                             print(appSettings.lifePointsCeilling.toString());
                             print(_currentScore.toString());
-                          } else {
-                            // need to notify user of course....
+                          } else { // you can't cuz it is too expensive                            
                             print("Error, too many things");
                             print(appSettings.lifePointsCeilling.toString());
                             print(_currentScore.toString());
@@ -166,9 +167,10 @@ class ListScreenState extends State<ListScreen> {
                               elevation: 8,
                               behavior: SnackBarBehavior.floating,
                               //action: SnackBarAction(
-                              //label: 'Undo',
+                              //label: 'Edit LifePoints Quota',
                               //onPressed: () {
                               // Some code to undo the change.
+                              // 
                               //},
                               //),
                             );
@@ -260,16 +262,23 @@ class ListScreenState extends State<ListScreen> {
       );
     }
 
-    // or just handle through bottom abb par? or no button at all which is ideal anyway...
+    // just swipting = no additions happened (stop handling this here :))
     Widget viewSection = GestureDetector(
       onPanUpdate: (details) {
         // swipe left to look at today
         if (details.delta.dx < 0) {
+          // clear the staging list of activities to add
+          print("_activitiesToAdd.length " + _activitiesToAdd.length.toString());
+          //_activitiesToAdd.clear();
           Navigator.of(context).push(
             MaterialPageRoute<void>(
                 builder: (context) =>
-                    TodayScreen(selectedActivities: _selectedActivities)),
+                    TodayScreen(addedActivities: _activitiesToAdd)),
           );
+          //print("_activitiesToAdd.length " + _activitiesToAdd.length.toString());
+          // we added these activities, so we wont again. back button won't see them so could handle that...
+          //_activitiesToAdd.clear();
+          
         }
         // swipe right to add a new activity
         // should we async await then save? what if they change their mind...
@@ -331,6 +340,7 @@ class ListScreenState extends State<ListScreen> {
     );
 
     void _onPressedFAB() {
+      // TODO: fix this display to not be on top of FAB
       Scaffold.of(context).showSnackBar(
         SnackBar(
           content: Text("Added these to your day!"),
@@ -340,12 +350,16 @@ class ListScreenState extends State<ListScreen> {
           behavior: SnackBarBehavior.floating,
           action: SnackBarAction(
             label: 'Undo',
-            onPressed: () {
-              //Some code to undo the change on Today and the selected activities (maybe)
-            },
+            onPressed: () {},
           ),
         ),
       );
+      // add this selection group to staging, then clear
+      _activitiesToAdd.addAll(_selectedActivities);
+      print("_activitiesToAdd.length " + _activitiesToAdd.length.toString());
+      setState(() {
+        _selectedActivities.clear();
+      });
     }
 
     return MaterialApp(

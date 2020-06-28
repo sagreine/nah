@@ -5,9 +5,15 @@ import "package:nah/app/state_container.dart";
 
 // order of next things a.k.a. why you should use Jira not comments 
 // determine with finality overall approach below. -> approach 1 per users vai wireframe + walkthrough - done (for now :))
-// let them delete something from Today
-// make reordering work and stay
+/// if we let them add to today, but don't want to immediately go to Today, how do we pass Today that data?
+/// one solution is to do it all from the list page (implemented here) but that's not going to be good with Today being a top level page
+/// e.g. if we add 5 things, go to Add/Edit top level page, then go to Today, nobody pushed list->Today....
+/// are we back to tabs then, w/ FAB, with add/edit a 2nd class citizen? or is there another way to pass this data to Today async?
+// let them delete something from Today --- done, but doesn't reflect that in List. which is okay, since we're changing that relationship to add-only.
 // statefulness review across everything
+//
+// nice to have, post-MVP below
+//
 // make adding an activity work, editable activity if it is easy too
 // look into persistence, simple way first, across 1 day of use at least
 // fancy timelines

@@ -9,25 +9,36 @@ import 'package:nah/app/detail.dart';
 /// TODO: animated list? much more fun especially for deletion sweep :)
 class TodayScreen extends StatelessWidget {
   //DetailScreen({Key key, @required this.activity}) : super(key: key);
-  final List<Activity> selectedActivities;
-  TodayScreen({Key key, @required this.selectedActivities}) : super(key: key);
+  List<Activity> _selectedActivities;
+  final List<Activity> addedActivities;
+
+  TodayScreen({Key key, this.addedActivities}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Widget _buildViewSection() {
+      //so this goes in initState..
+      if (_selectedActivities == null) {
+        _selectedActivities = List<Activity>();
+      }
+      
+      print("this.addedActivities.length " + this.addedActivities.length.toString());
+      // if we got passed new activities for today, add them!
+      _selectedActivities.addAll(this.addedActivities);
+
       return ReorderableListView(
           //shrinkWrap: true,
           padding: const EdgeInsets.all(8),
           onReorder: (_oldIndex, _newIndex) {
             //setState(() {
-            Activity tmpOld = selectedActivities.removeAt(_oldIndex);
-            selectedActivities.insert(_newIndex, tmpOld);
+            Activity tmpOld = _selectedActivities.removeAt(_oldIndex);
+            _selectedActivities.insert(_newIndex, tmpOld);
             //}
             //);
           },
           header: Text("Drag to reorder"),
           children: <Widget>[
-            for (final activity in selectedActivities)
+            for (final activity in _selectedActivities)
 
               // populated card, detail screen on long press
               Card(
@@ -39,15 +50,14 @@ class TodayScreen extends StatelessWidget {
                     Navigator.of(context).push(
                       MaterialPageRoute<void>(builder: (BuildContext context) {
                         return Scaffold(
-                           body: Container(
-                                // if we want it small with the same background, do that here
-                                // but be consistent across ways to get this screen
-                                // just here for now as an example / another way to look at it.
-                                alignment: Alignment.center,                        
-                                color: Colors.transparent,
-                                padding: const EdgeInsets.all(16.0),
-                                child:
-                                    DetailScreen(activity: activity)),
+                          body: Container(
+                              // if we want it small with the same background, do that here
+                              // but be consistent across ways to get this screen
+                              // just here for now as an example / another way to look at it.
+                              alignment: Alignment.center,
+                              color: Colors.transparent,
+                              padding: const EdgeInsets.all(16.0),
+                              child: DetailScreen(activity: activity)),
                         );
                       }),
                     );
@@ -75,20 +85,18 @@ class TodayScreen extends StatelessWidget {
                             ]),
                       ),
                       InkWell(
-                        child:
-                      Icon(
-                        Icons.delete_sweep,
-                        color: Colors.red,
-                        size: 35,
-                      ),
-                      onTap: () {
-                        selectedActivities.remove(activity);
-                        print(selectedActivities.length);
+                        child: Icon(
+                          Icons.delete_sweep,
+                          color: Colors.red,
+                          size: 35,
+                        ),
+                        onTap: () {
+                          _selectedActivities.remove(activity);
+                          print(_selectedActivities.length);
                         },
                       ),
 
-
-                       //selectedActivities.removeAt(index),
+                      //selectedActivities.removeAt(index),
                     ],
                   ),
                 ),
