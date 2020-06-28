@@ -129,8 +129,10 @@ class ListScreenState extends State<ListScreen> {
                     onTap: () {
                       // TODO: This is a default setting to not stop them in their tracks
                       // could push them directly to settings page, snackbar them to, even a flyin widget to edit it.
+                      // this is broken for first item they select no longer being selected, at least when settings is null to start.
                       if (appSettings == null) {
                         container.updateAppSettings(10);
+                        appSettings = container.appSettings;
                       }
                       setState(() {
                         if (_selectedActivities.contains(_activities[index])) {

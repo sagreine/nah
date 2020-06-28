@@ -103,8 +103,8 @@ class DetailScreen extends StatelessWidget {
     return MaterialApp(
       title: activity.title,
       home: Scaffold(
-        appBar: AppBar(
-          title: Text(activity.title),
+        appBar: AppBar(          
+          title: Text("View and Edit Detail for Activity"),
         ),
         body: viewSection,
       ),
