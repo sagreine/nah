@@ -164,6 +164,8 @@ class ListScreenState extends State<ListScreen> {
                     },
                     // this is dumb. use a listTile... but image isn't great as it is too small
                     // straightforward adaptation breaks things though..
+                    // only remaining 'issue' is checkbox is transparent, could just not use a transparent icon...
+                    // well it's also very ugly
                     child: Container(
                       decoration: BoxDecoration(
                         color: _selectedActivities.contains(_activities[index])

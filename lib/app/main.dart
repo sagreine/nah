@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nah/app/home.dart';
 
-// TODO: hero animations in a grid view - shrink the fly in screen? done, but do we like it
 // TODO: actually consider statefulness.....
 // TODO: pick color pallete, make that theme, no more hex
 // TODO: settings page
@@ -20,7 +19,7 @@ import 'package:nah/app/home.dart';
 /// con: a little more intuitive to say "add these!" than just know they're there --- i'd wonder why i need to go to a second screen at all, honestly..
 /// if all it adds is ability to reorder and view in a pretty timeline.
 /// 
-/// TODO: redo them as listTiles... just easier that way..
+/// TODO: redo them as listTiles... just easier that way.. -> too small to look at :(
 /// TODO: add a first time setup tutorial, just for fun!
 
 
