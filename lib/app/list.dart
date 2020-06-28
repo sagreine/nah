@@ -7,14 +7,13 @@ import 'package:nah/app/today.dart';
 
 ///// Generally thinking go away from strict navigator and prefer
 ///   bottomNavBar and PageView, managed out of home, for simplicity...
- /*if((currentIndex-index).abs()==1){
+/*if((currentIndex-index).abs()==1){
       pageController.animateToPage(
         index, duration: const Duration(milliseconds: 300),
         curve: Curves.ease);
     }else{
       pageController.jumpToPage(index);
     }*/
-
 
 // push to a builder of slivers for selected day....
 // not a map though? or pushes to a map but reads
@@ -94,117 +93,60 @@ class ListScreenState extends State<ListScreen> {
               // weight this color by lifepoint
               //color: _activities[index].getLifePointsColor(),
               shadowColor: Theme.of(context).primaryColorDark,
-
-              // this enables cool animations when getting details
-              child: Hero(
-                tag: _activities[index].img,
-/*                flightShuttleBuilder: (
-                  BuildContext flightContext,
-                  Animation<double> animation,
-                  HeroFlightDirection flightDirection,
-                  BuildContext fromHeroContext,
-                  BuildContext toHeroContext,
-                ) {
-                  final Hero toHero = toHeroContext.widget;
-                  return RotationTransition(
-                    turns: animation,
-                    child: toHero.child,
-                  );
-                },*/
-                child: Material(
-                  // transparent enhances hero animation
-                  color: Colors.transparent,
-                  child: InkWell(
-                    splashColor: Theme.of(context).primaryColor.withAlpha(30),
-                    onTap: () {
-                      setState(() {
-                        if (_selectedActivities.contains(_activities[index])) {
-                          _selectedActivities.remove(_activities[index]);
-                          _currentScore -= _activities[index].lifepoints;
-                          print("removed!");
-                          print(_allowedSore.toString());
-                          print(_currentScore.toString());
-                        } else {
-                          if (_currentScore + _activities[index].lifepoints <=
-                              _allowedSore) {
-                            _selectedActivities.add(_activities[index]);
-                            _currentScore += _activities[index].lifepoints;
-                            print("added!");
-                            print(_allowedSore.toString());
-                            print(_currentScore.toString());
-                          } else {
-                            // need to notify user of course....
-                            print("Error, too many things");
-                            print(_allowedSore.toString());
-                            print(_currentScore.toString());
-                          }
-                        }
-                        // update border, may have to put onTap on the container....
-                        // alreadyAdded ? Colors.red : null;
-                      });
-                    },
-                    onDoubleTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute<void>(
-                            builder: (BuildContext context) {
-                          timeDilation = 2.5;
-                          return Scaffold(
-                            body: Container(
-                                // if we want it small with the same background, do that here
-                                // but be consistent across ways to get this screen
-                                // just here for now as an example / another way to look at it.
-                                alignment: Alignment.center,
-                                color: Color(0xffE49273),
-                                padding: const EdgeInsets.all(16.0),
-                                child:
-                                    DetailScreen(activity: _activities[index])),
-                          );
-                        }),
-                      );
-                    },
-                    // this is dumb. use a listTile... but image isn't great as it is too small
-                    // straightforward adaptation breaks things though..
-                    child: Container(
-                      decoration: BoxDecoration(
+/*
+              child: Container(
+decoration: BoxDecoration(
                         color: _selectedActivities.contains(_activities[index])
                             ? Color(0xff2B4570)
                             : Color(0xffA8D0DB),
                       ),
-                      child: Stack(
-                        children: <Widget>[
-                          Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  child: _activities[index].img,
-                                ),
-                                Text(
-                                    _activities[index].title +
-                                        " " +
-                                        _activities[index]
-                                            .lifepoints
-                                            .toString(),
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.black.withOpacity(0.9),
-                                    )),
-                              ]),
-                          Icon(
-                            Icons.check_circle,
-                            size: 35.0,
-                            color:
-                                _selectedActivities.contains(_activities[index])
-                                    ? Color(0xffA8D0DB)
-                                    : Colors.transparent,
-                          ),
-                          //Text(_activities[index].lifepoints.toString(),
-                          //textAlign: TextAlign.end,
-                          //),
-                        ],
-                      ),
-                      //border: Colors.red,
+*/
+              child: Hero(
+                tag: _activities[index].img,
+                child: Material(
+                  // transparent enhances hero animation
+                  color: Colors.red,
+
+                  child: ListTile(
+                    //isThreeLine: true,
+                    title: Text(
+                        _activities[index].title,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.black.withOpacity(0.9),
+                          fontSize: 11,
+                        )),
+                    //subtitle: 
+                    leading: 
+                    Container( 
+                      
+                      //padding: EdgeInsets.symmetric(vertical: 4.0),
+                      alignment: Alignment.centerLeft,
+                      width: 80,
+                      height: 640,
+                      // could limit this...
+                      child: Expanded( child:
+                      _activities[index].img,),
                     ),
+                    enabled: (_currentScore + _activities[index].lifepoints) <=
+                        _allowedSore,
+                    trailing: 
+                    
+                    Column(
+
+                      children: <Widget>[
+                      Icon(
+                      Icons.check_circle,
+                      size: 30.0,
+                      /*color: _selectedActivities.contains(_activities[index])
+                          ? Color(0xffA8D0DB)
+                          : Colors.transparent,*/
+                    ),
+                    Text(_activities[index].lifepoints.toString()),
+                    ],
+                    ),
+
+
                   ),
                 ),
               ),
@@ -255,7 +197,7 @@ class ListScreenState extends State<ListScreen> {
         primary: false,
         slivers: <Widget>[
           SliverAppBar(
-              expandedHeight: 75.0,
+              expandedHeight: 85.0,
               floating: false,
               pinned: true,
               snap: false,
@@ -294,33 +236,90 @@ class ListScreenState extends State<ListScreen> {
             elevation: 12,
           ),
         ),
-        
+
         bottomNavigationBar: BottomAppBar(
           shape: CircularNotchedRectangle(),
-          color: Colors.blueGrey,          
+          color: Colors.blueGrey,
           notchMargin: 3.5,
           clipBehavior: Clip.antiAlias,
           child: BottomNavigationBar(
-            currentIndex: _currentIndex,
-            onTap: (int index) {
-              setState(() {
-                _currentIndex = index;
-                }
-              );
-          //_navigateToScreens(index);
-        },
-            items: [
-            BottomNavigationBarItem(
-                icon: Icon(FontAwesomeIcons.edit), 
-                title: Text("Add or Edit")),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.view_day), 
-                title: Text("View Today"),
+              currentIndex: _currentIndex,
+              onTap: (int index) {
+                setState(() {
+                  _currentIndex = index;
+                });
+                //_navigateToScreens(index);
+              },
+              items: [
+                BottomNavigationBarItem(
+                    icon: Icon(FontAwesomeIcons.edit),
+                    title: Text("Add or Edit")),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.view_day),
+                  title: Text("View Today"),
                 ),
-          ]),
+              ]),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );
   }
 }
+
+/*
+                child: Container(
+                    onTap: () {
+                      setState(() {
+                        if (_selectedActivities.contains(_activities[index])) {
+                          _selectedActivities.remove(_activities[index]);
+                          _currentScore -= _activities[index].lifepoints;
+                          print("removed!");
+                          print(_allowedSore.toString());
+                          print(_currentScore.toString());
+                        } else {
+                          if (_currentScore + _activities[index].lifepoints <=
+                              _allowedSore) {
+                            _selectedActivities.add(_activities[index]);
+                            _currentScore += _activities[index].lifepoints;
+                            print("added!");
+                            print(_allowedSore.toString());
+                            print(_currentScore.toString());
+                          } else {
+                            // need to notify user of course....
+                            print("Error, too many things");
+                            print(_allowedSore.toString());
+                            print(_currentScore.toString());
+                          }
+                        }
+                        // update border, may have to put onTap on the container....
+                        // alreadyAdded ? Colors.red : null;
+                      });
+                    },
+                    onDoubleTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                            builder: (BuildContext context) {
+                          timeDilation = 2.5;
+                          return Scaffold(
+                            body: Container(
+                                // if we want it small with the same background, do that here
+                                // but be consistent across ways to get this screen
+                                // just here for now as an example / another way to look at it.
+                                alignment: Alignment.center,
+                                color: Color(0xffE49273),
+                                padding: const EdgeInsets.all(16.0),
+                                child:
+                                    DetailScreen(activity: _activities[index])),
+                          );
+                        }),
+                      );
+                    },
+                    // this is dumb. use a listTile... but image isn't great as it is too small
+                    // straightforward adaptation breaks things though..
+
+                      ),
+                      //border: Colors.red,
+                    ),
+                  ),
+                ),
+              ),*/

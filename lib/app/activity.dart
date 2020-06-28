@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 // this needs to be better to pass from screen to screen...
-// TODO: way to edit everything,but especially the score itself
 class Activity {
   // pls no do this way, btw, if storing in db...
   //https://api.flutter.dev/flutter/widgets/UniqueKey-class.html

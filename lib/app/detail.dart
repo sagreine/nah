@@ -5,6 +5,7 @@ import 'package:nah/app/activity.dart';
 
 /// TODO: SliverAnimatedList instead? much more fun. also explicit animations instead of roll your own.. :)
 /// also also, naturally lends to the coming reorganziation/state-conscious editing of the code
+/// TODO: way to edit everything in an activity,but especially the score itself
 class DetailScreen extends StatelessWidget {
   final Activity activity;
 
