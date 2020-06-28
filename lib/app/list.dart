@@ -193,7 +193,11 @@ class ListScreenState extends State<ListScreen> {
                                 // but be consistent across ways to get this screen
                                 // just here for now as an example / another way to look at it.
                                 alignment: Alignment.center,
+
+                                // this feels like transparent should show what's behind it, but it doesn't..
                                 color: Color(0xffE49273),
+                                //color: Colors.transparent,
+
                                 padding: const EdgeInsets.all(16.0),
                                 child:
                                     DetailScreen(activity: _activities[index])),

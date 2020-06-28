@@ -7,7 +7,6 @@ class Activity {
   //https://api.flutter.dev/flutter/widgets/UniqueKey-class.html
   // also
   final UniqueKey activityID = new UniqueKey();
-
   // these will be set and read
   Image img;
   String title;

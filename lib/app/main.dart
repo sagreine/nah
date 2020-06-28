@@ -19,7 +19,8 @@ import "package:nah/app/state_container.dart";
 // sliveraninmated list for adding activities? if didn't already for Adding/Editing
 // actually separate files and use a development pattern instead of random nonsense (which is fun while in discovery mode of the language)
 // longer term persistence aka DB or even google cloud
-// actual UI ---  page transitions for one, doesnt look terrible for two
+// actual UI ---  page transitions for one, doesnt look terrible for two -> see e.g. Gridview flutter buil
+// https://github.com/flutter/flutter/blob/master/dev/integration_tests/flutter_gallery/lib/demo/material/grid_list_demo.dart
 // release, testing, CI, CD
 
 
