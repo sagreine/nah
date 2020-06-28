@@ -4,10 +4,10 @@ import "package:nah/app/state_container.dart";
 
 
 // order of next things a.k.a. why you should use Jira not comments 
-// settings page to set lifepoints - only changeable there for now
-// determine with finality overall approach below. -> approach 1 per users vai wireframe + walkthrough
-// statefulness review across everything
+// determine with finality overall approach below. -> approach 1 per users vai wireframe + walkthrough - done (for now :))
+// let them delete something from Today
 // make reordering work and stay
+// statefulness review across everything
 // make adding an activity work, editable activity if it is easy too
 // look into persistence, simple way first, across 1 day of use at least
 // fancy timelines
@@ -17,13 +17,14 @@ import "package:nah/app/state_container.dart";
 // better splash screen
 // setup onboarding screens, through settings setup
 // sliveraninmated list for adding activities? if didn't already for Adding/Editing
+// actually separate files and use a development pattern instead of random nonsense (which is fun while in discovery mode of the language)
 // longer term persistence aka DB or even google cloud
-// actual UI
+// actual UI ---  page transitions for one, doesnt look terrible for two
+// release, testing, CI, CD
 
 
 // TODO: actually consider statefulness.....
 // TODO: pick color pallete, make that theme, no more hex
-// TODO: settings page
 // TODO: bottom nav bar or Appbar, to all pages
 // TODO: better splash screen - https://medium.com/kick-start-fluttering/flutter-design-your-own-splashscreen-d0612b17db23 animate transition? gif?
 // TODO: 'remove from Today screen' option to get rid of an item right there
@@ -31,6 +32,7 @@ import "package:nah/app/state_container.dart";
 /// TODO: Sheets:bottom to share/name etc. a day
 /// TODO: make settings not ugly as all get out
 /// TODO: do we want it to be, auto updates today's screen? or make them press a button to add to it...
+/// 
 /// option 1) start on list page. select ones to add. button to add them. toast success. go to right to see today's list, back to left to add things
 /// pro: can click things, check out the order + # times you're doing something, change your mind
 /// con: you HAVE to swipe back and forth if you want to see what's selected today already (you'd blank out today's list on List once add button pressed)

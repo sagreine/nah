@@ -7,9 +7,6 @@ import "package:nah/app/state_container.dart";
 // may not really need the controller given this?
 
 class Settings extends StatefulWidget {
-  //static int lifePoints = 5;
-
-
   @override
   _SettingsState createState() => _SettingsState();
 }
@@ -18,7 +15,6 @@ class _SettingsState extends State<Settings> {
   // actually think about this before we do it....
   final lifePointsController = TextEditingController();
   AppSettings appSettings;
-
 
   @override
   void dispose() {
@@ -29,13 +25,19 @@ class _SettingsState extends State<Settings> {
   }
 
   @override
-  Widget build(BuildContext context) {    
+  Widget build(BuildContext context) {
     final container = StateContainer.of(context);
     appSettings = container.appSettings;
+
     // only actually want this run once? or does flutter handle that (text == text, so no need to repaint?)
     // also probably just not the right way to do this at all but yeah.
     // not incorrect display, anyway
-    lifePointsController.text = appSettings.lifePointsCeilling.toString();
+    // TODO: This is a default setting to not stop them in their tracks
+    // could push them directly to settings page, snackbar them to, even a flyin widget to edit it.
+    if (appSettings != null) {
+      lifePointsController.text = appSettings.lifePointsCeilling.toString();
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Settings"),
@@ -73,7 +75,7 @@ class _SettingsState extends State<Settings> {
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.blueGrey, width: 1.0),
                   ),
-                  labelText: "Edit Your LifePoints",
+                  labelText: appSettings == null ? "Enter Your LifePoints" : "Edit Your LifePoints",
                 ),
                 //_allowedSore.toString()),
                 keyboardType: TextInputType.number,
@@ -84,7 +86,7 @@ class _SettingsState extends State<Settings> {
                 // update the global setting to the new value and print for debug
                 // TODO: this will break things if, e.g., they've select 97 things for today already
                 // and we're changing this to say 5. how will Today handle that? List?
-                onSubmitted: (String value){
+                onSubmitted: (String value) {
                   container.updateAppSettings(int.parse(value));
                   print(container.appSettings.lifePointsCeilling.toString());
                   print(appSettings.lifePointsCeilling.toString());
