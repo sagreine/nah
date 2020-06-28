@@ -7,14 +7,13 @@ import 'package:nah/app/today.dart';
 
 ///// Generally thinking go away from strict navigator and prefer
 ///   bottomNavBar and PageView, managed out of home, for simplicity...
- /*if((currentIndex-index).abs()==1){
+/*if((currentIndex-index).abs()==1){
       pageController.animateToPage(
         index, duration: const Duration(milliseconds: 300),
         curve: Curves.ease);
     }else{
       pageController.jumpToPage(index);
     }*/
-
 
 // push to a builder of slivers for selected day....
 // not a map though? or pushes to a map but reads
@@ -70,7 +69,7 @@ class ListScreenState extends State<ListScreen> {
     Widget _buildViewSection() {
       // may eventually return to just one column....
       // this is a grid of slivers that will hold our activities
-      int _allowedSore = 6;
+      int _allowedSore =  2;
       int _currentScore = 0;
 
       return SliverGrid(
@@ -137,6 +136,19 @@ class ListScreenState extends State<ListScreen> {
                             print("Error, too many things");
                             print(_allowedSore.toString());
                             print(_currentScore.toString());
+                            final snackBar = SnackBar(
+                              content: Text("You're doing too much! Do less :)"),
+                              //action: SnackBarAction(
+                                //label: 'Undo',
+                                //onPressed: () {
+                                  // Some code to undo the change.
+                                //},
+                              //),
+                            );
+
+                            // Find the Scaffold in the widget tree and use
+                            // it to show a SnackBar.
+                            Scaffold.of(context).showSnackBar(snackBar);
                           }
                         }
                         // update border, may have to put onTap on the container....
@@ -296,30 +308,29 @@ class ListScreenState extends State<ListScreen> {
             elevation: 12,
           ),
         ),
-        
+
         bottomNavigationBar: BottomAppBar(
           shape: CircularNotchedRectangle(),
-          color: Colors.blueGrey,          
+          color: Colors.blueGrey,
           notchMargin: 3.5,
           clipBehavior: Clip.antiAlias,
           child: BottomNavigationBar(
-            currentIndex: _currentIndex,
-            onTap: (int index) {
-              setState(() {
-                _currentIndex = index;
-                }
-              );
-          //_navigateToScreens(index);
-        },
-            items: [
-            BottomNavigationBarItem(
-                icon: Icon(FontAwesomeIcons.edit), 
-                title: Text("Add or Edit")),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.view_day), 
-                title: Text("View Today"),
+              currentIndex: _currentIndex,
+              onTap: (int index) {
+                setState(() {
+                  _currentIndex = index;
+                });
+                //_navigateToScreens(index);
+              },
+              items: [
+                BottomNavigationBarItem(
+                    icon: Icon(FontAwesomeIcons.edit),
+                    title: Text("Add or Edit")),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.view_day),
+                  title: Text("View Today"),
                 ),
-          ]),
+              ]),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),

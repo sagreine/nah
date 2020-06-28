@@ -1,6 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:nah/app/home.dart';
 
+
+// order of next things
+// settings page to set lifepoints - only changeable there for now
+// determine with finality overall approach below.
+// statefulness review across everything
+// make reordering work and stay
+// make adding an activity work, editable activity if it is easy too
+// look into persistence, simple way first, across 1 day of use at least
+// fancy timelines
+// navbar and re-nav'ing -> no button, just bottomNav 
+// editable activity
+// color palette consistency / more fun logo, e.g. for splash
+// better splash screen
+// setup onboarding screens, through settings setup
+// sliveraninmated list for adding activities? if didn't already for Adding/Editing
+// longer term persistence aka DB or even google cloud
+// actual UI
+
+
 // TODO: actually consider statefulness.....
 // TODO: pick color pallete, make that theme, no more hex
 // TODO: settings page
