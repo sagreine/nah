@@ -19,7 +19,7 @@ class DetailScreen extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          // doubletap may be inappropriate here, user expecting Tap instead...
+          // doubletap may be inappropriate material.io here, user expecting Tap instead...
           onDoubleTap: () {
             // will want to pass the activity back?
             // or, only if the activity was edited? comparison?

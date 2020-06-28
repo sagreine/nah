@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nah/app/home.dart';
+import "package:nah/app/state_container.dart";
 
 
 // order of next things a.k.a. why you should use Jira not comments 
@@ -44,10 +45,10 @@ import 'package:nah/app/home.dart';
 /// 
 /// okay, final(ish) decision is in -> option 1 has been selected by users. will add "remove from list" on Today screen as a feature
 /// 
-/// TODO: redo them as listTiles... just easier that way.. -> nope, too small to look at :(
+/// TODO: redo them as listTiles... just easier that way.. -> nope, too small to look at :(. but maybe we just replace with icons in the end...
 /// TODO: add a first time setup tutorial, just for fun!
 
 
 void main() {
-  runApp(MyApp());
+  runApp(new StateContainer(child: new MyApp()));
 }

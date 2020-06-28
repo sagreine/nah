@@ -4,7 +4,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nah/app/activity.dart';
 import 'package:nah/app/detail.dart';
 import 'package:nah/app/today.dart';
-import 'package:flutter/services.dart';
+import 'package:nah/app/settings.dart';
+import "package:nah/app/state_container.dart";
 
 ///// Generally thinking go away from strict navigator and prefer
 ///   bottomNavBar and PageView, managed out of home, for simplicity...
@@ -36,8 +37,13 @@ class ListScreenState extends State<ListScreen> {
   final List<Activity> _selectedActivities = List<Activity>();
   int _currentIndex = 0;
 
+  int _currentScore = 0;
+  AppSettings appSettings;
+
   @override
   Widget build(BuildContext context) {
+    final container = StateContainer.of(context);
+    appSettings = container.appSettings;
     // this part obviously doesn't go here, done every build, just testing
     // will come from db anyhow...
     _activities.add(Activity(Image.asset('assets/images/yoga.jpg'), "Yoga!",
@@ -67,11 +73,15 @@ class ListScreenState extends State<ListScreen> {
         "this is a description for chores",
         2));
 
+    //appSettings = appSettings == null ? AppSettings(5) : container.appSettings;
+    //container = StateContainer.of(context);
+
+    //appSettings = StateContainer.of(context).appSettings;
+    //appSettings = AppSettings(50);
+
     Widget _buildViewSection() {
       // may eventually return to just one column....
       // this is a grid of slivers that will hold our activities
-      int _allowedSore = 2;
-      int _currentScore = 0;
 
       return SliverGrid(
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
@@ -117,25 +127,30 @@ class ListScreenState extends State<ListScreen> {
                   child: InkWell(
                     splashColor: Theme.of(context).primaryColor.withAlpha(30),
                     onTap: () {
+                      // TODO: This is a default setting to not stop them in their tracks
+                      // could push them directly to settings page, snackbar them to, even a flyin widget to edit it.
+                      if (appSettings == null) {
+                        container.updateAppSettings(10);
+                      }
                       setState(() {
                         if (_selectedActivities.contains(_activities[index])) {
                           _selectedActivities.remove(_activities[index]);
                           _currentScore -= _activities[index].lifepoints;
                           print("removed!");
-                          print(_allowedSore.toString());
+                          print(toString());
                           print(_currentScore.toString());
                         } else {
                           if (_currentScore + _activities[index].lifepoints <=
-                              _allowedSore) {
+                              appSettings.lifePointsCeilling) {
                             _selectedActivities.add(_activities[index]);
                             _currentScore += _activities[index].lifepoints;
                             print("added!");
-                            print(_allowedSore.toString());
+                            print(appSettings.lifePointsCeilling.toString());
                             print(_currentScore.toString());
                           } else {
                             // need to notify user of course....
                             print("Error, too many things");
-                            print(_allowedSore.toString());
+                            print(appSettings.lifePointsCeilling.toString());
                             print(_currentScore.toString());
                             final snackBar = SnackBar(
                               // unsure -> banner may be more approriate here
@@ -143,7 +158,7 @@ class ListScreenState extends State<ListScreen> {
                                   "Nah, you're doing too much! Do less :) This is " +
                                       (_activities[index].lifepoints +
                                               _currentScore -
-                                              _allowedSore)
+                                              appSettings.lifePointsCeilling)
                                           .toString() +
                                       " too many lifepoints"),
                               elevation: 8,
@@ -299,68 +314,7 @@ class ListScreenState extends State<ListScreen> {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute<void>(
-                        builder: (BuildContext context) {
-                          return Scaffold(
-                            appBar: AppBar(
-                              title: Text("Settings"),
-                              centerTitle: true,
-                            ),
-                            body:
-                                // get lifepoints if you want
-                                Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                
-                                children: <Widget>[
-                                  
-                                  Text(
-                                    "LifePoints",
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(0, 0, 0, 8),
-                                    child:
-                                  Text(
-                                    "LifePoints determine how many activities you can do in a day " +
-                                        "based on how expensive (or restorative!) each activity is",
-                                    style: TextStyle(fontSize: 12),
-                                  ),
-                                  ),
-                                  Expanded(
-                                    child: TextField(
-                                      decoration: new InputDecoration(                                        
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.greenAccent,
-                                                width: 1.0,
-                                                style: BorderStyle.solid,
-                                                ),
-                                          ),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Colors.blueGrey, width: 1.0),
-                                          ),
-                                          labelText:
-                                              "Edit Your LifePoints",),
-                                                  //_allowedSore.toString()),
-                                      keyboardType: TextInputType.number,
-
-                                      inputFormatters: <TextInputFormatter>[
-                                        WhitelistingTextInputFormatter
-                                            .digitsOnly,
-                                      ],
-                                      //onSubmitted: (String value),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
+                          builder: (BuildContext context) => Settings()),
                     );
                   },
                 ),
