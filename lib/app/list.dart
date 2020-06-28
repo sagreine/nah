@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nah/app/activity.dart';
 import 'package:nah/app/detail.dart';
 import 'package:nah/app/today.dart';
+import 'package:flutter/services.dart';
 
 ///// Generally thinking go away from strict navigator and prefer
 ///   bottomNavBar and PageView, managed out of home, for simplicity...
@@ -15,11 +16,11 @@ import 'package:nah/app/today.dart';
       pageController.jumpToPage(index);
     }*/
 
-// push to a builder of slivers for selected day....
 // not a map though? or pushes to a map but reads
 // into a list so you can have multiple of one...
-// TODO: lifepoints check. but notify users
 /// can we have that without error checking? e.g. make the button grayed out? or, toast instead...
+
+// TODO: Error by banner? or snackbar + brief red border highlight inkwell splash?
 
 class ListScreen extends StatefulWidget {
   @override
@@ -69,7 +70,7 @@ class ListScreenState extends State<ListScreen> {
     Widget _buildViewSection() {
       // may eventually return to just one column....
       // this is a grid of slivers that will hold our activities
-      int _allowedSore =  2;
+      int _allowedSore = 2;
       int _currentScore = 0;
 
       return SliverGrid(
@@ -137,12 +138,21 @@ class ListScreenState extends State<ListScreen> {
                             print(_allowedSore.toString());
                             print(_currentScore.toString());
                             final snackBar = SnackBar(
-                              content: Text("You're doing too much! Do less :)"),
+                              // unsure -> banner may be more approriate here
+                              content: Text(
+                                  "Nah, you're doing too much! Do less :) This is " +
+                                      (_activities[index].lifepoints +
+                                              _currentScore -
+                                              _allowedSore)
+                                          .toString() +
+                                      " too many lifepoints"),
+                              elevation: 8,
+                              behavior: SnackBarBehavior.floating,
                               //action: SnackBarAction(
-                                //label: 'Undo',
-                                //onPressed: () {
-                                  // Some code to undo the change.
-                                //},
+                              //label: 'Undo',
+                              //onPressed: () {
+                              // Some code to undo the change.
+                              //},
                               //),
                             );
 
@@ -269,24 +279,114 @@ class ListScreenState extends State<ListScreen> {
         primary: false,
         slivers: <Widget>[
           SliverAppBar(
-              expandedHeight: 75.0,
+              //expandedHeight: 75.0,
               floating: false,
               pinned: true,
               snap: false,
+              leading: Image.asset("assets/images/ic_launcher.png"),
               flexibleSpace: const FlexibleSpaceBar(
                 title: Text('Activities'),
               ),
               actions: <Widget>[
                 IconButton(
                   icon: const Icon(Icons.add_circle),
-                  tooltip: 'Add new',
+                  tooltip: 'Add new Activity',
                   onPressed: () {/* TOOD: add a new item to activities */},
+                ),
+                IconButton(
+                  icon: const Icon(Icons.settings),
+                  tooltip: 'Settings',
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (BuildContext context) {
+                          return Scaffold(
+                            appBar: AppBar(
+                              title: Text("Settings"),
+                              centerTitle: true,
+                            ),
+                            body:
+                                // get lifepoints if you want
+                                Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                
+                                children: <Widget>[
+                                  
+                                  Text(
+                                    "LifePoints",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(0, 0, 0, 8),
+                                    child:
+                                  Text(
+                                    "LifePoints determine how many activities you can do in a day " +
+                                        "based on how expensive (or restorative!) each activity is",
+                                    style: TextStyle(fontSize: 12),
+                                  ),
+                                  ),
+                                  Expanded(
+                                    child: TextField(
+                                      decoration: new InputDecoration(                                        
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.greenAccent,
+                                                width: 1.0,
+                                                style: BorderStyle.solid,
+                                                ),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.blueGrey, width: 1.0),
+                                          ),
+                                          labelText:
+                                              "Edit Your LifePoints",),
+                                                  //_allowedSore.toString()),
+                                      keyboardType: TextInputType.number,
+
+                                      inputFormatters: <TextInputFormatter>[
+                                        WhitelistingTextInputFormatter
+                                            .digitsOnly,
+                                      ],
+                                      //onSubmitted: (String value),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  },
                 ),
               ]),
           _buildViewSection(),
         ],
       ),
     );
+
+    void _onPressedFAB() {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Added these to your day!"),
+          //(_activities[index].lifepoints + _currentScore -_allowedSore).toString() +
+          //" too many lifepoints"),
+          elevation: 8,
+          behavior: SnackBarBehavior.floating,
+          action: SnackBarAction(
+            label: 'Undo',
+            onPressed: () {
+              //Some code to undo the change on Today and the selected activities (maybe)
+            },
+          ),
+        ),
+      );
+    }
 
     return MaterialApp(
       title: 'nah',
@@ -302,7 +402,7 @@ class ListScreenState extends State<ListScreen> {
           height: 80,
           width: 90,
           child: FloatingActionButton(
-            onPressed: null,
+            onPressed: _onPressedFAB,
             tooltip: 'Add to Day',
             child: Icon(Icons.add),
             elevation: 12,

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:nah/app/home.dart';
 
 
-// order of next things
+// order of next things a.k.a. why you should use Jira not comments 
 // settings page to set lifepoints - only changeable there for now
-// determine with finality overall approach below.
+// determine with finality overall approach below. -> approach 1 per users vai wireframe + walkthrough
 // statefulness review across everything
 // make reordering work and stay
 // make adding an activity work, editable activity if it is easy too
@@ -25,6 +25,10 @@ import 'package:nah/app/home.dart';
 // TODO: settings page
 // TODO: bottom nav bar or Appbar, to all pages
 // TODO: better splash screen - https://medium.com/kick-start-fluttering/flutter-design-your-own-splashscreen-d0612b17db23 animate transition? gif?
+// TODO: 'remove from Today screen' option to get rid of an item right there
+/// TODO: allow to temporarily override lifepoints
+/// TODO: Sheets:bottom to share/name etc. a day
+/// TODO: make settings not ugly as all get out
 /// TODO: do we want it to be, auto updates today's screen? or make them press a button to add to it...
 /// option 1) start on list page. select ones to add. button to add them. toast success. go to right to see today's list, back to left to add things
 /// pro: can click things, check out the order + # times you're doing something, change your mind
@@ -38,7 +42,9 @@ import 'package:nah/app/home.dart';
 /// con: a little more intuitive to say "add these!" than just know they're there --- i'd wonder why i need to go to a second screen at all, honestly..
 /// if all it adds is ability to reorder and view in a pretty timeline.
 /// 
-/// TODO: redo them as listTiles... just easier that way.. -> too small to look at :(
+/// okay, final(ish) decision is in -> option 1 has been selected by users. will add "remove from list" on Today screen as a feature
+/// 
+/// TODO: redo them as listTiles... just easier that way.. -> nope, too small to look at :(
 /// TODO: add a first time setup tutorial, just for fun!
 
 
