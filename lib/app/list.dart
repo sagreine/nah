@@ -109,44 +109,42 @@ decoration: BoxDecoration(
 
                   child: ListTile(
                     //isThreeLine: true,
-                    title: Text(
-                        _activities[index].title,
+                    title: Container(
+                      //padding: EdgeInsets.symmetric(vertical: 4.0),
+                      alignment: Alignment.center,
+                      
+  //                    width: 400,
+  //                    height: 640,
+                      // could limit this...
+                      child:
+                       Expanded(
+                         
+                        child: _activities[index].img,
+                      ),
+                    ),
+
+                    //subtitle:
+                    leading: Column(
+                      children: <Widget>[
+                        Icon(
+                          Icons.check_circle,
+                          size: 25.0,
+                          /*color: _selectedActivities.contains(_activities[index])
+                          ? Color(0xffA8D0DB)
+                          : Colors.transparent,*/
+                        ),
+                        Text(_activities[index].lifepoints.toString()),
+                      ],
+                    ),
+
+                    enabled: (_currentScore + _activities[index].lifepoints) <=
+                        _allowedSore,
+                    trailing: Text(_activities[index].title,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.black.withOpacity(0.9),
                           fontSize: 11,
                         )),
-                    //subtitle: 
-                    leading: 
-                    Container( 
-                      
-                      //padding: EdgeInsets.symmetric(vertical: 4.0),
-                      alignment: Alignment.centerLeft,
-                      width: 80,
-                      height: 640,
-                      // could limit this...
-                      child: Expanded( child:
-                      _activities[index].img,),
-                    ),
-                    enabled: (_currentScore + _activities[index].lifepoints) <=
-                        _allowedSore,
-                    trailing: 
-                    
-                    Column(
-
-                      children: <Widget>[
-                      Icon(
-                      Icons.check_circle,
-                      size: 30.0,
-                      /*color: _selectedActivities.contains(_activities[index])
-                          ? Color(0xffA8D0DB)
-                          : Colors.transparent,*/
-                    ),
-                    Text(_activities[index].lifepoints.toString()),
-                    ],
-                    ),
-
-
                   ),
                 ),
               ),

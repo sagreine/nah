@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nah/app/home.dart';
 
-// TODO: hero animations in a grid view - shrink the fly in screen? done, but do we like it
 // TODO: actually consider statefulness.....
 // TODO: pick color pallete, make that theme, no more hex
 // TODO: settings page
@@ -19,11 +18,9 @@ import 'package:nah/app/home.dart';
 /// con: no use for add button, which is not a con of course. 
 /// con: a little more intuitive to say "add these!" than just know they're there --- i'd wonder why i need to go to a second screen at all, honestly..
 /// if all it adds is ability to reorder and view in a pretty timeline.
-/// https://medium.com/@KarthikPonnam/flutter-pageview-withbottomnavigationbar-fb4c87580f6a
-/// https://stackoverflow.com/questions/61269906/flutter-bottom-navigation-bar-with-pageview
 /// 
-/// TODO: redo them as listTiles... just easier that way..
-/// TODO: add a first time setup tutorial, just for fun!
+/// TODO: redo them as listTiles... just easier that way.. -> too small to look at :(
+/// TODO: add a first time setup tutorial, just for fun.
 
 
 void main() {
