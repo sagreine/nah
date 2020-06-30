@@ -38,25 +38,19 @@ class ListScreenState extends State<ListScreen> {
   final List<Activity> _selectedActivities = List<Activity>();
   DayOfActivities thisDay = DayOfActivities();
   
+  
 
   int _currentIndex = 0;
   
   AppSettings appSettings;
 
+
   @override
-  Widget build(BuildContext context) {
-    final container = StateContainer.of(context);
-    appSettings = container.appSettings;
-
-    // 'need' a only-this-context running sum since we aren't adding
-    // activities to the day right away. 
-    // however, don't keep this here. only here to force recalc every setState()
-    int _currentScore = thisDay.getLifePointsSum();
-    _selectedActivities.forEach((element) {
-      _currentScore += element.lifepoints;
-    });
-
-    // this part obviously doesn't go here, done every build, just testing
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    
+        // this part obviously doesn't go here, done every build, just testing
     // will come from db anyhow...
     _activities.add(Activity(Image.asset('assets/images/yoga.jpg'), "Yoga!",
         "a Yoga subtitle", "this is yoga description", -2));
@@ -85,6 +79,23 @@ class ListScreenState extends State<ListScreen> {
         "this is a description for chores",
         2));
 
+
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    final container = StateContainer.of(context);
+    appSettings = container.appSettings;
+    // 'need' a only-this-context running sum since we aren't adding
+    // activities to the day right away. 
+    // however, don't keep this here. only here to force recalc every setState()
+    int _currentScore = thisDay.getLifePointsSum();
+    _selectedActivities.forEach((element) {
+      _currentScore += element.lifepoints;
+    });
+
+
     //appSettings = appSettings == null ? AppSettings(5) : container.appSettings;
     //container = StateContainer.of(context);
 
@@ -111,7 +122,7 @@ class ListScreenState extends State<ListScreen> {
 
             // load from db up front or lazy here directly?
             // performance considerations.
-            // use ListTile instead of card....
+            // look at non-Card options. straight grid tile, flutter example is muuch nicer UI
             return Card(
               // weight this color by lifepoint
               //color: _activities[index].getLifePointsColor(),
@@ -221,7 +232,7 @@ class ListScreenState extends State<ListScreen> {
                     // this is dumb. use a listTile... but image isn't great as it is too small
                     // straightforward adaptation breaks things though..
                     // only remaining 'issue' is checkbox is transparent, could just not use a transparent icon...
-                    // well it's also very ugly
+                    // well it's also very ugly. Switch to icons instead of images generally?
                     child: Container(
                       decoration: BoxDecoration(
                         color: _selectedActivities.contains(_activities[index])
@@ -278,24 +289,11 @@ class ListScreenState extends State<ListScreen> {
       onPanUpdate: (details)  {
         // swipe left to look at today
         if (details.delta.dx < 0) {
-          // clear the staging list of activities to add
-          //print("_activitiesToAdd.length " + _activitiesToAdd.length.toString());
-          //_activitiesToAdd.clear();
           Navigator.of(context).push(
             MaterialPageRoute<void>(
                 builder: (context) =>
                     TodayScreen()),
           );
-          // should do the clearing here but may need to async it?
-
-          /*.then(value)
-          {
-            _activitiesToAdd.clear(),*/
-            //);
-          //print("_activitiesToAdd.length " + _activitiesToAdd.length.toString());
-          // we added these activities, so we wont again. back button won't see them so could handle that...
-          //_activitiesToAdd.clear();
-          
         }
         // swipe right to add a new activity
         // should we async await then save? what if they change their mind...
@@ -361,11 +359,10 @@ class ListScreenState extends State<ListScreen> {
       Scaffold.of(context).showSnackBar(
         SnackBar(
           content: Text("Added these to your day!"),
-          //(_activities[index].lifepoints + _currentScore -_allowedSore).toString() +
-          //" too many lifepoints"),
           elevation: 8,
           behavior: SnackBarBehavior.floating,
           action: SnackBarAction(
+            // TODO: undo add to day
             label: 'Undo',
             onPressed: () {},
           ),
