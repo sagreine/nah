@@ -38,17 +38,18 @@ class ListScreenState extends State<ListScreen> {
   final List<Activity> _selectedActivities = List<Activity>();
   DayOfActivities thisDay = DayOfActivities();
   
-  
-
   int _currentIndex = 0;
   
   AppSettings appSettings;
 
+  // this is massively unnecessary, right?
+  GlobalKey<ScaffoldState> scaffoldState;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    scaffoldState = GlobalKey();
     
         // this part obviously doesn't go here, done every build, just testing
     // will come from db anyhow...
@@ -78,7 +79,6 @@ class ListScreenState extends State<ListScreen> {
         "a chores subtitle",
         "this is a description for chores",
         2));
-
 
   }
 
@@ -356,18 +356,23 @@ class ListScreenState extends State<ListScreen> {
 
     void _onPressedFAB() {
       // TODO: fix this display to not be on top of FAB
-      Scaffold.of(context).showSnackBar(
-        SnackBar(
+
+SnackBar snack = SnackBar(
           content: Text("Added these to your day!"),
           elevation: 8,
+          
+          
           behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 4),
           action: SnackBarAction(
             // TODO: undo add to day
             label: 'Undo',
             onPressed: () {},
           ),
-        ),
-      );
+        );        
+
+      //Scaffold.of(context).showSnackBar(snack);
+      scaffoldState.currentState.showSnackBar(snack);
       // add this selection group to staging, then clear
       thisDay.activities.addAll(_selectedActivities);
       //print("_activitiesToAdd.length " + _activitiesToAdd.length.toString());
@@ -377,8 +382,12 @@ class ListScreenState extends State<ListScreen> {
     }
 
     return MaterialApp(
+      
       title: 'nah',
-      home: Scaffold(
+      home: 
+      Scaffold(
+        key: scaffoldState,
+        
         backgroundColor: Color(0xffE49273),
         //Color(0xFF7180AC),
         //Theme.of(context).primaryColorLight.withOpacity(0.9),
@@ -386,10 +395,12 @@ class ListScreenState extends State<ListScreen> {
         // consider extended, with an icon and text, instead. e.g. "add to today"
         // still not sold on approach here. might prefer bottomNav with no add button...
         // in fact probably will do that!
-        floatingActionButton: Container(
+        floatingActionButton: 
+        Container(
           height: 80,
           width: 90,
-          child: FloatingActionButton(
+          child: 
+          FloatingActionButton(
             onPressed: _onPressedFAB,
             tooltip: 'Add to Day',
             child: Icon(Icons.add),

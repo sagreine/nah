@@ -143,7 +143,6 @@ class TodayScreenState extends State<TodayScreen> {
           /*Navigator.of(context).push(
             MaterialPageRoute<void>(builder: (context) => TodayScreen(selectedActivities: _selectedActivities)),*/
         }
-        // should we async await then save? what if they change their mind...
       },
       // the Activities for today...
       child: _buildViewSection(),
