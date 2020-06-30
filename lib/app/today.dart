@@ -10,29 +10,14 @@ import 'package:nah/app/detail.dart';
 ///
 ///
 ///
-/*abstract class ExampleStateBase {
-  @protected
-  String initialText;
-  @protected
-  String stateText;
-  String get currentText => stateText;
 
-  void setStateText(String text) {
-    stateText = text;
-  }
-
-  void reset() {
-    stateText = initialText;
-  }
-}*/
-
+// Singleton for the day. trying it out. not sure why it is in this file though.
 class DayOfActivities {
   //extends ExampleStateBase {
   static final DayOfActivities _instance = DayOfActivities._internal();
 
   List<Activity> activities;
   //int currentScore;
-
 
   factory DayOfActivities() {
     return _instance;
@@ -47,46 +32,36 @@ class DayOfActivities {
   }
 
   DayOfActivities._internal() {
-    //initialText = "A new 'ExampleState' instance has been created.";
-    //stateText = initialText;
-    //print(stateText);
     activities = List<Activity>();
-    //currentScore = 0;
   }
 }
 
-class TodayScreen extends StatelessWidget {
+class TodayScreen extends StatefulWidget {
   //DetailScreen({Key key, @required this.activity}) : super(key: key);
   //List<Activity> _selectedActivities;
   //final List<Activity> addedActivities;
-  DayOfActivities thisDay = DayOfActivities();
+  @override
+  TodayScreenState createState() => TodayScreenState();
+}
 
-  TodayScreen({Key key}) : super(key: key);
+class TodayScreenState extends State<TodayScreen> {
+  DayOfActivities thisDay = DayOfActivities();
 
   @override
   Widget build(BuildContext context) {
     Widget _buildViewSection() {
-      //so this goes in initState..
-      /*
-      if (_selectedActivities == null) {
-        _selectedActivities = List<Activity>();
-      }
-      */
-
-      /*print("thisDay.activities.length " +
-          thisDay.activities.length.toString());*/
-      // if we got passed new activities for today, add them!
-     // _selectedActivities.addAll(this.addedActivities);
-
       return ReorderableListView(
           //shrinkWrap: true,
           padding: const EdgeInsets.all(8),
           onReorder: (_oldIndex, _newIndex) {
-            //setState(() {
-            Activity tmpOld = thisDay.activities.removeAt(_oldIndex);
-            thisDay.activities.insert(_newIndex, tmpOld);
-            //}
-            //);
+            setState(() {
+              //Activity tmpOld = ;
+              if (_newIndex > _oldIndex) {
+                _newIndex -= 1;
+              }
+              thisDay.activities
+                  .insert(_newIndex, thisDay.activities.removeAt(_oldIndex));
+            });
           },
           header: Text("Drag to reorder"),
           children: <Widget>[
@@ -143,7 +118,9 @@ class TodayScreen extends StatelessWidget {
                           size: 35,
                         ),
                         onTap: () {
-                          thisDay.activities.remove(activity);
+                          setState(() {
+                            thisDay.activities.remove(activity);
+                          });
                           print(thisDay.activities.length);
                         },
                       ),
@@ -157,6 +134,7 @@ class TodayScreen extends StatelessWidget {
       //separatorBuilder: (BuildContext context, int index) => const Divider(),
     }
 
+// change this to horizontal only, too easy to mix it up with moving thing.
     Widget viewSection = GestureDetector(
       onPanUpdate: (details) {
         // swipe left to look at today
@@ -180,14 +158,4 @@ class TodayScreen extends StatelessWidget {
       ),
     );
   }
-
-  //@override
-  //TodayScreenState createState() => TodayScreenState();
-
 }
-
-//class TodayScreenState extends State<TodayScreen> {
-//List<Activity> selectedActivities;// = List<Activity>();
-//TodayScreenState({Key key); //: super(Key, key);
-
-//}
