@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nah/app/activity.dart';
 
 
 /// this class passes around stateful data automatically when updated
@@ -8,8 +9,9 @@ import 'package:flutter/material.dart';
 
 class AppSettings {
   int lifePointsCeilling;
+  List<Activity> todaysActivities;
 
-  AppSettings(this.lifePointsCeilling);
+  AppSettings(this.lifePointsCeilling, this.todaysActivities);
 
 }
 
@@ -65,7 +67,7 @@ class StateContainerState extends State<StateContainer> {
   // Widgets in the app that rely on the state you've changed.
   void updateAppSettings(lifePointsCeiling) {
     if (appSettings == null) {
-      appSettings = new AppSettings(lifePointsCeiling);
+      appSettings = new AppSettings(lifePointsCeiling, null);
       setState(() {
         appSettings = appSettings;
       });
@@ -75,7 +77,20 @@ class StateContainerState extends State<StateContainer> {
       });
     }
   }
-
+/*
+  void updateTodaysActivities(todaysActivities) {
+    if (appSettings == null) {
+      appSettings = new AppSettings(lifePointsCeiling, null);
+      setState(() {
+        appSettings = appSettings;
+      });
+    } else {
+      setState(() {
+        appSettings.lifePointsCeilling = todaysActivities ?? appSettings.lifePointsCeilling;
+      });
+    }
+  }
+*/
   // Simple build method that just passes this state through
   // your InheritedWidget
   @override

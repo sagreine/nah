@@ -34,17 +34,28 @@ class ListScreenState extends State<ListScreen> {
   // these should be maps. but also when look at state again,
   // because we should be able to delete them on the next page if we don't like them - maybe, anyway? could just make them come back here...
   final List<Activity> _activities = List<Activity>();
-  List<Activity> _activitiesToAdd = List<Activity>();
+  //List<Activity> _activitiesToAdd = List<Activity>();
   final List<Activity> _selectedActivities = List<Activity>();
+  DayOfActivities thisDay = DayOfActivities();
   
+
   int _currentIndex = 0;
-  int _currentScore = 0;
+  
   AppSettings appSettings;
 
   @override
   Widget build(BuildContext context) {
     final container = StateContainer.of(context);
     appSettings = container.appSettings;
+
+    // 'need' a only-this-context running sum since we aren't adding
+    // activities to the day right away. 
+    // however, don't keep this here. only here to force recalc every setState()
+    int _currentScore = thisDay.getLifePointsSum();
+    _selectedActivities.forEach((element) {
+      _currentScore += element.lifepoints;
+    });
+
     // this part obviously doesn't go here, done every build, just testing
     // will come from db anyhow...
     _activities.add(Activity(Image.asset('assets/images/yoga.jpg'), "Yoga!",
@@ -264,17 +275,23 @@ class ListScreenState extends State<ListScreen> {
 
     // just swipting = no additions happened (stop handling this here :))
     Widget viewSection = GestureDetector(
-      onPanUpdate: (details) {
+      onPanUpdate: (details)  {
         // swipe left to look at today
         if (details.delta.dx < 0) {
           // clear the staging list of activities to add
-          print("_activitiesToAdd.length " + _activitiesToAdd.length.toString());
+          //print("_activitiesToAdd.length " + _activitiesToAdd.length.toString());
           //_activitiesToAdd.clear();
           Navigator.of(context).push(
             MaterialPageRoute<void>(
                 builder: (context) =>
-                    TodayScreen(addedActivities: _activitiesToAdd)),
+                    TodayScreen()),
           );
+          // should do the clearing here but may need to async it?
+
+          /*.then(value)
+          {
+            _activitiesToAdd.clear(),*/
+            //);
           //print("_activitiesToAdd.length " + _activitiesToAdd.length.toString());
           // we added these activities, so we wont again. back button won't see them so could handle that...
           //_activitiesToAdd.clear();
@@ -355,8 +372,8 @@ class ListScreenState extends State<ListScreen> {
         ),
       );
       // add this selection group to staging, then clear
-      _activitiesToAdd.addAll(_selectedActivities);
-      print("_activitiesToAdd.length " + _activitiesToAdd.length.toString());
+      thisDay.activities.addAll(_selectedActivities);
+      //print("_activitiesToAdd.length " + _activitiesToAdd.length.toString());
       setState(() {
         _selectedActivities.clear();
       });
@@ -403,6 +420,7 @@ class ListScreenState extends State<ListScreen> {
                 BottomNavigationBarItem(
                   icon: Icon(Icons.view_day),
                   title: Text("View Today"),
+                  // pass _activitiesToAdd...?
                 ),
               ]),
         ),

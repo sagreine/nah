@@ -9,6 +9,7 @@ import "package:nah/app/state_container.dart";
 /// one solution is to do it all from the list page (implemented here) but that's not going to be good with Today being a top level page
 /// e.g. if we add 5 things, go to Add/Edit top level page, then go to Today, nobody pushed list->Today....
 /// are we back to tabs then, w/ FAB, with add/edit a 2nd class citizen? or is there another way to pass this data to Today async?
+/// alternatively, just store todaysActivities in our state?
 // let them delete something from Today --- done, but doesn't reflect that in List. which is okay, since we're changing that relationship to add-only.
 // statefulness review across everything
 //

@@ -7,38 +7,90 @@ import 'package:nah/app/detail.dart';
 /// TODO: obviously, this is no longer a stateless widget....
 /// TODO: custom timeline rather than reorderable list? more fun :)
 /// TODO: animated list? much more fun especially for deletion sweep :)
+///
+///
+///
+/*abstract class ExampleStateBase {
+  @protected
+  String initialText;
+  @protected
+  String stateText;
+  String get currentText => stateText;
+
+  void setStateText(String text) {
+    stateText = text;
+  }
+
+  void reset() {
+    stateText = initialText;
+  }
+}*/
+
+class DayOfActivities {
+  //extends ExampleStateBase {
+  static final DayOfActivities _instance = DayOfActivities._internal();
+
+  List<Activity> activities;
+  //int currentScore;
+
+
+  factory DayOfActivities() {
+    return _instance;
+  }
+
+  int getLifePointsSum() {
+    int tmp = 0;
+    activities.forEach((element) {
+      tmp += element.lifepoints;
+    });
+    return tmp;
+  }
+
+  DayOfActivities._internal() {
+    //initialText = "A new 'ExampleState' instance has been created.";
+    //stateText = initialText;
+    //print(stateText);
+    activities = List<Activity>();
+    //currentScore = 0;
+  }
+}
+
 class TodayScreen extends StatelessWidget {
   //DetailScreen({Key key, @required this.activity}) : super(key: key);
-  List<Activity> _selectedActivities;
-  final List<Activity> addedActivities;
+  //List<Activity> _selectedActivities;
+  //final List<Activity> addedActivities;
+  DayOfActivities thisDay = DayOfActivities();
 
-  TodayScreen({Key key, this.addedActivities}) : super(key: key);
+  TodayScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Widget _buildViewSection() {
       //so this goes in initState..
+      /*
       if (_selectedActivities == null) {
         _selectedActivities = List<Activity>();
       }
-      
-      print("this.addedActivities.length " + this.addedActivities.length.toString());
+      */
+
+      /*print("thisDay.activities.length " +
+          thisDay.activities.length.toString());*/
       // if we got passed new activities for today, add them!
-      _selectedActivities.addAll(this.addedActivities);
+     // _selectedActivities.addAll(this.addedActivities);
 
       return ReorderableListView(
           //shrinkWrap: true,
           padding: const EdgeInsets.all(8),
           onReorder: (_oldIndex, _newIndex) {
             //setState(() {
-            Activity tmpOld = _selectedActivities.removeAt(_oldIndex);
-            _selectedActivities.insert(_newIndex, tmpOld);
+            Activity tmpOld = thisDay.activities.removeAt(_oldIndex);
+            thisDay.activities.insert(_newIndex, tmpOld);
             //}
             //);
           },
           header: Text("Drag to reorder"),
           children: <Widget>[
-            for (final activity in _selectedActivities)
+            for (final activity in thisDay.activities)
 
               // populated card, detail screen on long press
               Card(
@@ -91,8 +143,8 @@ class TodayScreen extends StatelessWidget {
                           size: 35,
                         ),
                         onTap: () {
-                          _selectedActivities.remove(activity);
-                          print(_selectedActivities.length);
+                          thisDay.activities.remove(activity);
+                          print(thisDay.activities.length);
                         },
                       ),
 
