@@ -37,12 +37,13 @@ class ListScreenState extends State<ListScreen> {
   //List<Activity> _activitiesToAdd = List<Activity>();
   final List<Activity> _selectedActivities = List<Activity>();
   DayOfActivities thisDay = DayOfActivities();
-  
+
   int _currentIndex = 0;
-  
+
   AppSettings appSettings;
 
   // this is massively unnecessary, right?
+  /// i couldn't immediately see why scaffold of context in the FAB didn't work, with snack behavior set to floating though. 
   GlobalKey<ScaffoldState> scaffoldState;
 
   @override
@@ -50,8 +51,8 @@ class ListScreenState extends State<ListScreen> {
     // TODO: implement initState
     super.initState();
     scaffoldState = GlobalKey();
-    
-        // this part obviously doesn't go here, done every build, just testing
+
+    // this part obviously doesn't go here, done every build, just testing
     // will come from db anyhow...
     _activities.add(Activity(Image.asset('assets/images/yoga.jpg'), "Yoga!",
         "a Yoga subtitle", "this is yoga description", -2));
@@ -79,22 +80,19 @@ class ListScreenState extends State<ListScreen> {
         "a chores subtitle",
         "this is a description for chores",
         2));
-
   }
 
   @override
   Widget build(BuildContext context) {
-
     final container = StateContainer.of(context);
     appSettings = container.appSettings;
     // 'need' a only-this-context running sum since we aren't adding
-    // activities to the day right away. 
+    // activities to the day right away.
     // however, don't keep this here. only here to force recalc every setState()
     int _currentScore = thisDay.getLifePointsSum();
     _selectedActivities.forEach((element) {
       _currentScore += element.lifepoints;
     });
-
 
     //appSettings = appSettings == null ? AppSettings(5) : container.appSettings;
     //container = StateContainer.of(context);
@@ -165,7 +163,8 @@ class ListScreenState extends State<ListScreen> {
                           print("removed!");
                           print(toString());
                           print(_currentScore.toString());
-                        } else { // select if not going over the limit
+                        } else {
+                          // select if not going over the limit
                           if (_currentScore + _activities[index].lifepoints <=
                               appSettings.lifePointsCeilling) {
                             _selectedActivities.add(_activities[index]);
@@ -173,7 +172,8 @@ class ListScreenState extends State<ListScreen> {
                             print("added!");
                             print(appSettings.lifePointsCeilling.toString());
                             print(_currentScore.toString());
-                          } else { // you can't cuz it is too expensive                            
+                          } else {
+                            // you can't cuz it is too expensive
                             print("Error, too many things");
                             print(appSettings.lifePointsCeilling.toString());
                             print(_currentScore.toString());
@@ -192,7 +192,7 @@ class ListScreenState extends State<ListScreen> {
                               //label: 'Edit LifePoints Quota',
                               //onPressed: () {
                               // Some code to undo the change.
-                              // 
+                              //
                               //},
                               //),
                             );
@@ -286,13 +286,11 @@ class ListScreenState extends State<ListScreen> {
 
     // just swipting = no additions happened (stop handling this here :))
     Widget viewSection = GestureDetector(
-      onPanUpdate: (details)  {
+      onPanUpdate: (details) {
         // swipe left to look at today
         if (details.delta.dx < 0) {
           Navigator.of(context).push(
-            MaterialPageRoute<void>(
-                builder: (context) =>
-                    TodayScreen()),
+            MaterialPageRoute<void>(builder: (context) => TodayScreen()),
           );
         }
         // swipe right to add a new activity
@@ -354,40 +352,34 @@ class ListScreenState extends State<ListScreen> {
       ),
     );
 
-    void _onPressedFAB() {
-      // TODO: fix this display to not be on top of FAB
+    void _onPressedFAB() {      
+      // tell the user it worked then clear everyting. 
+      // don't need to create then dispose every time....
+      SnackBar snack = SnackBar(
+        content: Text("Added these to your day!"),
+        elevation: 8,
+        behavior: SnackBarBehavior.floating,
+        duration: Duration(seconds: 4),
+        action: SnackBarAction(
+          // TODO: undo add to day
+          label: 'Undo',
+          onPressed: () {},
+        ),
+      );
 
-SnackBar snack = SnackBar(
-          content: Text("Added these to your day!"),
-          elevation: 8,
-          
-          
-          behavior: SnackBarBehavior.floating,
-          duration: Duration(seconds: 4),
-          action: SnackBarAction(
-            // TODO: undo add to day
-            label: 'Undo',
-            onPressed: () {},
-          ),
-        );        
-
-      //Scaffold.of(context).showSnackBar(snack);
-      scaffoldState.currentState.showSnackBar(snack);
-      // add this selection group to staging, then clear
+      // add this selection to Today then clear selected
       thisDay.activities.addAll(_selectedActivities);
-      //print("_activitiesToAdd.length " + _activitiesToAdd.length.toString());
       setState(() {
         _selectedActivities.clear();
       });
+
+      scaffoldState.currentState.showSnackBar(snack);
     }
 
     return MaterialApp(
-      
       title: 'nah',
-      home: 
-      Scaffold(
+      home: Scaffold(
         key: scaffoldState,
-        
         backgroundColor: Color(0xffE49273),
         //Color(0xFF7180AC),
         //Theme.of(context).primaryColorLight.withOpacity(0.9),
@@ -395,12 +387,10 @@ SnackBar snack = SnackBar(
         // consider extended, with an icon and text, instead. e.g. "add to today"
         // still not sold on approach here. might prefer bottomNav with no add button...
         // in fact probably will do that!
-        floatingActionButton: 
-        Container(
+        floatingActionButton: Container(
           height: 80,
           width: 90,
-          child: 
-          FloatingActionButton(
+          child: FloatingActionButton(
             onPressed: _onPressedFAB,
             tooltip: 'Add to Day',
             child: Icon(Icons.add),

@@ -37,9 +37,6 @@ class DayOfActivities {
 }
 
 class TodayScreen extends StatefulWidget {
-  //DetailScreen({Key key, @required this.activity}) : super(key: key);
-  //List<Activity> _selectedActivities;
-  //final List<Activity> addedActivities;
   @override
   TodayScreenState createState() => TodayScreenState();
 }
@@ -55,7 +52,6 @@ class TodayScreenState extends State<TodayScreen> {
           padding: const EdgeInsets.all(8),
           onReorder: (_oldIndex, _newIndex) {
             setState(() {
-              //Activity tmpOld = ;
               if (_newIndex > _oldIndex) {
                 _newIndex -= 1;
               }
@@ -89,44 +85,72 @@ class TodayScreenState extends State<TodayScreen> {
                       }),
                     );
                   },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      Expanded(
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            // so they don't get huge when dragging..
-                            mainAxisSize: MainAxisSize.min,
+                  child: Dismissible(
+                    // Each Dismissible must contain a Key. Keys allow Flutter to
+                    // uniquely identify widgets.
+                    key: Key(activity.activityID.toString()),
+                    // Provide a function that tells the app
+                    // what to do after an item has been swiped away.
+                    onDismissed: (direction) {
+                      // Remove the item from the data source.
+                      setState(() {
+                        thisDay.activities.remove(activity);
+                      });
 
-                            // do we want these cards to be the same size? height?
-                            // same as other page, same as each other, something else?
+                      // Then show a snackbar.
+                      Scaffold.of(context).showSnackBar(SnackBar(
+                          content:
+                              Text(activity.title + " removed from today")));
+                    },
+                    // Show a red background as the item is swiped away.
+                    background: Container(color: Colors.red),
 
-                            children: [
-                              Image(height: 100, image: activity.img.image),
-                              Text(activity.title,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Colors.black.withOpacity(0.9),
-                                  )),
-                            ]),
-                      ),
-                      InkWell(
-                        child: Icon(
-                          Icons.delete_sweep,
-                          color: Colors.red,
-                          size: 35,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Expanded(
+                          //child: ListTile(title: Text('$item')),
+
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              // so they don't get huge when dragging..
+                              mainAxisSize: MainAxisSize.min,
+
+                              // do we want these cards to be the same size? height?
+                              // same as other page, same as each other, something else?
+
+                              children: [
+                                Image(height: 100, image: activity.img.image),
+                                Text(activity.title,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.black.withOpacity(0.9),
+                                    )),
+                              ]),
                         ),
-                        onTap: () {
-                          setState(() {
-                            thisDay.activities.remove(activity);
-                          });
-                          print(thisDay.activities.length);
-                        },
-                      ),
+                        InkWell(
+                          child: Icon(
+                            Icons.delete_sweep,
+                            color: Colors.red,
+                            size: 35,
+                          ),
+                          // TODO: make this exectute dismiss instead of just delete...
+                          onTap: () {
+                            setState(() {
+                              thisDay.activities.remove(activity);                              
+                              // Then show a snackbar.
+                              Scaffold.of(context).showSnackBar(SnackBar(
+                                  content: Text(
+                                      activity.title + " removed from today")));
+                            });
+                            print(thisDay.activities.length);
+                          },
+                        ),
 
-                      //selectedActivities.removeAt(index),
-                    ],
+                        //selectedActivities.removeAt(index),
+                      ],
+                    ),
                   ),
                 ),
               ),
