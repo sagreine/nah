@@ -62,10 +62,9 @@ class TodayScreenState extends State<TodayScreen> {
           header: Text("Drag to reorder"),
           children: <Widget>[
             for (final activity in thisDay.activities)
-
               // populated card, detail screen on long press
               Card(
-                key: ValueKey(activity),
+                key: UniqueKey(),//ObjectKey(activity.activityID),
                 shadowColor: Theme.of(context).primaryColorDark,
                 child: InkWell(
                   splashColor: Theme.of(context).primaryColor.withAlpha(30),
@@ -98,9 +97,12 @@ class TodayScreenState extends State<TodayScreen> {
                       });
 
                       // Then show a snackbar.
-                      Scaffold.of(context).showSnackBar(SnackBar(
-                          content:
-                              Text(activity.title + " removed from today")));
+                      // needs scaffold (use builder or global key)
+                      /*
+                              Scaffold.of(context).showSnackBar(SnackBar(
+                                  content: Text(
+                                      activity.title + " removed from today")));
+                                      */
                     },
                     // Show a red background as the item is swiped away.
                     background: Container(color: Colors.red),
@@ -138,11 +140,14 @@ class TodayScreenState extends State<TodayScreen> {
                           // TODO: make this exectute dismiss instead of just delete...
                           onTap: () {
                             setState(() {
-                              thisDay.activities.remove(activity);                              
+                              thisDay.activities.remove(activity);
                               // Then show a snackbar.
+                              // needs scaffold (use builder or global key)
+                              /*
                               Scaffold.of(context).showSnackBar(SnackBar(
                                   content: Text(
                                       activity.title + " removed from today")));
+                                      */
                             });
                             print(thisDay.activities.length);
                           },
@@ -175,6 +180,7 @@ class TodayScreenState extends State<TodayScreen> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
+          // TODO: add a clear all button
           title: Text("Today's Activitiies"),
         ),
         body: viewSection,
