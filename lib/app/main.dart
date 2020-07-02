@@ -8,12 +8,12 @@ import "package:nah/app/state_container.dart";
 //
 // nice to have, post-MVP below
 //
-// make adding an activity work, editable activity if it is easy to
 // We have an image in each activity. why? why not a string to the asset, and recreate it where needed? cheaper than passing along? easy to e.g. fadeInImage wherever we want etc..
+// make adding an activity work, editable activity if it is easy to, perm delete one too 
+//
 // how do we want to deal wtih 3 days at bottom nav bar? add activity, pick activites, today's activities... pageview? manual? UI? - fix bottomnav, no more pop() there.
 // look into persistence, simple way first, across 1 day of use at least
 // fancy timelines
-// navbar and re-nav'ing -> no button, just bottomNav 
 // editable activity
 // color palette consistency / more fun logo, e.g. for splash
 // better splash screen

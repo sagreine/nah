@@ -22,6 +22,7 @@ import "package:nah/app/state_container.dart";
 // just using list for now to not deal with it basically, iterable by index speed vs. math Set guarantees - not needed, though could be assumed so faster if searching non-index
 
 // TODO: Error by banner? or snackbar + brief red border highlight inkwell splash?
+// TODO: Positioned.fill for stack for background?
 
 class ListScreen extends StatefulWidget {
   @override
@@ -38,7 +39,7 @@ class ListScreenState extends State<ListScreen> {
   final List<Activity> _selectedActivities = List<Activity>();
   DayOfActivities thisDay = DayOfActivities();
 
-// this will change when we use PageView
+// this will change when we use PageView but for now used to tell which page we're on and pick the next one
   int _currentIndex = 0;
 
   AppSettings appSettings;
@@ -95,11 +96,6 @@ class ListScreenState extends State<ListScreen> {
       _currentScore += element.lifepoints;
     });
 
-    //appSettings = appSettings == null ? AppSettings(5) : container.appSettings;
-    //container = StateContainer.of(context);
-
-    //appSettings = StateContainer.of(context).appSettings;
-    //appSettings = AppSettings(50);
 
     Widget _buildViewSection() {
       // may eventually return to just one column....
@@ -107,11 +103,10 @@ class ListScreenState extends State<ListScreen> {
 
       return SliverGrid(
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+          // change here to see more activities in a given row
           maxCrossAxisExtent: 200.0,
-          mainAxisSpacing: 20.0,
-          crossAxisSpacing: 10.0,
-          // change sizing of images here
-          childAspectRatio: 2.0,
+          mainAxisSpacing: 5,
+          crossAxisSpacing: 3,
         ),
         // this builds each individual activity
 
@@ -121,15 +116,26 @@ class ListScreenState extends State<ListScreen> {
 
             // load from db up front or lazy here directly?
             // performance considerations.
-            // look at non-Card options. straight grid tile, flutter example is muuch nicer UI
-            return Card(
-              // weight this color by lifepoint
-              //color: _activities[index].getLifePointsColor(),
-              shadowColor: Theme.of(context).primaryColorDark,
+            return Container(
+              height: double.infinity,
+              width: double.infinity,
 
               // this enables cool animations when getting details
               child: Hero(
                 tag: _activities[index].img,
+/*                flightShuttleBuilder: (
+                  BuildContext flightContext,
+                  Animation<double> animation,
+                  HeroFlightDirection flightDirection,
+                  BuildContext fromHeroContext,
+                  BuildContext toHeroContext,
+                ) {
+                  final Hero toHero = toHeroContext.widget;
+                  return RotationTransition(
+                    turns: animation,
+                    child: toHero.child,
+                  );
+                },*/
                 child: Material(
                   // transparent enhances hero animation
                   color: Colors.transparent,
@@ -229,24 +235,23 @@ class ListScreenState extends State<ListScreen> {
                       ),
                       child: Stack(
                         children: <Widget>[
-                          Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  child: _activities[index].img,
-                                ),
-                                Text(
-                                    _activities[index].title +
-                                        " " +
-                                        _activities[index]
-                                            .lifepoints
-                                            .toString(),
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.black.withOpacity(0.9),
-                                    )),
-                              ]),
+                          // want image to fill the box so use infinity..
+                          Image(
+                              height: double.infinity,
+                              width: double.infinity,
+                              image: AssetImage("assets/images/learn.jpg"),
+                              fit: BoxFit.cover),
+                          Container(
+                            alignment: Alignment.bottomCenter,
+                            child: Text(
+                                _activities[index].title +
+                                    " " +
+                                    _activities[index].lifepoints.toString(),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.black.withOpacity(0.9),
+                                )),
+                          ),
                           Icon(
                             Icons.check_circle,
                             size: 35.0,

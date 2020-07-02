@@ -39,7 +39,7 @@ class TodayScreen extends StatefulWidget {
 
 class TodayScreenState extends State<TodayScreen> {
   DayOfActivities thisDay = DayOfActivities();
-  int _currentIndex = 1;
+  int _currentIndex = 2;
 
   @override
   Widget build(BuildContext context) {

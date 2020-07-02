@@ -77,20 +77,6 @@ class StateContainerState extends State<StateContainer> {
       });
     }
   }
-/*
-  void updateTodaysActivities(todaysActivities) {
-    if (appSettings == null) {
-      appSettings = new AppSettings(lifePointsCeiling, null);
-      setState(() {
-        appSettings = appSettings;
-      });
-    } else {
-      setState(() {
-        appSettings.lifePointsCeilling = todaysActivities ?? appSettings.lifePointsCeilling;
-      });
-    }
-  }
-*/
   // Simple build method that just passes this state through
   // your InheritedWidget
   @override
