@@ -130,19 +130,6 @@ class ListScreenState extends State<ListScreen> {
               // this enables cool animations when getting details
               child: Hero(
                 tag: _activities[index].img,
-/*                flightShuttleBuilder: (
-                  BuildContext flightContext,
-                  Animation<double> animation,
-                  HeroFlightDirection flightDirection,
-                  BuildContext fromHeroContext,
-                  BuildContext toHeroContext,
-                ) {
-                  final Hero toHero = toHeroContext.widget;
-                  return RotationTransition(
-                    turns: animation,
-                    child: toHero.child,
-                  );
-                },*/
                 child: Material(
                   // transparent enhances hero animation
                   color: Colors.transparent,

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:nah/app/activity.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nah/app/today.dart';
+import 'package:transparent_image/transparent_image.dart';
+
 
 
 
@@ -30,7 +32,11 @@ class DetailScreen extends StatelessWidget {
             // Navigator.pop(context, activity);
             Navigator.of(context).pop();
           },
-          child: activity.img,
+          child: //FadeInImage.memoryNetwork(
+                //placeholder: kTransparentImage,
+                //image:  Image.asset(activity.img),
+                activity.img,
+               // ),
         ),
       ),
     );
