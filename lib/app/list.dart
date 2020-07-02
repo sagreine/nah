@@ -38,12 +38,13 @@ class ListScreenState extends State<ListScreen> {
   final List<Activity> _selectedActivities = List<Activity>();
   DayOfActivities thisDay = DayOfActivities();
 
+// this will change when we use PageView
   int _currentIndex = 0;
 
   AppSettings appSettings;
 
   // this is massively unnecessary, right?
-  /// i couldn't immediately see why scaffold of context in the FAB didn't work, with snack behavior set to floating though. 
+  /// i couldn't immediately see why scaffold of context in the FAB didn't work, with snack behavior set to floating though.
   GlobalKey<ScaffoldState> scaffoldState;
 
   @override
@@ -352,8 +353,8 @@ class ListScreenState extends State<ListScreen> {
       ),
     );
 
-    void _onPressedFAB() {      
-      // tell the user it worked then clear everyting. 
+    void _onPressedFAB() {
+      // tell the user it worked then clear everyting.
       // don't need to create then dispose every time....
       SnackBar snack = SnackBar(
         content: Text("Added these to your day!"),
@@ -408,13 +409,32 @@ class ListScreenState extends State<ListScreen> {
               onTap: (int index) {
                 setState(() {
                   _currentIndex = index;
+                  // this will change when we add PageView
+                  // but, nav to the other screens this way basically
+                  if (_currentIndex == 1) {
+                    Navigator.of(context).push(MaterialPageRoute<void>(
+                        builder: (context) => TodayScreen()));
+                  } else {
+                    Navigator.of(context).push(MaterialPageRoute<void>(
+                      builder: (context) => DetailScreen(
+                        //default is a 0 score activity
+                        activity: Activity(
+                          Image.asset('assets/images/default.jpg'),
+                          "Add a title to this activity",
+                          "Add a subtitle to this activity",
+                          "Add an activity description!",
+                          0,
+                        ),
+                      ),
+                    ));
+                  }
                 });
                 //_navigateToScreens(index);
               },
               items: [
                 BottomNavigationBarItem(
                     icon: Icon(FontAwesomeIcons.edit),
-                    title: Text("Add or Edit")),
+                    title: Text("Create Activity")),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.view_day),
                   title: Text("View Today"),

@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nah/app/activity.dart';
 import 'package:nah/app/detail.dart';
 
-///// needs to be a list, not a set, as activities can repeat here
-/// TODO: retain reordering across life of screen (if i go back, then return, i want to save my order) --- this happens now, just not setState()...
-/// TODO: obviously, this is no longer a stateless widget....
 /// TODO: custom timeline rather than reorderable list? more fun :)
 /// TODO: animated list? much more fun especially for deletion sweep :)
-///
-///
 ///
 
 // Singleton for the day. trying it out. not sure why it is in this file though.
@@ -43,6 +39,7 @@ class TodayScreen extends StatefulWidget {
 
 class TodayScreenState extends State<TodayScreen> {
   DayOfActivities thisDay = DayOfActivities();
+  int _currentIndex = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +61,7 @@ class TodayScreenState extends State<TodayScreen> {
             for (final activity in thisDay.activities)
               // populated card, detail screen on long press
               Card(
-                key: UniqueKey(),//ObjectKey(activity.activityID),
+                key: UniqueKey(), //ObjectKey(activity.activityID),
                 shadowColor: Theme.of(context).primaryColorDark,
                 child: InkWell(
                   splashColor: Theme.of(context).primaryColor.withAlpha(30),
@@ -182,8 +179,70 @@ class TodayScreenState extends State<TodayScreen> {
         appBar: AppBar(
           // TODO: add a clear all button
           title: Text("Today's Activitiies"),
+          leading: Image.asset("assets/images/ic_launcher.png"),
         ),
         body: viewSection,
+        floatingActionButton: Container(
+          height: 80,
+          width: 90,
+          child: FloatingActionButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            tooltip: 'Back to Activities List',
+            child: Icon(FontAwesomeIcons.arrowLeft),
+            elevation: 12,
+          ),
+        ),
+        bottomNavigationBar: BottomAppBar(
+          shape: CircularNotchedRectangle(),
+          color: Colors.blueGrey,
+          notchMargin: 3.5,
+          clipBehavior: Clip.antiAlias,
+          child: BottomNavigationBar(
+              currentIndex: _currentIndex,
+              onTap: (int index) {
+                setState(() {
+                  _currentIndex = index;                  
+                  if (_currentIndex == 2) {
+                    // N/A, we're here already...
+                  } 
+                  else if (_currentIndex == 1)
+                  {
+                    Navigator.of(context).pop();
+                  }
+                  else {
+                    Navigator.of(context).push(MaterialPageRoute<void>(
+                      builder: (context) => DetailScreen(
+                        //default is a 0 score activity
+                        activity: Activity(
+                          Image.asset('assets/images/default.jpg'),
+                          "Add a title to this activity",
+                          "Add a subtitle to this activity",
+                          "Add an activity description!",
+                          0,
+                        ),
+                      ),
+                    ));
+                  }
+                });
+                //_navigateToScreens(index);
+              },
+              items: [
+                BottomNavigationBarItem(
+                    icon: Icon(FontAwesomeIcons.edit),
+                    title: Text("Create Activity")),
+                BottomNavigationBarItem(
+                    icon: Icon(FontAwesomeIcons.truckPickup),
+                    title: Text("Pick Activities")),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.view_day),
+                  title: Text("View Today"),
+                  // pass _activitiesToAdd...?
+                ),
+              ]),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       ),
     );
   }
