@@ -58,19 +58,19 @@ class ListScreenState extends State<ListScreen> {
     // this part obviously doesn't go here, done every build, just testing
     // will come from db anyhow...
     _activities.add(Activity('assets/images/yoga.jpg', "Yoga!",
-        "a Yoga subtitle", "this is yoga description", -2));
+        "a Yoga subtitle", "This is doing yoga, not teaching it. Yoga is a great way to relax. Try doing it in the park! Or with a goat! Or a beer.", -2));
     _activities.add(Activity('assets/images/work.jpg', "work...!",
-        "a work subtitle", "this is a description for work", 3));
+        "a work subtitle", "Work. Can't live with it, can't live without it! Luckily they pay you, which is pretty cool I guess. It takes a lot though!", 3));
     _activities.add(Activity('assets/images/write.jpg', "write...!",
-        "a write subtitle", "this is a description for write", -2));
+        "a write subtitle", "Writing is fun. Try doing it with crayons to be silly. edit: DON'T eat the crayons.", -2));
     _activities.add(Activity('assets/images/tv.jpg', "tv...!", "a tv subtitle",
-        "this is a description for tv", 0));
+        "Of course by 'TV' I mean 'Netflix'. It isn't 1996.", 0));
     _activities.add(Activity('assets/images/eat.jpg', "eat...!",
-        "an eating subtitle", "this is a description for eat", 0));
+        "an eating subtitle", "Eating is amazing. I do it almost every day. I recommend 1 large pizza every 12-18 hours for best results.", 0));
     _activities.add(Activity('assets/images/teach.jpg', "teach...!",
-        "a teaching subtitle", "this is a description for teach", 1));
+        "a teaching subtitle", "This can be teaching anything. Yoga, programming, even eating. Mmm, eating.", 1));
     _activities.add(Activity('assets/images/chores.jpg', "chores...!",
-        "a chores subtitle", "this is a description for chores", 2));
+        "a chores subtitle", "Everyone hates chores but everyone has to do them. Unless you're rich. In which case, please buy me a coffee", 2));
   }
 
   @override

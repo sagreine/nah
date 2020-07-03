@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nah/app/activity.dart';
 import 'package:nah/app/detail.dart';
+import 'package:nah/app/timeline.dart';
 
 /// TODO: custom timeline rather than reorderable list? more fun :)
 /// TODO: animated list? much more fun especially for deletion sweep :)
@@ -120,7 +121,9 @@ class TodayScreenState extends State<TodayScreen> {
                               // same as other page, same as each other, something else?
 
                               children: [
-                                Image(height: 100, image: AssetImage(activity.imgPath)),
+                                Image(
+                                    height: 100,
+                                    image: AssetImage(activity.imgPath)),
                                 Text(activity.title,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
@@ -171,7 +174,15 @@ class TodayScreenState extends State<TodayScreen> {
         }
       },
       // the Activities for today...
-      child: _buildViewSection(),
+      child:
+      Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[   
+          Text("hi is this timeline no this is patrick"),
+          Expanded(child:      
+       _buildViewSection(),),
+      ],
+      ),
     );
 
     return MaterialApp(
@@ -187,7 +198,9 @@ class TodayScreenState extends State<TodayScreen> {
           width: 90,
           child: FloatingActionButton(
             onPressed: () {
-              Navigator.of(context).pop();
+              //Navigator.of(context).pop();
+              Navigator.of(context).push(
+                  MaterialPageRoute<void>(builder: (context) => Timeline()));
             },
             tooltip: 'Back to Activities List',
             child: Icon(FontAwesomeIcons.arrowLeft),
@@ -203,18 +216,15 @@ class TodayScreenState extends State<TodayScreen> {
               currentIndex: _currentIndex,
               onTap: (int index) {
                 setState(() {
-                  _currentIndex = index;                  
+                  _currentIndex = index;
                   if (_currentIndex == 2) {
                     // N/A, we're here already...
-                  } 
-                  else if (_currentIndex == 1)
-                  {
+                  } else if (_currentIndex == 1) {
                     Navigator.of(context).pop();
-                  }
-                  else {
+                  } else {
                     Navigator.of(context).push(MaterialPageRoute<void>(
                       builder: (context) => DetailScreen(
-                        //default is a 0 score activity - this should be done in activity.dart as blank constructor... 
+                        //default is a 0 score activity - this should be done in activity.dart as blank constructor...
                         activity: Activity(
                           'assets/images/default.jpg',
                           "Add a title to this activity",

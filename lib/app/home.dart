@@ -38,6 +38,7 @@ class _MyHomeState extends State<MyHome> {
       _controller.setLooping(true);
       Timer(Duration(milliseconds: 100), () {
         setState(() {
+          _controller.setVolume(0);
           _controller.play();
           _visible = true;
         });
