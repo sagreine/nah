@@ -8,6 +8,13 @@ import 'dart:io';
 
 /// TODO: SliverAnimatedList instead? much more fun. also explicit animations instead of roll your own.. :)
 /// also also, naturally lends to the coming reorganziation/state-conscious editing of the code
+/// Existing activities: do we want editable by default, or click edit button to edit?
+/// new activities default to editable. then after pressed, are they or not?
+/// TODO: fix animation and etc on textfield editing.
+/// TODO: add submit button on description editing instead of hack
+
+// if we want to know if adding or editing, make that a parameter of the screen
+// e.g. to know if we want to make them press Edit. or, if they can have a delete button. 
 
 class DetailScreen extends StatefulWidget {
   final Activity activity;
@@ -20,20 +27,37 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreenState extends State<DetailScreen> {
   int _currentIndex = 0;
+  final _titleController = TextEditingController();
+  final _descriptionController = TextEditingController();
 
-// this is unnecessary and stupid of course. just build a camera with gallery overlay...
+// this parameter is unnecessary and stupid of course. just build a camera with gallery overlay...
 // https://medium.com/@richard.ng/whatsapp-clone-with-flutter-in-a-week-part-2-d5e394e76b22
   Future getImage(ImageSource imageSource) async {
     final picker = ImagePicker();
     final pickedFile = await picker.getImage(source: imageSource);
     setState(() {
-      widget.activity.imgPath = pickedFile.path.toString();
+      // if they picked a file :)
+      if (pickedFile != null) {
+        widget.activity.imgPath = pickedFile.path.toString();
+      }
     });
   }
 
   @override
+  void dispose() {
+    // Clean up the controller when the widget is removed from the
+    // widget tree.
+    _titleController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    Widget fromhero = Hero(
+    _titleController.text = widget.activity.title;
+    _descriptionController.text = widget.activity.description;
+
+    Widget imageSection = Hero(
       tag: AssetImage(widget.activity.imgPath),
       child: Material(
         color: Colors.transparent,
@@ -51,30 +75,25 @@ class _DetailScreenState extends State<DetailScreen> {
               // fadeInImage but doesn't work directly.... why?
               Center(child: CircularProgressIndicator()),
               // repercussions of new vs FadeInImage.asset etc.?
+              // maybe a gif in the future :)
               new FadeInImage(
-                placeholder: MemoryImage(
-                    kTransparentImage), //AssetImage("assets/images/default.jpg"),
+                placeholder: MemoryImage(kTransparentImage),
                 image: AssetImage(widget.activity.imgPath),
-                //Image(
-//                image: AssetImage(widget.activity.imgPath),
               ),
-              Column(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   InkWell(
                     child:
-                        Icon(Icons.camera_alt, color: Colors.white, size: 32),
+                        Icon(Icons.camera_alt, color: Colors.white, size: 48),
                     onTap: () {
                       getImage(ImageSource.camera);
                     },
                   ),
                 ],
               ),
-              //FadeInImage.memoryNetwork(
-              //placeholder: kTransparentImage,
-              //image:  Image.asset(activity.img),
             ],
           ),
-          // ),
         ),
       ),
     );
@@ -86,11 +105,16 @@ class _DetailScreenState extends State<DetailScreen> {
           Expanded(
             child: Container(
               padding: const EdgeInsets.only(bottom: 8),
-              child: Text(
-                widget.activity.title,
+              child: TextField(
+                controller: _titleController,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
+                // doesn't do what i thought it did :(
+                expands: false,
+                onSubmitted: (value) {
+                  widget.activity.title = value;
+                },
               ),
             ),
           ),
@@ -101,14 +125,16 @@ class _DetailScreenState extends State<DetailScreen> {
 
     Color color = Theme.of(context).primaryColor;
 
-// TODO: what buttons do we actually want, and make them functional
     Widget buttonSection = Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           // what buttons do we even want? delete for sure, but do we need any others?
-          _buildButtonColumn(color, Icons.add_circle_outline, 'ADD'),
-          _buildButtonColumn(color, Icons.remove_circle_outline, 'REMOVE'),
+          // what alignment do we want? size? etc.
+          // do we want this to show on "Add Activity" or just "Edit"?
+          // do we have that info?
+          //_buildButtonColumn(color, Icons.add_circle_outline, 'ADD'),
+          //_buildButtonColumn(color, Icons.edit_attributes, 'Edit'),
           _buildButtonColumn(color, Icons.delete_forever, 'DELETE'),
         ],
       ),
@@ -116,9 +142,18 @@ class _DetailScreenState extends State<DetailScreen> {
     Widget textSection = Container(
       padding: const EdgeInsets.all(32),
       color: widget.activity.getLifePointsColor(),
-      child: Text(
-        widget.activity.description,
-        softWrap: true,
+      child: TextField(
+        controller: _descriptionController,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+        ),
+        keyboardType: TextInputType.multiline,
+        minLines: 1,
+        maxLines: 5,
+        // TODO: don't do this. add a submit button.
+        onChanged: (value) {
+          widget.activity.description = value;
+        },
       ),
     );
 
@@ -136,11 +171,9 @@ class _DetailScreenState extends State<DetailScreen> {
       // consider function for state.....
       child: ListView(
         children: [
-          fromhero,
-          // maybe add an edit icon to the image here...
-          //trailing: Icon(
-          titleSection,
+          imageSection,
           buttonSection,
+          titleSection,
           textSection,
         ],
       ),
@@ -221,12 +254,17 @@ class _DetailScreenState extends State<DetailScreen> {
   }
 
   // builds bottom buttons on edit page..
+  // do we want differences based on Add vs Edit? e.g. no/transparent delete button..
   Column _buildButtonColumn(Color color, IconData icon, String label) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(icon, color: color),
+        InkWell(
+          child: Icon(icon, color: color),
+          // TODO: delete this activity somehow? or we can just not have this icon on the page at all of course
+          onTap: () {},
+        ),
         Container(
           margin: const EdgeInsets.only(top: 8),
           child: Text(
