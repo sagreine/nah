@@ -26,6 +26,9 @@ dependencies:
   font_awesome_flutter:
   video_player: '>=0.10.11+1 <2.0.0'
   transparent_image: ^1.0.0
+  image_picker:
+  camera:
+  path_provider:
 
 
   # The following adds the Cupertino Icons font to your application.

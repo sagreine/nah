@@ -120,7 +120,7 @@ class TodayScreenState extends State<TodayScreen> {
                               // same as other page, same as each other, something else?
 
                               children: [
-                                Image(height: 100, image: activity.img.image),
+                                Image(height: 100, image: AssetImage(activity.imgPath)),
                                 Text(activity.title,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
@@ -214,9 +214,9 @@ class TodayScreenState extends State<TodayScreen> {
                   else {
                     Navigator.of(context).push(MaterialPageRoute<void>(
                       builder: (context) => DetailScreen(
-                        //default is a 0 score activity
+                        //default is a 0 score activity - this should be done in activity.dart as blank constructor... 
                         activity: Activity(
-                          Image.asset('assets/images/default.jpg'),
+                          'assets/images/default.jpg',
                           "Add a title to this activity",
                           "Add a subtitle to this activity",
                           "Add an activity description!",

@@ -56,28 +56,28 @@ class ListScreenState extends State<ListScreen> {
 
     // this part obviously doesn't go here, done every build, just testing
     // will come from db anyhow...
-    _activities.add(Activity(Image.asset('assets/images/yoga.jpg'), "Yoga!",
+    _activities.add(Activity('assets/images/yoga.jpg', "Yoga!",
         "a Yoga subtitle", "this is yoga description", -2));
-    _activities.add(Activity(Image.asset('assets/images/work.jpg'), "work...!",
+    _activities.add(Activity('assets/images/work.jpg', "work...!",
         "a work subtitle", "this is a description for work", 3));
     _activities.add(Activity(
-        Image.asset('assets/images/write.jpg'),
+        'assets/images/write.jpg',
         "write...!",
         "a write subtitle",
         "this is a description for write",
         -2));
-    _activities.add(Activity(Image.asset('assets/images/tv.jpg'), "tv...!",
+    _activities.add(Activity('assets/images/tv.jpg', "tv...!",
         "a tv subtitle", "this is a description for tv", 0));
-    _activities.add(Activity(Image.asset('assets/images/eat.jpg'), "eat...!",
+    _activities.add(Activity('assets/images/eat.jpg', "eat...!",
         "an eating subtitle", "this is a description for eat", 0));
     _activities.add(Activity(
-        Image.asset('assets/images/teach.jpg'),
+        'assets/images/teach.jpg',
         "teach...!",
         "a teaching subtitle",
         "this is a description for teach",
         1));
     _activities.add(Activity(
-        Image.asset('assets/images/chores.jpg'),
+        'assets/images/chores.jpg',
         "chores...!",
         "a chores subtitle",
         "this is a description for chores",
@@ -122,7 +122,8 @@ class ListScreenState extends State<ListScreen> {
 
               // this enables cool animations when getting details
               child: Hero(
-                tag: _activities[index].img,
+                // does this work? also is it necessary to create an image just for this...?
+                tag: AssetImage(_activities[index].imgPath),
 /*                flightShuttleBuilder: (
                   BuildContext flightContext,
                   Animation<double> animation,
@@ -239,7 +240,7 @@ class ListScreenState extends State<ListScreen> {
                           Image(
                               height: double.infinity,
                               width: double.infinity,
-                              image: AssetImage("assets/images/learn.jpg"),
+                              image: AssetImage(_activities[index].imgPath),
                               fit: BoxFit.cover),
                           Container(
                             alignment: Alignment.bottomCenter,
@@ -297,7 +298,7 @@ class ListScreenState extends State<ListScreen> {
                   child: DetailScreen(
                     //default is a 0 score activity
                     activity: Activity(
-                      Image.asset('assets/images/default.jpg'),
+                      'assets/images/default.jpg',
                       "Add a title to this activity",
                       "Add a subtitle to this activity",
                       "Add an activity description!",
@@ -411,7 +412,7 @@ class ListScreenState extends State<ListScreen> {
                       builder: (context) => DetailScreen(
                         //default is a 0 score activity
                         activity: Activity(
-                          Image.asset('assets/images/default.jpg'),
+                          'assets/images/default.jpg',
                           "Add a title to this activity",
                           "Add a subtitle to this activity",
                           "Add an activity description!",

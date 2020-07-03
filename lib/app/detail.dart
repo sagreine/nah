@@ -3,24 +3,42 @@ import 'package:nah/app/activity.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nah/app/today.dart';
 import 'package:transparent_image/transparent_image.dart';
-
-
-
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 /// TODO: SliverAnimatedList instead? much more fun. also explicit animations instead of roll your own.. :)
 /// also also, naturally lends to the coming reorganziation/state-conscious editing of the code
-class DetailScreen extends StatelessWidget {
+
+class DetailScreen extends StatefulWidget {
   final Activity activity;
+  // this.activity was required, but let's not require it for a new on. or pass blank one?
+  const DetailScreen({Key key, @required this.activity}) : super(key: key);
+
+  @override
+  _DetailScreenState createState() => _DetailScreenState();
+}
+
+class _DetailScreenState extends State<DetailScreen> {
   int _currentIndex = 0;
 
-// this.activity was required, but let's not require it for a new on. or pass blank one?
-  DetailScreen({Key key, @required this.activity}) : super(key: key);
+
+// this is unnecessary and stupid of course. just build a camera with gallery overlay...
+// https://medium.com/@richard.ng/whatsapp-clone-with-flutter-in-a-week-part-2-d5e394e76b22
+  Future getImage(ImageSource imageSource) async {
+    final picker = ImagePicker();
+    final pickedFile =
+        //await picker.getImage(source: ImageSource.camera);
+        await picker.getImage(source: imageSource);
+
+    setState(() {
+      widget.activity.imgPath = pickedFile.path.toString();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    //if (context.)
     Widget fromhero = Hero(
-      tag: activity.img,
+      tag: AssetImage(widget.activity.imgPath),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
@@ -32,11 +50,32 @@ class DetailScreen extends StatelessWidget {
             // Navigator.pop(context, activity);
             Navigator.of(context).pop();
           },
-          child: //FadeInImage.memoryNetwork(
-                //placeholder: kTransparentImage,
-                //image:  Image.asset(activity.img),
-                activity.img,
-               // ),
+          child: Stack(
+            children: <Widget>[
+              Image(
+                image: AssetImage(widget.activity.imgPath),
+              ),
+              Column(
+                children: <Widget>[
+                  InkWell(
+                    child: Icon(
+                      Icons.camera_alt,
+                      color: Colors.white,
+                      size: 32
+                      
+                    ),
+                    onTap: () {
+                      getImage(ImageSource.camera);
+                    },
+                  ),
+                ],
+              ),
+              //FadeInImage.memoryNetwork(
+              //placeholder: kTransparentImage,
+              //image:  Image.asset(activity.img),
+            ],
+          ),
+          // ),
         ),
       ),
     );
@@ -49,7 +88,7 @@ class DetailScreen extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.only(bottom: 8),
               child: Text(
-                activity.title,
+                widget.activity.title,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
@@ -77,9 +116,9 @@ class DetailScreen extends StatelessWidget {
     );
     Widget textSection = Container(
       padding: const EdgeInsets.all(32),
-      color: activity.getLifePointsColor(),
+      color: widget.activity.getLifePointsColor(),
       child: Text(
-        activity.description,
+        widget.activity.description,
         softWrap: true,
       ),
     );
@@ -97,33 +136,32 @@ class DetailScreen extends StatelessWidget {
       // the Activities for today...
       // consider function for state.....
       child: ListView(
-          children: [
-            fromhero,
-            // maybe add an edit icon to the image here...
-            //trailing: Icon( 
-            titleSection,
-            buttonSection,
-            textSection,
-          ],
-        ),        
-      );
-
+        children: [
+          fromhero,
+          // maybe add an edit icon to the image here...
+          //trailing: Icon(
+          titleSection,
+          buttonSection,
+          textSection,
+        ],
+      ),
+    );
 
     return MaterialApp(
-      title: activity.title,
+      title: widget.activity.title,
       home: Scaffold(
-        appBar: AppBar(          
+        appBar: AppBar(
           title: Text("View and Edit Detail for Activity"),
         ),
         body: viewSection,
-               floatingActionButton: Container(
+        floatingActionButton: Container(
           height: 80,
           width: 90,
           child: FloatingActionButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            tooltip: 'Back to Activities List',
+            tooltip: 'Back previous',
             child: Icon(Icons.done),
             elevation: 12,
           ),
@@ -245,3 +283,4 @@ class _RestorativeValWidgetState extends State<RestorativeValWidget> {
     });
   }
 }
+

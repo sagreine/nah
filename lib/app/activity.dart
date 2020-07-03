@@ -8,13 +8,13 @@ class Activity {
   // also
   final UniqueKey activityID = new UniqueKey();
   // these will be set and read
-  Image img;
+  String imgPath;
   String title;
   String subtitle;
   String description;
   int lifepoints = 0;
 
-  Activity(this.img, this.title, this.subtitle, this.description, this.lifepoints) {
+  Activity(this.imgPath, this.title, this.subtitle, this.description, this.lifepoints) {
     //activityID = 
   }
   // "winsorizes" lifepoints
