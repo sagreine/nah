@@ -4,14 +4,11 @@ import "package:nah/app/state_container.dart";
 
 
 // order of next things a.k.a. why you should use Jira not comments 
-// determine with finality overall approach below. -> approach 1 per users vai wireframe + walkthrough - done (for now :))
 //
-// nice to have, post-MVP below
-//
-// make adding an activity work, perm delete one too 
 // how do we want to deal wtih 3 days at bottom nav bar? add activity, pick activites, today's activities... pageview? manual? UI? - fix bottomnav, no more pop() there.
 // fancy timelines
-// editable activity
+///// https://pub.dev/packages/timeline_tile
+// where does _activities live? singleton? managed by pageview? delete activity
 // color palette consistency / more fun logo, e.g. for splash
 // better splash screen
 // setup onboarding screens, through settings setup
@@ -25,6 +22,7 @@ import "package:nah/app/state_container.dart";
 // maybe a gridTile and gridTileBar? better than a custom stack kprobably..
 // actually separate files and use a development pattern instead of random nonsense (which is fun while in discovery mode of the language)
 // release, testing, CI, CD
+//https://github.com/jogboms/flutter_spinkit
 
 
 // TODO: actually consider statefulness.....

@@ -84,7 +84,7 @@ class _DetailScreenState extends State<DetailScreen> {
               Container(
                 decoration: BoxDecoration(
                   border: Border.all(
-                      color: widget.activity.lifepoints > 0
+                      color: widget.activity.lifepoints < 0
                           ? Colors.greenAccent
                           : Colors.redAccent),
                 ),
@@ -151,12 +151,12 @@ class _DetailScreenState extends State<DetailScreen> {
             padding: EdgeInsets.all(0),
             // this isn't an inconbutton anymore though...
             child: IconButton(
-                icon: (widget.activity.lifepoints > 0
+                icon: (widget.activity.lifepoints < 0
                     ? Icon(FontAwesomeIcons.levelUpAlt)
                     : Icon(
                         FontAwesomeIcons.levelDownAlt,
                       )),
-                color: (widget.activity.lifepoints > 0
+                color: (widget.activity.lifepoints < 0
                     ? Colors.green[500]
                     : Colors.red[500]),
                 onPressed: () {
