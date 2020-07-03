@@ -21,15 +21,11 @@ class DetailScreen extends StatefulWidget {
 class _DetailScreenState extends State<DetailScreen> {
   int _currentIndex = 0;
 
-
 // this is unnecessary and stupid of course. just build a camera with gallery overlay...
 // https://medium.com/@richard.ng/whatsapp-clone-with-flutter-in-a-week-part-2-d5e394e76b22
   Future getImage(ImageSource imageSource) async {
     final picker = ImagePicker();
-    final pickedFile =
-        //await picker.getImage(source: ImageSource.camera);
-        await picker.getImage(source: imageSource);
-
+    final pickedFile = await picker.getImage(source: imageSource);
     setState(() {
       widget.activity.imgPath = pickedFile.path.toString();
     });
@@ -52,18 +48,21 @@ class _DetailScreenState extends State<DetailScreen> {
           },
           child: Stack(
             children: <Widget>[
-              Image(
+              // fadeInImage but doesn't work directly.... why?
+              Center(child: CircularProgressIndicator()),
+              // repercussions of new vs FadeInImage.asset etc.?
+              new FadeInImage(
+                placeholder: MemoryImage(
+                    kTransparentImage), //AssetImage("assets/images/default.jpg"),
                 image: AssetImage(widget.activity.imgPath),
+                //Image(
+//                image: AssetImage(widget.activity.imgPath),
               ),
               Column(
                 children: <Widget>[
                   InkWell(
-                    child: Icon(
-                      Icons.camera_alt,
-                      color: Colors.white,
-                      size: 32
-                      
-                    ),
+                    child:
+                        Icon(Icons.camera_alt, color: Colors.white, size: 32),
                     onTap: () {
                       getImage(ImageSource.camera);
                     },
@@ -283,4 +282,3 @@ class _RestorativeValWidgetState extends State<RestorativeValWidget> {
     });
   }
 }
-
