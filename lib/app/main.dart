@@ -16,6 +16,7 @@ import "package:nah/app/state_container.dart";
 // better splash screen
 // setup onboarding screens, through settings setup
 // sliveraninmated list for adding activities? if didn't already for Adding/Editing
+// hero uses image as tag....so will crash if they upload multiple of the same image!
 
 // longer term persistence aka DB or even google cloud
 // can they put a Gif in, screencap for usual but shows Gif on detail page? would be fun

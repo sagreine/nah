@@ -13,14 +13,14 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   // actually think about this before we do it....
-  final lifePointsController = TextEditingController();
+  final _lifePointsController = TextEditingController();
   AppSettings appSettings;
 
   @override
   void dispose() {
     // Clean up the controller when the widget is removed from the
     // widget tree.
-    lifePointsController.dispose();
+    _lifePointsController.dispose();
     super.dispose();
   }
 
@@ -35,7 +35,7 @@ class _SettingsState extends State<Settings> {
     // TODO: This is a default setting to not stop them in their tracks
     // could push them directly to settings page, snackbar them to, even a flyin widget to edit it.
     if (appSettings != null) {
-      lifePointsController.text = appSettings.lifePointsCeilling.toString();
+      _lifePointsController.text = appSettings.lifePointsCeilling.toString();
     }
 
     return Scaffold(
@@ -82,7 +82,7 @@ class _SettingsState extends State<Settings> {
                 inputFormatters: <TextInputFormatter>[
                   WhitelistingTextInputFormatter.digitsOnly,
                 ],
-                controller: lifePointsController,
+                controller: _lifePointsController,
                 // update the global setting to the new value and print for debug
                 // TODO: this will break things if, e.g., they've select 97 things for today already
                 // and we're changing this to say 5. how will Today handle that? List?

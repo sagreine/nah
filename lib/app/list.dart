@@ -34,6 +34,7 @@ class ListScreenState extends State<ListScreen> {
   // list of activities we've selected
   // these should be maps. but also when look at state again,
   // because we should be able to delete them on the next page if we don't like them - maybe, anyway? could just make them come back here...
+  // think: are these of state or statefulwidget
   final List<Activity> _activities = List<Activity>();
   //List<Activity> _activitiesToAdd = List<Activity>();
   final List<Activity> _selectedActivities = List<Activity>();
@@ -60,28 +61,16 @@ class ListScreenState extends State<ListScreen> {
         "a Yoga subtitle", "this is yoga description", -2));
     _activities.add(Activity('assets/images/work.jpg', "work...!",
         "a work subtitle", "this is a description for work", 3));
-    _activities.add(Activity(
-        'assets/images/write.jpg',
-        "write...!",
-        "a write subtitle",
-        "this is a description for write",
-        -2));
-    _activities.add(Activity('assets/images/tv.jpg', "tv...!",
-        "a tv subtitle", "this is a description for tv", 0));
+    _activities.add(Activity('assets/images/write.jpg', "write...!",
+        "a write subtitle", "this is a description for write", -2));
+    _activities.add(Activity('assets/images/tv.jpg', "tv...!", "a tv subtitle",
+        "this is a description for tv", 0));
     _activities.add(Activity('assets/images/eat.jpg', "eat...!",
         "an eating subtitle", "this is a description for eat", 0));
-    _activities.add(Activity(
-        'assets/images/teach.jpg',
-        "teach...!",
-        "a teaching subtitle",
-        "this is a description for teach",
-        1));
-    _activities.add(Activity(
-        'assets/images/chores.jpg',
-        "chores...!",
-        "a chores subtitle",
-        "this is a description for chores",
-        2));
+    _activities.add(Activity('assets/images/teach.jpg', "teach...!",
+        "a teaching subtitle", "this is a description for teach", 1));
+    _activities.add(Activity('assets/images/chores.jpg', "chores...!",
+        "a chores subtitle", "this is a description for chores", 2));
   }
 
   @override
@@ -96,6 +85,30 @@ class ListScreenState extends State<ListScreen> {
       _currentScore += element.lifepoints;
     });
 
+    // push a new activity to detail screen and update the list of activities if you get one back
+    // managed through e.g. PageView in future? (e.g., bottom nav bar navigation to Detail on Today needs very similar code to update _activities)
+    // though with consideration of how exactly would you do that given you can go Today->new Detail. for now assume PageView has magic.
+    // or _activities is singleton...
+    void _navDetail() async {
+      final result = await Navigator.push(
+          context,
+          // Create the SelectionScreen in the next step.
+          MaterialPageRoute(
+            builder: (context) => DetailScreen(
+                activity: Activity(
+              'assets/images/default.jpg',
+              "Add a title to this activity",
+              "Add a subtitle to this activity",
+              "Add an activity description!",
+              0,
+            )),
+          ));
+      if (result != null) {
+        setState(() {
+          _activities.add(result);
+        });
+      }
+    }
 
     Widget _buildViewSection() {
       // may eventually return to just one column....
@@ -290,25 +303,7 @@ class ListScreenState extends State<ListScreen> {
         // swipe right to add a new activity
         // should we async await then save? what if they change their mind...
         else {
-          Navigator.of(context).push(
-            MaterialPageRoute<void>(builder: (BuildContext context) {
-              timeDilation = 2.5;
-              return Scaffold(
-                body: Container(
-                  child: DetailScreen(
-                    //default is a 0 score activity
-                    activity: Activity(
-                      'assets/images/default.jpg',
-                      "Add a title to this activity",
-                      "Add a subtitle to this activity",
-                      "Add an activity description!",
-                      0,
-                    ),
-                  ),
-                ),
-              );
-            }),
-          );
+          _navDetail();
         }
       },
       // the Activities you can select from
@@ -400,30 +395,19 @@ class ListScreenState extends State<ListScreen> {
           child: BottomNavigationBar(
               currentIndex: _currentIndex,
               onTap: (int index) {
-                setState(() {
-                  _currentIndex = index;
-                  // this will change when we add PageView
-                  // but, nav to the other screens this way basically
-                  if (_currentIndex == 1) {
-                    Navigator.of(context).push(MaterialPageRoute<void>(
-                        builder: (context) => TodayScreen()));
-                  } else {
-                    Navigator.of(context).push(MaterialPageRoute<void>(
-                      builder: (context) => DetailScreen(
-                        //default is a 0 score activity
-                        activity: Activity(
-                          'assets/images/default.jpg',
-                          "Add a title to this activity",
-                          "Add a subtitle to this activity",
-                          "Add an activity description!",
-                          0,
-                        ),
-                      ),
-                    ));
-                  }
-                });
-                //_navigateToScreens(index);
+                _currentIndex = index;
+                // this will change when we add PageView
+                // but, nav to the other screens this way basically
+                if (_currentIndex == 1) {
+                  Navigator.of(context).push(MaterialPageRoute<void>(
+                      builder: (context) => TodayScreen()));
+                } else {
+                  _navDetail();
+                }
               },
+
+              //_navigateToScreens(index);
+
               items: [
                 BottomNavigationBarItem(
                     icon: Icon(FontAwesomeIcons.edit),
