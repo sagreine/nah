@@ -86,6 +86,7 @@ class TodayScreenState extends State<TodayScreen> {
                   child: Dismissible(
                     // Each Dismissible must contain a Key. Keys allow Flutter to
                     // uniquely identify widgets.
+                    // this isn't unique though... UniqueKey()
                     key: Key(activity.activityID.toString()),
                     // Provide a function that tells the app
                     // what to do after an item has been swiped away.

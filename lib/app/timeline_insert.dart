@@ -15,27 +15,16 @@ class TimelineInsert extends StatefulWidget {
 class _TimelineInsertState extends State<TimelineInsert> {
   DayOfActivities thisDay = DayOfActivities();
 
+  // stateless widget...refactor out of this class
   Widget _pickChild(int index) {
     final int itemIndex = index ~/ 2;
 
-    if (index.isOdd)
-      return TimelineDivider(
-        color: thisDay.activities[itemIndex].getLifePointsColor(),
-        //steps[itemIndex].lifepoints <= 0 ? Colors.greenAccent : Colors.redAccent,
-        //(0xFFCB8421),
-        thickness: 5,
-        begin: 0.1,
-        end: 0.9,
-      );
-
     final Activity step = thisDay.activities[itemIndex];
-
-    final bool isLeftAlign = itemIndex.isEven;
-
+    
     final child = _TimelineStepsChild(
       title: step.title,
       subtitle: step.description,
-      isLeftAlign: isLeftAlign,
+      isLeftAlign: true,
     );
 
     final isFirst = itemIndex == 0;
@@ -51,15 +40,14 @@ class _TimelineInsertState extends State<TimelineInsert> {
 
     return TimelineTile(
       alignment: TimelineAlign.manual,
-      rightChild: isLeftAlign ? child : null,
-      leftChild: isLeftAlign ? null : child,
-      lineX: isLeftAlign ? 0.1 : 0.9,
+      lineX: 0.1,
       isFirst: isFirst,
       isLast: isLast,
       indicatorStyle: IndicatorStyle(
         width: 40,
         height: 40,
         indicatorY: indicatorY,
+        // don't need to pass step if we do away with the color circle...
         indicator: _TimelineStepIndicator(
           step: step,
           index: itemIndex.toString(),
@@ -67,10 +55,9 @@ class _TimelineInsertState extends State<TimelineInsert> {
       ),
       topLineStyle: LineStyle(
         color: thisDay.activities[itemIndex].getLifePointsColor(),
-        //step.lifepoints <= 0 ? Colors.greenAccent : Colors.redAccent,
-        //Color(0xFFCB8421),
         width: 5,
       ),
+      rightChild: child,
     );
   }
 
@@ -111,10 +98,13 @@ class _TimelineInsertState extends State<TimelineInsert> {
                       },
                       children: <Widget>[
                         for (int i = 0; i < thisDay.activities.length; i++)
-                          Stack(
-                            key: UniqueKey(),
-                            children: <Widget>[
-                             _pickChild(i),
+                        Container(
+                          key: UniqueKey(),
+                          child:
+                        Row(children: <Widget>[
+                          Expanded(child: 
+                          _pickChild(i),
+                          ),
                          InkWell(
                           child: Icon(
                             Icons.delete_sweep,
@@ -136,7 +126,8 @@ class _TimelineInsertState extends State<TimelineInsert> {
                           },
                         ),
                             ],
-                          ),
+                          ),                        
+                        ),
                       ],
                     ),
                   ),
@@ -169,7 +160,7 @@ class _TimelineStepIndicator extends StatelessWidget {
       child: Center(
         child: Text(
           //index,
-          step.title,
+          step.lifepoints.toString(),
           style: GoogleFonts.architectsDaughter(
             fontSize: 12,
             color: Colors.white,
