@@ -255,54 +255,68 @@ class ListScreenState extends State<ListScreen> {
                     // straightforward adaptation breaks things though..
                     // only remaining 'issue' is checkbox is transparent, could just not use a transparent icon...
                     // well it's also very ugly. Switch to icons instead of images generally?
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: _selectedActivities.contains(_activities[index])
-                            ? Color(0xff2B4570)
-                            : Color(0xffA8D0DB),
-                      ),
-                      child: Stack(                        
-                        children: <Widget>[
-                          // want image to fill the box so use infinity..
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(8.0),
-                            child: Image(
-                                height: double.infinity,
-                                width: double.infinity,
-                                image: AssetImage(_activities[index].imgPath),
-                                fit: BoxFit.cover),
-                          ),
-                          Container(                            
-                            //height: 45,
-                            //color: Colors.grey[300],
-                            alignment: Alignment.bottomCenter,
-                            child: Text(
-                                _activities[index].title +
-                                    " " +
-                                    _activities[index].lifepoints.toString(),
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.black.withOpacity(0.9),
-                                )),
-                          ),
-                          Icon(
-                            Icons.check_circle,
-                            size: 35.0,
-                            color:
-                                _selectedActivities.contains(_activities[index])
-                                    ? Color(0xffA8D0DB)
-                                    : Colors.transparent,
-                          ),
-                          //Text(_activities[index].lifepoints.toString(),
-                          //textAlign: TextAlign.end,
-                          //),
-                        ],
+                      child: GridTile(
+                        child:
+                            // want image to fill the box so use infinity..
+                            ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Image(
+                              height: double.infinity,
+                              width: double.infinity,
+                              image: AssetImage(_activities[index].imgPath),
+                              fit: BoxFit.cover),
+                        ),
+                        header: Icon(
+                          Icons.check_circle,
+                          size: 100.0,
+                          color:
+                              _selectedActivities.contains(_activities[index])
+                                  ? Color(0xffA8D0DB)
+                                  : Colors.transparent,
+                        ),
+                        footer: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: <Widget>[
+                            Expanded(child: 
+                            Container(
+                              //width: double.infinity,
+                              height: 45,
+                              padding: EdgeInsets.all(5),
+                              color: Colors.blueGrey.withOpacity(.8),//Theme.of(context).primaryColor.withOpacity(.8),
+                              
+                              //alignment: Alignment.centerLeft,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[                                
+                               Text(
+                                  _activities[index].title ,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                                  Text(
+                                  _activities[index].lifepoints.toString() ,
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                                      
+                              ],
+                              ),
+                            ),
+                            ),
+                            //Text(_activities[index].lifepoints.toString(),
+                            //textAlign: TextAlign.end,
+                            //),
+                          ],
+                        ),
                       ),
                       //border: Colors.red,
                     ),
                   ),
                 ),
-              ),
             );
           },
           childCount: _activities.length,
@@ -383,7 +397,7 @@ class ListScreenState extends State<ListScreen> {
       title: 'nah',
       home: Scaffold(
         key: scaffoldState,
-        backgroundColor: Color(0xffE49273),
+        //backgroundColor: Color(0xffE49273),
         //Color(0xFF7180AC),
         //Theme.of(context).primaryColorLight.withOpacity(0.9),
         body: viewSection,
