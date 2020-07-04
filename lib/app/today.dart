@@ -5,6 +5,7 @@ import 'package:nah/app/detail.dart';
 import 'package:nah/app/timeline.dart';
 import 'package:nah/app/timeline_insert.dart';
 import 'package:nah/app/settings.dart';
+import 'package:awesome_page_transitions/awesome_page_transitions.dart';
 
 /// TODO: custom timeline rather than reorderable list? more fun :)
 /// TODO: animated list? much more fun especially for deletion sweep :)

@@ -6,6 +6,9 @@ import 'package:nah/app/detail.dart';
 import 'package:nah/app/today.dart';
 import 'package:nah/app/settings.dart';
 import "package:nah/app/state_container.dart";
+import 'package:awesome_page_transitions/awesome_page_transitions.dart';
+
+
 
 ///// Generally thinking go away from strict navigator and prefer
 ///   bottomNavBar and PageView, managed out of home, for simplicity...
@@ -329,8 +332,18 @@ class ListScreenState extends State<ListScreen> {
       onPanUpdate: (details) {
         // swipe left to look at today
         if (details.delta.dx < 0) {
-          Navigator.of(context).push(
-            MaterialPageRoute<void>(builder: (context) => TodayScreen()),
+          Navigator.push(context,
+            AwesomePageRoute(
+              transitionDuration: Duration(milliseconds: 600),
+              exitPage: widget,
+              enterPage: TodayScreen(),
+              transition: CubeTransition(),
+            ),
+
+
+            //MaterialPageRoute<void>(builder: (context) => TodayScreen()),
+
+
           );
         }
         // swipe right to add a new activity
