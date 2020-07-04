@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:nah/app/home.dart';
+import 'package:nah/app/login.dart';
 import "package:nah/app/state_container.dart";
 
 
 // order of next things a.k.a. why you should use Jira not comments 
 //
 // how do we want to deal wtih 3 days at bottom nav bar? add activity, pick activites, today's activities... pageview? manual? UI? - fix bottomnav, no more pop() there.
-// fancy timelines ---- mostly just up to UI tweaks at this point.
+// fancy timelines ---- mostly just up to UI tweaks at this point. -> running totla of lifepoints on left? total used at top?
 ///// https://pub.dev/packages/timeline_tile
 // where does _activities live? singleton? managed by pageview? perm delete activity on Today or Detail udpates how?
 // color palette consistency / more fun logo, e.g. for splash
@@ -25,7 +25,6 @@ import "package:nah/app/state_container.dart";
 //https://github.com/jogboms/flutter_spinkit
 
 
-// TODO: actually consider statefulness.....
 // TODO: pick color pallete, make that theme, no more hex
 // TODO: better splash screen - https://medium.com/kick-start-fluttering/flutter-design-your-own-splashscreen-d0612b17db23 animate transition? gif?
 /// TODO: allow to temporarily override lifepoints

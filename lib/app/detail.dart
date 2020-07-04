@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nah/app/activity.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:nah/app/today.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nah/app/settings.dart';
@@ -70,10 +69,7 @@ class _DetailScreenState extends State<DetailScreen> {
         child: InkWell(
           // doubletap may be inappropriate material.io here, user expecting Tap instead...
           onDoubleTap: () {
-            // will want to pass the activity back?
-            // or, only if the activity was edited? comparison?
-            // need to do hero everywhere to ensure pop back to right place?
-            // Navigator.pop(context, activity);
+            // this might not work, pending PageView implementation
             Navigator.of(context).pop();
           },
           child: Stack(
@@ -126,7 +122,7 @@ class _DetailScreenState extends State<DetailScreen> {
       );
     }
 
-    ;
+    
     Widget titleSection = Container(
       padding: const EdgeInsets.all(32),
       child: Row(

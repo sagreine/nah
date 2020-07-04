@@ -1,159 +1,119 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:nah/app/list.dart';
-import 'package:video_player/video_player.dart';
-import 'dart:async';
-import 'package:flutter/widgets.dart';
-
-// borrowed here: https://github.com/syonip/flutter_login_video/blob/master/lib/sign_in.dart
-
-class MyApp extends StatelessWidget {
-  @override
-  //MyAppState createState() => MyAppState();
-  Widget build(BuildContext context) {
-    return MaterialApp(home: MyHome());
-  }
-}
+import 'package:nah/app/today.dart';
+import 'package:nah/app/detail.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:nah/app/activity.dart'; // remove once no pass blank Activity..
 
 class MyHome extends StatefulWidget {
-  MyHome({Key, key}) : super(key: key);
+  MyHome({Key key}) : super(key: key);
   @override
   State<StatefulWidget> createState() => _MyHomeState();
 }
 
 class _MyHomeState extends State<MyHome> {
-  VideoPlayerController _controller;
-  bool _visible = false;
+  final PageController _pageController = PageController(
+    initialPage: 0,
+    viewportFraction: 0.8,
+    keepPage: true,
+  );
+  int bottomSelectedIndex = 0;
 
-  @override
-  void initState() {
-    super.initState();
-// this might not be a good idea, need to update every other tab....
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-    ]);
-
-    _controller = VideoPlayerController.asset("assets/videos/science2.mp4");
-    _controller.initialize().then((_) {
-      _controller.setLooping(true);
-      Timer(Duration(milliseconds: 100), () {
-        setState(() {
-          _controller.setVolume(0);
-          _controller.play();
-          _visible = true;
-        });
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    if (_controller != null) {
-      _controller.dispose();
-      _controller = null;
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Stack(
-            children: <Widget>[
-              _getVideoBackground(),
-              _getBackgroundColor(),
-              _getContent(),
-            ],
-          ),
-        ),
+  List<BottomNavigationBarItem> buildBottomNavBarItems() {
+    return [
+      BottomNavigationBarItem(
+          icon: Icon(FontAwesomeIcons.edit), 
+          title: Text("Create Activity")),
+      BottomNavigationBarItem(
+          icon: Icon(FontAwesomeIcons.truckPickup),
+          title: Text("Pick Activities")),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.view_day),
+        title: Text("View Today"),
+        // pass _activitiesToAdd...?
       ),
-    );
+    ];
   }
 
-  _getVideoBackground() {
-    return AnimatedOpacity(
-      opacity: _visible ? 1.0 : 0.0,
-      duration: Duration(milliseconds: 1000),
-      child: VideoPlayer(_controller),
-    );
-  }
-
-  _getBackgroundColor() {
-    return Container(
-      color: Colors.blue.withAlpha(120),
-    );
-  }
-
-  _getContent() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.start,
+  Widget buildPageView() {
+    return PageView(
+      controller: _pageController,
+      onPageChanged: (index) {
+        pageChanged(index);
+      },
       children: <Widget>[
-        SizedBox(
-          height: 50.0,
-        ),
-        Image(
-          image: AssetImage("assets/images/ic_launcher.png"),
-          width: 150.0,
-        ),
-        Text(
-          "nah",
-          style: TextStyle(color: Colors.white, fontSize: 40),
-        ),
-        Container(
-          margin: const EdgeInsets.only(left: 30.0, right: 30.0, top: 40.0),
-          alignment: Alignment.center,
-          child: Text(
-            "do less, be happier",
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.white, fontSize: 20),
-          ),
-        ),
-        Spacer(),
-        ..._getLoginButtons()
+        /*
+        DetailScreen(
+            activity: null,
+        ),*/
+        ListScreen(),
+        TodayScreen(),
+        
       ],
     );
   }
 
-  _getLoginButtons() {
-    return <Widget>[
-      Container(
-        margin: const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 45),
-        width: double.infinity,
-        child: FlatButton(
-          color: Colors.blueAccent,
-          padding: const EdgeInsets.only(top: 15.0, bottom: 5.0),
-          child: const Text(
-            'Log in',
-            style: TextStyle(color: Colors.white),
-          ),
-          onPressed: () async {
-            // so this would change if we needed to verify login...
+  void pageChanged(int index) {
+    setState(() {
+      bottomSelectedIndex = index;
+    });
+  }
 
-            // essentially, go back to auto mode after this...
-            SystemChrome.setPreferredOrientations([
-              DeviceOrientation.landscapeRight,
-              DeviceOrientation.landscapeLeft,
-              DeviceOrientation.portraitUp,
-              DeviceOrientation.portraitDown,
-            ]);
+  void bottomTapped(int index) {
+    if ((bottomSelectedIndex - index).abs() == 1) {
+      _pageController.animateToPage(index,
+          duration: const Duration(milliseconds: 300), curve: Curves.ease);
+    } else {
+      _pageController.jumpToPage(index);
+    }
+  }
 
-            // close if you back out after logging in
-            // right now just avoids video running issues on login page (running after logged in)
-            // dispose, but then no video on back. otherwise, video runs in background
-            // easy to fix but ... why
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute<void>(builder: (BuildContext context) {
-                return Scaffold(
-                  body: Container(child: ListScreen()),
-                );
-              }),
-            );
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+       appBar: AppBar(
+         title: Text("nah. a to-do-less app"),
+       ),
+        
+        body: buildPageView(),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: bottomSelectedIndex,
+          onTap: (index) {
+            bottomTapped(index);
           },
-        ),
-      ),
-    ];
+          items: buildBottomNavBarItems(),
+          ),
+    );
   }
 }
+
+/*
+   bottomNavigationBar: BottomAppBar(
+          shape: CircularNotchedRectangle(),
+          color: Colors.blueGrey,
+          notchMargin: 3.5,
+          clipBehavior: Clip.antiAlias,
+          child: BottomNavigationBar(
+              currentIndex: _currentIndex,
+              onTap: (int index) {
+                _currentIndex = index;
+                // this will change when we add PageView
+                // but, nav to the other screens this way basically
+                if (_currentIndex == 1) {
+                  _navToday();
+                } else {
+                  _navDetail();
+                }
+              },
+
+              //_navigateToScreens(index);
+
+              ),
+        ),
+        */

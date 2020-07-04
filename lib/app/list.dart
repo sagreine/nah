@@ -8,8 +8,6 @@ import 'package:nah/app/settings.dart';
 import "package:nah/app/state_container.dart";
 import 'package:awesome_page_transitions/awesome_page_transitions.dart';
 
-
-
 ///// Generally thinking go away from strict navigator and prefer
 ///   bottomNavBar and PageView, managed out of home, for simplicity...
 /*if((currentIndex-index).abs()==1){
@@ -137,6 +135,20 @@ class ListScreenState extends State<ListScreen> {
       }
     }
 
+    void _navToday() {
+      Navigator.push(
+        context,
+        AwesomePageRoute(
+          transitionDuration: Duration(milliseconds: 600),
+          exitPage: widget,
+          enterPage: TodayScreen(),
+          transition: ParallaxTransition(),
+        ),
+
+        //MaterialPageRoute<void>(builder: (context) => TodayScreen()),
+      );
+    }
+
     Widget _buildViewSection() {
       // may eventually return to just one column....
       // this is a grid of slivers that will hold our activities
@@ -258,68 +270,66 @@ class ListScreenState extends State<ListScreen> {
                     // straightforward adaptation breaks things though..
                     // only remaining 'issue' is checkbox is transparent, could just not use a transparent icon...
                     // well it's also very ugly. Switch to icons instead of images generally?
-                      child: GridTile(
-                        child:
-                            // want image to fill the box so use infinity..
-                            ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: Image(
-                              height: double.infinity,
-                              width: double.infinity,
-                              image: AssetImage(_activities[index].imgPath),
-                              fit: BoxFit.cover),
-                        ),
-                        header: Icon(
-                          Icons.check_circle,
-                          size: 100.0,
-                          color:
-                              _selectedActivities.contains(_activities[index])
-                                  ? Color(0xffA8D0DB)
-                                  : Colors.transparent,
-                        ),
-                        footer: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: <Widget>[
-                            Expanded(child: 
-                            Container(
+                    child: GridTile(
+                      child:
+                          // want image to fill the box so use infinity..
+                          ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: Image(
+                            height: double.infinity,
+                            width: double.infinity,
+                            image: AssetImage(_activities[index].imgPath),
+                            fit: BoxFit.cover),
+                      ),
+                      header: Icon(
+                        Icons.check_circle,
+                        size: 100.0,
+                        color: _selectedActivities.contains(_activities[index])
+                            ? Color(0xffA8D0DB)
+                            : Colors.transparent,
+                      ),
+                      footer: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          Expanded(
+                            child: Container(
                               //width: double.infinity,
                               height: 45,
                               padding: EdgeInsets.all(5),
-                              color: Colors.blueGrey.withOpacity(.8),//Theme.of(context).primaryColor.withOpacity(.8),
-                              
+                              color: Colors.blueGrey.withOpacity(
+                                  .8), //Theme.of(context).primaryColor.withOpacity(.8),
+
                               //alignment: Alignment.centerLeft,
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: <Widget>[                                
-                               Text(
-                                  _activities[index].title ,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  )),
-                                  Text(
-                                  _activities[index].lifepoints.toString() ,
-                                  textAlign: TextAlign.right,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  )),
-                                      
-                              ],
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(_activities[index].title,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                  Text(_activities[index].lifepoints.toString(),
+                                      textAlign: TextAlign.right,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                ],
                               ),
                             ),
-                            ),
-                            //Text(_activities[index].lifepoints.toString(),
-                            //textAlign: TextAlign.end,
-                            //),
-                          ],
-                        ),
+                          ),
+                          //Text(_activities[index].lifepoints.toString(),
+                          //textAlign: TextAlign.end,
+                          //),
+                        ],
                       ),
-                      //border: Colors.red,
                     ),
+                    //border: Colors.red,
                   ),
                 ),
+              ),
             );
           },
           childCount: _activities.length,
@@ -332,22 +342,9 @@ class ListScreenState extends State<ListScreen> {
       onPanUpdate: (details) {
         // swipe left to look at today
         if (details.delta.dx < 0) {
-          Navigator.push(context,
-            AwesomePageRoute(
-              transitionDuration: Duration(milliseconds: 600),
-              exitPage: widget,
-              enterPage: TodayScreen(),
-              transition: CubeTransition(),
-            ),
-
-
-            //MaterialPageRoute<void>(builder: (context) => TodayScreen()),
-
-
-          );
+          _navToday();
         }
         // swipe right to add a new activity
-        // should we async await then save? what if they change their mind...
         else {
           _navDetail();
         }
@@ -361,7 +358,10 @@ class ListScreenState extends State<ListScreen> {
               floating: false,
               pinned: true,
               snap: false,
-              leading: Image.asset("assets/images/ic_launcher.png"),
+              leading: Padding(
+                padding: EdgeInsets.all(3),
+                child: Image.asset("assets/images/ic_launcher.png"),
+              ),
               flexibleSpace: const FlexibleSpaceBar(
                 title: Text('Activities'),
               ),
@@ -440,8 +440,7 @@ class ListScreenState extends State<ListScreen> {
                 // this will change when we add PageView
                 // but, nav to the other screens this way basically
                 if (_currentIndex == 1) {
-                  Navigator.of(context).push(MaterialPageRoute<void>(
-                      builder: (context) => TodayScreen()));
+                  _navToday();
                 } else {
                   _navDetail();
                 }

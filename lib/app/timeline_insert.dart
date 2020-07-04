@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:timeline_tile/timeline_tile.dart';
@@ -126,13 +125,6 @@ class _TimelineInsertState extends State<TimelineInsert> {
                                       color: Colors.red,
                                       size: 35,
                                     ),
-                                    // TODO: make this exectute dismiss instead of just delete...
-                                    //onTap: () {
-                                    //setState(() {
-                                    //thisDay.activities.removeAt(i);
-                                    // snackbar show..
-                                    //});
-                                    //},
                                   ),
                                 ],
                               ),
