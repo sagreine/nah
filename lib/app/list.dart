@@ -57,20 +57,44 @@ class ListScreenState extends State<ListScreen> {
 
     // this part obviously doesn't go here, done every build, just testing
     // will come from db anyhow...
-    _activities.add(Activity('assets/images/yoga.jpg', "Yoga!",
-        "a Yoga subtitle", "This is doing yoga, not teaching it. Yoga is a great way to relax. Try doing it in the park! Or with a goat! Or a beer.", -2));
-    _activities.add(Activity('assets/images/work.jpg', "work...!",
-        "a work subtitle", "Work. Can't live with it, can't live without it! Luckily they pay you, which is pretty cool I guess. It takes a lot though!", 3));
-    _activities.add(Activity('assets/images/write.jpg', "write...!",
-        "a write subtitle", "Writing is fun. Try doing it with crayons to be silly. edit: DON'T eat the crayons.", -2));
+    _activities.add(Activity(
+        'assets/images/yoga.jpg',
+        "Yoga!",
+        "a Yoga subtitle",
+        "This is doing yoga, not teaching it. Yoga is a great way to relax. Try doing it in the park! Or with a goat! Or a beer.",
+        -2));
+    _activities.add(Activity(
+        'assets/images/work.jpg',
+        "work...!",
+        "a work subtitle",
+        "Work. Can't live with it, can't live without it! Luckily they pay you, which is pretty cool I guess. It takes a lot though!",
+        3));
+    _activities.add(Activity(
+        'assets/images/write.jpg',
+        "write...!",
+        "a write subtitle",
+        "Writing is fun. Try doing it with crayons to be silly. edit: DON'T eat the crayons.",
+        -2));
     _activities.add(Activity('assets/images/tv.jpg', "tv...!", "a tv subtitle",
         "Of course by 'TV' I mean 'Netflix'. It isn't 1996.", 0));
-    _activities.add(Activity('assets/images/eat.jpg', "eat...!",
-        "an eating subtitle", "Eating is amazing. I do it almost every day. I recommend 1 large pizza every 12-18 hours for best results.", 0));
-    _activities.add(Activity('assets/images/teach.jpg', "teach...!",
-        "a teaching subtitle", "This can be teaching anything. Yoga, programming, even eating. Mmm, eating.", 1));
-    _activities.add(Activity('assets/images/chores.jpg', "chores...!",
-        "a chores subtitle", "Everyone hates chores but everyone has to do them. Unless you're rich. In which case, please buy me a coffee", 2));
+    _activities.add(Activity(
+        'assets/images/eat.jpg',
+        "eat...!",
+        "an eating subtitle",
+        "Eating is amazing. I do it almost every day. I recommend 1 large pizza every 12-18 hours for best results.",
+        0));
+    _activities.add(Activity(
+        'assets/images/teach.jpg',
+        "teach...!",
+        "a teaching subtitle",
+        "This can be teaching anything. Yoga, programming, even eating. Mmm, eating.",
+        1));
+    _activities.add(Activity(
+        'assets/images/chores.jpg',
+        "chores...!",
+        "a chores subtitle",
+        "Everyone hates chores but everyone has to do them. Unless you're rich. In which case, please buy me a coffee",
+        2));
   }
 
   @override
@@ -237,15 +261,20 @@ class ListScreenState extends State<ListScreen> {
                             ? Color(0xff2B4570)
                             : Color(0xffA8D0DB),
                       ),
-                      child: Stack(
+                      child: Stack(                        
                         children: <Widget>[
                           // want image to fill the box so use infinity..
-                          Image(
-                              height: double.infinity,
-                              width: double.infinity,
-                              image: AssetImage(_activities[index].imgPath),
-                              fit: BoxFit.cover),
-                          Container(
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8.0),
+                            child: Image(
+                                height: double.infinity,
+                                width: double.infinity,
+                                image: AssetImage(_activities[index].imgPath),
+                                fit: BoxFit.cover),
+                          ),
+                          Container(                            
+                            //height: 45,
+                            //color: Colors.grey[300],
                             alignment: Alignment.bottomCenter,
                             child: Text(
                                 _activities[index].title +
@@ -310,11 +339,6 @@ class ListScreenState extends State<ListScreen> {
                 title: Text('Activities'),
               ),
               actions: <Widget>[
-                IconButton(
-                  icon: const Icon(Icons.add_circle),
-                  tooltip: 'Add new Activity',
-                  onPressed: () {/* TOOD: add a new item to activities */},
-                ),
                 IconButton(
                   icon: const Icon(Icons.settings),
                   tooltip: 'Settings',

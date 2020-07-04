@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nah/app/today.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:nah/app/settings.dart';
 import 'dart:io';
 
 /// TODO: SliverAnimatedList instead? much more fun. also explicit animations instead of roll your own.. :)
@@ -273,6 +274,20 @@ class _DetailScreenState extends State<DetailScreen> {
       home: Scaffold(
         appBar: AppBar(
           title: Text("View and Edit Detail for Activity"),
+                    actions: <Widget>[
+
+
+                          IconButton(
+                  icon: const Icon(Icons.settings),
+                  tooltip: 'Settings',
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                          builder: (BuildContext context) => Settings()),
+                    );
+                  },
+                ),
+          ],
         ),
         body: viewSection,
         floatingActionButton: Container(

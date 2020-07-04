@@ -47,8 +47,7 @@ class _TimelineInsertState extends State<TimelineInsert> {
         indicatorY: indicatorY,
         // don't need to pass step if we do away with the color circle...
         indicator: _TimelineStepIndicator(
-          step: step,
-          index: index.toString(),
+          step: step,          
         ),
       ),
       topLineStyle: LineStyle(
@@ -188,7 +187,9 @@ class _TimelineStepsChild extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Card(
+      elevation: 5,
+      child: Container(
       // here we explicitly set the size of our tiles
       height: 200,
       padding: const EdgeInsets.all(16.0),
@@ -213,6 +214,7 @@ class _TimelineStepsChild extends StatelessWidget {
                 )),
           ),
         ],
+      ),
       ),
     );
 

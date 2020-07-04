@@ -6,7 +6,7 @@ import "package:nah/app/state_container.dart";
 // order of next things a.k.a. why you should use Jira not comments 
 //
 // how do we want to deal wtih 3 days at bottom nav bar? add activity, pick activites, today's activities... pageview? manual? UI? - fix bottomnav, no more pop() there.
-// fancy timelines
+// fancy timelines ---- mostly just up to UI tweaks at this point.
 ///// https://pub.dev/packages/timeline_tile
 // where does _activities live? singleton? managed by pageview? delete activity
 // color palette consistency / more fun logo, e.g. for splash
