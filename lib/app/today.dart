@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nah/app/activity.dart';
 import 'package:nah/app/detail.dart';
 import 'package:nah/app/timeline.dart';
+import 'package:nah/app/timeline_insert.dart';
 
 /// TODO: custom timeline rather than reorderable list? more fun :)
 /// TODO: animated list? much more fun especially for deletion sweep :)
@@ -169,19 +170,18 @@ class TodayScreenState extends State<TodayScreen> {
         // swipe left to look at today
         if (details.delta.dx > 0) {
           Navigator.of(context).pop();
-          /*Navigator.of(context).push(
-            MaterialPageRoute<void>(builder: (context) => TodayScreen(selectedActivities: _selectedActivities)),*/
         }
       },
       // the Activities for today...
-      child:
-      Row(
+      child: Row(
         mainAxisSize: MainAxisSize.min,
-        children: <Widget>[   
-          Text("hi is this timeline no this is patrick"),
-          Expanded(child:      
-       _buildViewSection(),),
-      ],
+        children: <Widget>[
+          Expanded(child: 
+          TimelineInsert(),),
+          /*Expanded(
+            child: _buildViewSection(),
+          ),*/
+        ],
       ),
     );
 
