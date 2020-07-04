@@ -17,18 +17,16 @@ class _TimelineInsertState extends State<TimelineInsert> {
 
   // stateless widget...refactor out of this class
   Widget _pickChild(int index) {
-    final int itemIndex = index ~/ 2;
 
-    final Activity step = thisDay.activities[itemIndex];
+    final Activity step = thisDay.activities[index];
 
-    final child =  Container(     
-      child: _TimelineStepsChild(
+    final child = Container(
+        child: _TimelineStepsChild(
       activity: step,
-    )
-    );
+    ));
 
-    final isFirst = itemIndex == 0;
-    final isLast = itemIndex == thisDay.activities.length - 1;
+    final isFirst = index == 0;
+    final isLast = index == thisDay.activities.length - 1;
     double indicatorY;
     if (isFirst) {
       indicatorY = 0.2;
@@ -50,11 +48,11 @@ class _TimelineInsertState extends State<TimelineInsert> {
         // don't need to pass step if we do away with the color circle...
         indicator: _TimelineStepIndicator(
           step: step,
-          index: itemIndex.toString(),
+          index: index.toString(),
         ),
       ),
       topLineStyle: LineStyle(
-        color: thisDay.activities[itemIndex].getLifePointsColor(),
+        color: thisDay.activities[index].getLifePointsColor(),
         width: 5,
       ),
       rightChild: child,
@@ -86,7 +84,7 @@ class _TimelineInsertState extends State<TimelineInsert> {
                 children: <Widget>[
                   //_Header(),
                   Expanded(
-                    child: ReorderableListView(                      
+                    child: ReorderableListView(
                       onReorder: (_oldIndex, _newIndex) {
                         setState(() {
                           if (_newIndex > _oldIndex) {
@@ -119,7 +117,6 @@ class _TimelineInsertState extends State<TimelineInsert> {
 
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
-                                
                                 children: <Widget>[
                                   Expanded(
                                     child: _pickChild(i),
@@ -156,11 +153,10 @@ class _TimelineInsertState extends State<TimelineInsert> {
 }
 
 class _TimelineStepIndicator extends StatelessWidget {
-  const _TimelineStepIndicator({Key key, this.step, this.index})
+  const _TimelineStepIndicator({Key key, this.step})
       : super(key: key);
 
   final Activity step;
-  final String index;
 
   @override
   Widget build(BuildContext context) {
@@ -193,20 +189,21 @@ class _TimelineStepsChild extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      // here we explicitly set the size of our tiles
       height: 200,
-      width: 35,
       padding: const EdgeInsets.all(16.0),
-      /*decoration: BoxDecoration(
-        color: Colors.black,
-      ),*/
       child: Stack(
         children: <Widget>[
-          // want image to fill the box so use infinity..
-          Image(
-              height: double.infinity,
-              width: double.infinity,
-              image: AssetImage(activity.imgPath),
-              fit: BoxFit.cover),
+          // to round the borders
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8.0),
+            child: Image(
+                // want image to fill the box so use infinity..
+                height: double.infinity,
+                width: double.infinity,
+                image: AssetImage(activity.imgPath),
+                fit: BoxFit.cover),
+          ),
           Container(
             alignment: Alignment.bottomCenter,
             child: Text(activity.title + " " + activity.lifepoints.toString(),
@@ -215,13 +212,8 @@ class _TimelineStepsChild extends StatelessWidget {
                   color: Colors.black.withOpacity(0.9),
                 )),
           ),
-
-          //Text(_activities[index].lifepoints.toString(),
-          //textAlign: TextAlign.end,
-          //),
         ],
       ),
-      //border: Colors.red,
     );
 
 /*
