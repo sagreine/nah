@@ -135,21 +135,11 @@ class ListScreenState extends State<ListScreen> {
 
               // this enables cool animations when getting details
               child: Hero(
-                // does this work? also is it necessary to create an image just for this...?
+                // tag needs to be unique
+                // this is a "watch out" for pages where you can have more than 1 of the same Activity
+                // and a "watch out" here for more than one Activities having the same image (imgPath)
+                // also an obvious "here's why" for separating e.g. MVC, we want to reuse this in a different screen but w/o  / w/ different actions
                 tag: AssetImage(_activities[index].imgPath),
-/*                flightShuttleBuilder: (
-                  BuildContext flightContext,
-                  Animation<double> animation,
-                  HeroFlightDirection flightDirection,
-                  BuildContext fromHeroContext,
-                  BuildContext toHeroContext,
-                ) {
-                  final Hero toHero = toHeroContext.widget;
-                  return RotationTransition(
-                    turns: animation,
-                    child: toHero.child,
-                  );
-                },*/
                 child: Material(
                   // transparent enhances hero animation
                   color: Colors.transparent,

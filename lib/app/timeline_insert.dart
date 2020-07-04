@@ -20,11 +20,11 @@ class _TimelineInsertState extends State<TimelineInsert> {
     final int itemIndex = index ~/ 2;
 
     final Activity step = thisDay.activities[itemIndex];
-    
-    final child = _TimelineStepsChild(
-      title: step.title,
-      subtitle: step.description,
-      isLeftAlign: true,
+
+    final child =  Container(     
+      child: _TimelineStepsChild(
+      activity: step,
+    )
     );
 
     final isFirst = itemIndex == 0;
@@ -84,9 +84,9 @@ class _TimelineInsertState extends State<TimelineInsert> {
             body: Center(
               child: Column(
                 children: <Widget>[
-                  _Header(),
+                  //_Header(),
                   Expanded(
-                    child: ReorderableListView(
+                    child: ReorderableListView(                      
                       onReorder: (_oldIndex, _newIndex) {
                         setState(() {
                           if (_newIndex > _oldIndex) {
@@ -98,36 +98,50 @@ class _TimelineInsertState extends State<TimelineInsert> {
                       },
                       children: <Widget>[
                         for (int i = 0; i < thisDay.activities.length; i++)
-                        Container(
-                          key: UniqueKey(),
-                          child:
-                        Row(children: <Widget>[
-                          Expanded(child: 
-                          _pickChild(i),
+                          Container(
+                            key: UniqueKey(),
+                            child: Dismissible(
+                              // Each Dismissible must contain a Key. Keys allow Flutter to
+                              // uniquely identify widgets.
+                              // this isn't unique though... UniqueKey()
+                              key: UniqueKey(),
+                              // Provide a function that tells the app
+                              // what to do after an item has been swiped away.
+                              onDismissed: (direction) {
+                                // Remove the item from the data source.
+                                setState(() {
+                                  thisDay.activities.removeAt(i);
+                                  // show snakcbar
+                                });
+                              },
+                              // Show a red background as the item is swiped away.
+                              background: Container(color: Colors.red),
+
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                
+                                children: <Widget>[
+                                  Expanded(
+                                    child: _pickChild(i),
+                                  ),
+                                  InkWell(
+                                    child: Icon(
+                                      Icons.delete_sweep,
+                                      color: Colors.red,
+                                      size: 35,
+                                    ),
+                                    // TODO: make this exectute dismiss instead of just delete...
+                                    //onTap: () {
+                                    //setState(() {
+                                    //thisDay.activities.removeAt(i);
+                                    // snackbar show..
+                                    //});
+                                    //},
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                         InkWell(
-                          child: Icon(
-                            Icons.delete_sweep,
-                            color: Colors.red,
-                            size: 35,
-                          ),
-                          // TODO: make this exectute dismiss instead of just delete...
-                          onTap: () {
-                            setState(() {
-                              thisDay.activities.removeAt(i);
-                              // Then show a snackbar.
-                              // needs scaffold (use builder or global key)
-                              /*
-                              Scaffold.of(context).showSnackBar(SnackBar(
-                                  content: Text(
-                                      activity.title + " removed from today")));
-                                      */
-                            });
-                          },
-                        ),
-                            ],
-                          ),                        
-                        ),
                       ],
                     ),
                   ),
@@ -159,7 +173,6 @@ class _TimelineStepIndicator extends StatelessWidget {
       ),
       child: Center(
         child: Text(
-          //index,
           step.lifepoints.toString(),
           style: GoogleFonts.architectsDaughter(
             fontSize: 12,
@@ -173,19 +186,45 @@ class _TimelineStepIndicator extends StatelessWidget {
 }
 
 class _TimelineStepsChild extends StatelessWidget {
-  const _TimelineStepsChild({
-    Key key,
-    this.title,
-    this.subtitle,
-    this.isLeftAlign,
-  }) : super(key: key);
+  const _TimelineStepsChild({Key key, this.activity}) : super(key: key);
 
-  final String title;
-  final String subtitle;
-  final bool isLeftAlign;
+  final Activity activity;
 
   @override
   Widget build(BuildContext context) {
+    return Container(
+      height: 200,
+      width: 35,
+      padding: const EdgeInsets.all(16.0),
+      /*decoration: BoxDecoration(
+        color: Colors.black,
+      ),*/
+      child: Stack(
+        children: <Widget>[
+          // want image to fill the box so use infinity..
+          Image(
+              height: double.infinity,
+              width: double.infinity,
+              image: AssetImage(activity.imgPath),
+              fit: BoxFit.cover),
+          Container(
+            alignment: Alignment.bottomCenter,
+            child: Text(activity.title + " " + activity.lifepoints.toString(),
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black.withOpacity(0.9),
+                )),
+          ),
+
+          //Text(_activities[index].lifepoints.toString(),
+          //textAlign: TextAlign.end,
+          //),
+        ],
+      ),
+      //border: Colors.red,
+    );
+
+/*
     return Padding(
       padding: isLeftAlign
           ? const EdgeInsets.only(right: 32, top: 16, bottom: 16, left: 10)
@@ -215,10 +254,10 @@ class _TimelineStepsChild extends StatelessWidget {
           ),
         ],
       ),
-    );
+    );*/
   }
 }
-
+/*
 class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -247,3 +286,4 @@ class _Header extends StatelessWidget {
     );
   }
 }
+*/
