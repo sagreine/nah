@@ -47,6 +47,7 @@ class ListScreenState extends State<ListScreen> {
   //final List<Activity> _activities = List<Activity>();
   //List<Activity> _activitiesToAdd = List<Activity>();
   
+  // may need to also override didUpdateWidget.
   ListScreenState(ListControllerFAB _controller){
     _controller.onFab = onFab;
   }
@@ -66,13 +67,13 @@ class ListScreenState extends State<ListScreen> {
 
   // this is massively unnecessary, right?
   /// i couldn't immediately see why scaffold of context in the FAB didn't work, with snack behavior set to floating though.
-  GlobalKey<ScaffoldState> scaffoldState;
+  
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    scaffoldState = GlobalKey();
+    
     
 
     // this part obviously doesn't go here, done every build, just testing
@@ -392,31 +393,6 @@ class ListScreenState extends State<ListScreen> {
         ],
       ),
     );
-
-    void _onPressedFAB() {
-      // tell the user it worked then clear everyting.
-      // don't need to create then dispose every time....
-      SnackBar snack = SnackBar(
-        content: Text("Added these to your day!"),
-        elevation: 8,
-        behavior: SnackBarBehavior.floating,
-        duration: Duration(seconds: 4),
-        action: SnackBarAction(
-          // TODO: undo add to day
-          label: 'Undo',
-          onPressed: () {},
-        ),
-      );
-
-      // add this selection to Today then clear selected
-      thisDay.activities.addAll(_selectedActivities);
-      setState(() {
-        _selectedActivities.clear();
-      });
-
-      scaffoldState.currentState.showSnackBar(snack);
-    }
-
     return viewSection;
   }
 }

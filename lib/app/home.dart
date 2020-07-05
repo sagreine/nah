@@ -27,13 +27,11 @@ class _MyHomeState extends State<MyHome> {
     keepPage: true,
   );
   final ListControllerFAB _listController = ListControllerFAB();
+  GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
 
   //what page do we want to start on
   int bottomSelectedIndex = ScreenIndex.detail.index;
-  AllActivities _allActivities = AllActivities();
-
-
-/*
+  /*
   // instead of string, generate a list of valid screens?
   // way overkill for now in any case...
   int generateIndex(String page) {
@@ -103,7 +101,7 @@ class _MyHomeState extends State<MyHome> {
     // list
     if (bottomSelectedIndex == ScreenIndex.list.index) {
 
-      _listController.onFab();
+      
       SnackBar snack = SnackBar(
         content: Text("Added these to your day!"),
         elevation: 8,
@@ -116,6 +114,11 @@ class _MyHomeState extends State<MyHome> {
         ),
       );
 
+      //Scaffold.of(context).showSnackBar(snack);
+      scaffoldState.currentState.showSnackBar(snack);
+      _listController.onFab();
+      
+
 
       // add this selection to Today then clear selected
       // this is abuse of a lot of things and dangerous -> would need to enforce only one ourList (list) to rely on this....
@@ -124,7 +127,7 @@ class _MyHomeState extends State<MyHome> {
 
     }
 
-      //scaffoldState.currentState.showSnackBar(snack);
+      //
     // today
   }
 
@@ -163,7 +166,7 @@ class _MyHomeState extends State<MyHome> {
 
   @override
   void dispose() {
-    _pageController.dispose();
+    _pageController.dispose();    
     super.dispose();
   }
 
@@ -171,6 +174,7 @@ class _MyHomeState extends State<MyHome> {
   Widget build(BuildContext context) {
     
     return Scaffold(
+      key: scaffoldState,
       appBar: AppBar(
         title: Text("nah. a to-do-less app"),
         leading: Padding(
