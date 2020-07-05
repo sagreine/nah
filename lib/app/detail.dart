@@ -5,7 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nah/app/today.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:nah/app/app_bars.dart';
+
 
 
 
@@ -263,84 +263,14 @@ class _DetailScreenState extends State<DetailScreen> {
       child: ListView(
         children: [
           imageSection,
-          buttonSection,
+          //buttonSection,
           titleSection,
           textSection,
         ],
       ),
     );
 
-    return MaterialApp(
-      title: widget.activity.title,
-      home: Scaffold(
-        // if we know if this is 'Add' or 'Edit' can say that + activity title
-        appBar: AppBarNah.getAppBar(context, "Add/Edit Activity"),
-        body: viewSection,
-        floatingActionButton: Container(
-          height: 80,
-          width: 90,
-          child: FloatingActionButton(
-            onPressed: () {
-              Navigator.of(context).pop(widget.activity);
-            },
-            tooltip: 'Back previous',
-            child: Icon(Icons.done),
-            elevation: 12,
-          ),
-        ),
-        bottomNavigationBar: BottomAppBar(
-          shape: CircularNotchedRectangle(),
-          color: Colors.blueGrey,
-          notchMargin: 3.5,
-          clipBehavior: Clip.antiAlias,
-          child: BottomNavigationBar(
-              currentIndex: _currentIndex,
-              onTap: (int index) {
-                /*
-                setState(() {
-                  _currentIndex = index;                  
-                  if (_currentIndex == 2) {
-                    // N/A, we're here already...
-                  } 
-                  else if (_currentIndex == 1)
-                  {
-                    Navigator.of(context).pop();
-                  }
-                  else {
-                    Navigator.of(context).push(MaterialPageRoute<void>(
-                      builder: (context) => DetailScreen(
-                        //default is a 0 score activity
-                        activity: Activity(
-                          Image.asset('assets/images/default.jpg'),
-                          "Add a title to this activity",
-                          "Add a subtitle to this activity",
-                          "Add an activity description!",
-                          0,
-                        ),
-                      ),
-                    ));
-                  }
-                });
-                */
-                //_navigateToScreens(index);
-              },
-              items: [
-                BottomNavigationBarItem(
-                    icon: Icon(FontAwesomeIcons.edit),
-                    title: Text("Create Activity")),
-                BottomNavigationBarItem(
-                    icon: Icon(FontAwesomeIcons.truckPickup),
-                    title: Text("Pick Activities")),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.view_day),
-                  title: Text("View Today"),
-                  // pass _activitiesToAdd...?
-                ),
-              ]),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      ),
-    );
+    return viewSection;
   }
 
   // builds bottom buttons on edit page..

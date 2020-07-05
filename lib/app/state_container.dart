@@ -8,9 +8,7 @@ import 'package:flutter/material.dart';
 
 class AppSettings {
   int lifePointsCeilling;
-
   AppSettings(this.lifePointsCeilling);
-
 }
 
 class _InheritedStateContainer extends InheritedWidget {

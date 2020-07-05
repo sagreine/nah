@@ -3,12 +3,14 @@ import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nah/app/activity.dart';
 import 'package:nah/app/detail.dart';
+import 'package:nah/app/home.dart';
 import 'package:nah/app/today.dart';
 import 'package:nah/app/settings.dart';
 import "package:nah/app/state_container.dart";
 import 'package:awesome_page_transitions/awesome_page_transitions.dart';
 import 'package:nah/app/singletons.dart';
-import 'package:nah/app/app_bars.dart';
+
+//import 'home.dart';
 
 ///// Generally thinking go away from strict navigator and prefer
 ///   bottomNavBar and PageView, managed out of home, for simplicity...
@@ -28,8 +30,12 @@ import 'package:nah/app/app_bars.dart';
 // TODO: Positioned.fill for stack for background?
 
 class ListScreen extends StatefulWidget {
+  final ListControllerFAB controller;
+
+  ListScreen({this.controller});
+
   @override
-  ListScreenState createState() => ListScreenState();
+  ListScreenState createState() => ListScreenState(controller);
 }
 
 class ListScreenState extends State<ListScreen> {
@@ -40,12 +46,21 @@ class ListScreenState extends State<ListScreen> {
   // think: are these of state or statefulwidget
   //final List<Activity> _activities = List<Activity>();
   //List<Activity> _activitiesToAdd = List<Activity>();
+  
+  ListScreenState(ListControllerFAB _controller){
+    _controller.onFab = onFab;
+  }
+  
+  void onFab() {
+    thisDay.activities.addAll(_selectedActivities);
+    setState(() {
+      _selectedActivities.clear();
+    });
+  }
+
   final List<Activity> _selectedActivities = List<Activity>();
   DayOfActivities thisDay = DayOfActivities();
   AllActivities _allActivities = AllActivities();
-
-// this will change when we use PageView but for now used to tell which page we're on and pick the next one
-  int _currentIndex = 0;
 
   AppSettings appSettings;
 
@@ -58,6 +73,7 @@ class ListScreenState extends State<ListScreen> {
     // TODO: implement initState
     super.initState();
     scaffoldState = GlobalKey();
+    
 
     // this part obviously doesn't go here, done every build, just testing
     // will come from db anyhow...
@@ -371,7 +387,7 @@ class ListScreenState extends State<ListScreen> {
       // the Activities you can select from
       child: CustomScrollView(
         primary: false,
-        slivers: <Widget>[          
+        slivers: <Widget>[
           _buildViewSection(),
         ],
       ),
@@ -401,63 +417,6 @@ class ListScreenState extends State<ListScreen> {
       scaffoldState.currentState.showSnackBar(snack);
     }
 
-    return MaterialApp(
-      title: 'nah',
-      home: Scaffold(
-        key: scaffoldState,
-        //backgroundColor: Color(0xffE49273),
-        //Color(0xFF7180AC),
-        //Theme.of(context).primaryColorLight.withOpacity(0.9),
-        appBar: AppBarNah.getAppBar(context, "Add some activities!"),
-        body: viewSection,
-        // consider extended, with an icon and text, instead. e.g. "add to today"
-        // still not sold on approach here. might prefer bottomNav with no add button...
-        // in fact probably will do that!
-        floatingActionButton: Container(
-          height: 80,
-          width: 90,
-          child: FloatingActionButton(
-            onPressed: _onPressedFAB,
-            tooltip: 'Add to Day',
-            child: Icon(Icons.add),
-            elevation: 12,
-          ),
-        ),
-
-        bottomNavigationBar: BottomAppBar(
-          shape: CircularNotchedRectangle(),
-          color: Colors.blueGrey,
-          notchMargin: 3.5,
-          clipBehavior: Clip.antiAlias,
-          child: BottomNavigationBar(
-              currentIndex: _currentIndex,
-              onTap: (int index) {
-                _currentIndex = index;
-                // this will change when we add PageView
-                // but, nav to the other screens this way basically
-                if (_currentIndex == 1) {
-                  Navigator.of(context).push(MaterialPageRoute<void>(
-                      builder: (context) => TodayScreen()));
-                } else {
-                  _navDetail();
-                }
-              },
-
-              //_navigateToScreens(index);
-
-              items: [
-                BottomNavigationBarItem(
-                    icon: Icon(FontAwesomeIcons.edit),
-                    title: Text("Create Activity")),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.view_day),
-                  title: Text("View Today"),
-                  // pass _activitiesToAdd...?
-                ),
-              ]),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      ),
-    );
+    return viewSection;
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:nah/app/home.dart';
 import 'package:nah/app/list.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:async';
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyLogin extends StatefulWidget {
-  MyLogin({Key, key}) : super(key: key);
+  MyLogin({Key key}) : super(key: key);
   @override
   State<StatefulWidget> createState() => _MyLoginState();
 }
@@ -156,7 +157,7 @@ class _MyLoginState extends State<MyLogin> {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute<void>(builder: (BuildContext context) {
                 return Scaffold(
-                  body: Container(child: ListScreen()),
+                  body: Container(child: MyHome()),
                 );
               }),
             );

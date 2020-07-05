@@ -7,7 +7,7 @@ import 'package:nah/app/timeline_insert.dart';
 import 'package:nah/app/settings.dart';
 import 'package:awesome_page_transitions/awesome_page_transitions.dart';
 import 'package:nah/app/singletons.dart';
-import 'package:nah/app/app_bars.dart';
+
 
 /// TODO: custom timeline rather than reorderable list? more fun :)
 /// TODO: animated list? much more fun especially for deletion sweep :)
@@ -165,71 +165,6 @@ class TodayScreenState extends State<TodayScreen> {
       ),
     );
 
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBarNah.getAppBar(context, "Today's activities"),
-        body: viewSection,
-        floatingActionButton: Container(
-          height: 80,
-          width: 90,
-          child: FloatingActionButton(
-            onPressed: () {
-              //Navigator.of(context).pop();
-              Navigator.of(context).push(
-                  MaterialPageRoute<void>(builder: (context) => Timeline()));
-            },
-            tooltip: 'Back to Activities List',
-            child: Icon(FontAwesomeIcons.arrowLeft),
-            elevation: 12,
-          ),
-        ),
-        bottomNavigationBar: BottomAppBar(
-          shape: CircularNotchedRectangle(),
-          color: Colors.blueGrey,
-          notchMargin: 3.5,
-          clipBehavior: Clip.antiAlias,
-          child: BottomNavigationBar(
-              currentIndex: _currentIndex,
-              onTap: (int index) {
-                setState(() {
-                  _currentIndex = index;
-                  if (_currentIndex == 2) {
-                    // N/A, we're here already...
-                  } else if (_currentIndex == 1) {
-                    Navigator.of(context).pop();
-                  } else {
-                    Navigator.of(context).push(MaterialPageRoute<void>(
-                      builder: (context) => DetailScreen(
-                        //default is a 0 score activity - this should be done in activity.dart as blank constructor...
-                        activity: Activity(
-                          'assets/images/default.jpg',
-                          "Add a title to this activity",
-                          "Add a subtitle to this activity",
-                          "Add an activity description!",
-                          0,
-                        ),
-                      ),
-                    ));
-                  }
-                });
-                //_navigateToScreens(index);
-              },
-              items: [
-                BottomNavigationBarItem(
-                    icon: Icon(FontAwesomeIcons.edit),
-                    title: Text("Create Activity")),
-                BottomNavigationBarItem(
-                    icon: Icon(FontAwesomeIcons.truckPickup),
-                    title: Text("Pick Activities")),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.view_day),
-                  title: Text("View Today"),
-                  // pass _activitiesToAdd...?
-                ),
-              ]),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      ),
-    );
+    return viewSection;
   }
 }
