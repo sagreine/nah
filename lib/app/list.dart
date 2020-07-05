@@ -30,7 +30,7 @@ import 'package:nah/app/singletons.dart';
 // TODO: Positioned.fill for stack for background?
 
 class ListScreen extends StatefulWidget {
-  final ListControllerFAB controller;
+  final FABController controller;
 
   ListScreen({this.controller});
 
@@ -46,12 +46,12 @@ class ListScreenState extends State<ListScreen> {
   // think: are these of state or statefulwidget
   //final List<Activity> _activities = List<Activity>();
   //List<Activity> _activitiesToAdd = List<Activity>();
-  
+
   // may need to also override didUpdateWidget.
-  ListScreenState(ListControllerFAB _controller){
+  ListScreenState(FABController _controller) {
     _controller.onFab = onFab;
   }
-  
+
   void onFab() {
     thisDay.activities.addAll(_selectedActivities);
     setState(() {
@@ -67,14 +67,11 @@ class ListScreenState extends State<ListScreen> {
 
   // this is massively unnecessary, right?
   /// i couldn't immediately see why scaffold of context in the FAB didn't work, with snack behavior set to floating though.
-  
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    
-    
 
     // this part obviously doesn't go here, done every build, just testing
     // will come from db anyhow...
@@ -132,7 +129,7 @@ class ListScreenState extends State<ListScreen> {
     // activities to the day right away.
     // however, don't keep this here. only here to force recalc every setState()
     int _currentScore = thisDay.getLifePointsSum();
-    
+
     _selectedActivities.forEach((element) {
       _currentScore += element.lifepoints;
     });
@@ -141,7 +138,6 @@ class ListScreenState extends State<ListScreen> {
     // managed through e.g. PageView in future? (e.g., bottom nav bar navigation to Detail on Today needs very similar code to update _activities)
     // though with consideration of how exactly would you do that given you can go Today->new Detail. for now assume PageView has magic.
     // or _activities is singleton...
-
 
     Widget _buildViewSection() {
       // may eventually return to just one column....
@@ -242,7 +238,7 @@ class ListScreenState extends State<ListScreen> {
                         }
                       });
                     },
-                    onDoubleTap: () {                      
+                    onDoubleTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute<void>(
                             builder: (BuildContext context) {
@@ -251,23 +247,25 @@ class ListScreenState extends State<ListScreen> {
                           // TODO: this doesn't set state, even when this is wrapped in setState. only after it is rebuilt again..
                           return Scaffold(
                             body: Container(
-                                // if we want it small with the same background, do that here
-                                // but be consistent across ways to get this screen
-                                // just here for now as an example / another way to look at it.
-                                alignment: Alignment.center,
+                              // if we want it small with the same background, do that here
+                              // but be consistent across ways to get this screen
+                              // just here for now as an example / another way to look at it.
+                              alignment: Alignment.center,
 
-                                // this feels like transparent should show what's behind it, but it doesn't..
-                                color: Color(0xffE49273),
-                                //color: Colors.transparent,
+                              // this feels like transparent should show what's behind it, but it doesn't..
+                              color: Color(0xffE49273),
+                              //color: Colors.transparent,
 
-                                padding: const EdgeInsets.all(16.0),
-                                child: DetailScreen(
-                                    activity:
-                                        _allActivities.activities[index]),
-                          ),
+                              padding: const EdgeInsets.all(16.0),
+                              child: DetailScreen(
+                                  activity: _allActivities.activities[index],
+                                  // this is NOT a thing we should do and it doesn't worki :)
+                                  //controller: new FABController()
+                                  ),
+                            ),
                           );
                         }),
-                      );                                          
+                      );
                     },
                     child: GridTile(
                       child:
@@ -339,10 +337,10 @@ class ListScreenState extends State<ListScreen> {
 
     // just swipting = no additions happened (stop handling this here :))
     Widget viewSection = CustomScrollView(
-        primary: false,
-        slivers: <Widget>[
-          _buildViewSection(),
-        ],
+      primary: false,
+      slivers: <Widget>[
+        _buildViewSection(),
+      ],
     );
     return viewSection;
   }

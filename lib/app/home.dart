@@ -11,7 +11,7 @@ import 'package:nah/app/activity.dart';
 // pls no do this, when this is not what this means. just do it right.
 enum ScreenIndex { detail, list, today }
 
-class ListControllerFAB {
+class FABController {
   void Function() onFab;
 }
 
@@ -27,11 +27,12 @@ class _MyHomeState extends State<MyHome> {
     viewportFraction: 0.95,
     keepPage: true,
   );
-  final ListControllerFAB _listController = ListControllerFAB();
+  final FABController _listFabController = FABController();
+  final FABController _detailFabController = FABController();
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
 
   //what page do we want to start on
-  int bottomSelectedIndex = ScreenIndex.detail.index;
+  int bottomSelectedIndex = ScreenIndex.list.index;
   /*
   // instead of string, generate a list of valid screens?
   // way overkill for now in any case...
@@ -79,8 +80,7 @@ class _MyHomeState extends State<MyHome> {
     }
   }
 
-  FloatingActionButtonLocation buildFABlocation ()
-  {
+  FloatingActionButtonLocation buildFABlocation() {
     if (bottomSelectedIndex == ScreenIndex.list.index) {
       // list icon
       return FloatingActionButtonLocation.centerDocked;
@@ -91,18 +91,15 @@ class _MyHomeState extends State<MyHome> {
     } else {
       return FloatingActionButtonLocation.endFloat;
     }
-
   }
 
-  void buildFABOnPressed () {
+  void buildFABOnPressed() {
     // detail
     // context aware? was this a hero or an Add activity screen
     // orrrr do we make a new Add screen that just displays a detail UI screen?
-    
+
     // list
     if (bottomSelectedIndex == ScreenIndex.list.index) {
-
-      
       SnackBar snack = SnackBar(
         content: Text("Added these to your day!"),
         elevation: 8,
@@ -117,9 +114,7 @@ class _MyHomeState extends State<MyHome> {
 
       //Scaffold.of(context).showSnackBar(snack);
       scaffoldState.currentState.showSnackBar(snack);
-      _listController.onFab();
-      
-
+      _listFabController.onFab();
 
       // add this selection to Today then clear selected
       // this is abuse of a lot of things and dangerous -> would need to enforce only one ourList (list) to rely on this....
@@ -128,7 +123,14 @@ class _MyHomeState extends State<MyHome> {
 
     }
 
-      //
+    else if (bottomSelectedIndex == ScreenIndex.detail.index) {
+       // snackbaer
+       _detailFabController.onFab();
+       bottomTapped(ScreenIndex.list.index);
+    }
+
+
+    //
     // today
   }
 /*
@@ -147,11 +149,7 @@ class _MyHomeState extends State<MyHome> {
             )),
           ));
           // now doesn't do this automatically? waits until setState() is called again, it looks like....
-      if (result != null) {
-        setState(() {
-          _allActivities.activities.add(result);
-        });
-      }
+      
     }*/
 
   Widget buildPageView() {
@@ -164,15 +162,17 @@ class _MyHomeState extends State<MyHome> {
       children: <Widget>[
         DetailScreen(
           activity: Activity(
-              'assets/images/default.jpg',
-              "Add a title to this activity",
-              "Add a subtitle to this activity",
-              "Add an activity description!",
-              0,
-          //activity: null,
-        )),
-        TodayScreen(),
-        ListScreen(controller: _listController),
+            'assets/images/default.jpg',
+            "Add a title to this activity",
+            "Add a subtitle to this activity",
+            "Add an activity description!",
+            0,
+
+            //activity: null,
+          ),
+          controller: _detailFabController,
+        ),
+        ListScreen(controller: _listFabController),
         TodayScreen(),
       ],
     );
@@ -201,18 +201,16 @@ class _MyHomeState extends State<MyHome> {
               transition: CubeTransition(),
             ),
 */
-
   }
 
   @override
   void dispose() {
-    _pageController.dispose();    
+    _pageController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       key: scaffoldState,
       appBar: AppBar(
@@ -234,9 +232,7 @@ class _MyHomeState extends State<MyHome> {
           ),
         ],
       ),
-
       body: buildPageView(),
-
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: bottomSelectedIndex,
         onTap: (index) {
@@ -250,7 +246,7 @@ class _MyHomeState extends State<MyHome> {
         child: FloatingActionButton(
           onPressed: () {
             buildFABOnPressed();
-            },
+          },
           tooltip: 'Add to Day',
           child: buildFABIcon(),
           elevation: 12,

@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nah/app/activity.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:nah/app/today.dart';
+import 'package:nah/app/home.dart';
+import 'package:nah/app/singletons.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:image_picker/image_picker.dart';
-
-
-
 
 /// TODO: SliverAnimatedList instead? much more fun. also explicit animations instead of roll your own.. :)
 /// also also, naturally lends to the coming reorganziation/state-conscious editing of the code
@@ -21,18 +19,28 @@ import 'package:image_picker/image_picker.dart';
 
 class DetailScreen extends StatefulWidget {
   final Activity activity;
+  final FABController controller;
+  
+
   // this.activity was required, but let's not require it for a new on. or pass blank one?
-  const DetailScreen({Key key, @required this.activity}) : super(key: key);
+  const DetailScreen({Key key, @required this.activity, this.controller}) : super(key: key);
 
   @override
-  _DetailScreenState createState() => _DetailScreenState();
+  _DetailScreenState createState() => _DetailScreenState(controller);
 }
 
 class _DetailScreenState extends State<DetailScreen> {
-  int _currentIndex = 0;
+
+    _DetailScreenState(FABController _controller) {
+      if (_controller != null) {
+    _controller.onFab = onFab;
+      }
+  }
+  
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _lifePointsController = TextEditingController();
+  AllActivities _allActivities = AllActivities();
 
 // this parameter is unnecessary and stupid of course. just build a camera with gallery overlay...
 // https://medium.com/@richard.ng/whatsapp-clone-with-flutter-in-a-week-part-2-d5e394e76b22
@@ -45,6 +53,18 @@ class _DetailScreenState extends State<DetailScreen> {
         widget.activity.imgPath = pickedFile.path.toString();
       }
     });
+  }
+
+  // what happens when they submit this image?
+  // this should save it, but mind that this is a state and we're doing widget.activity.....
+  void onFab()
+  {
+    if (widget.activity != null) {
+        setState(() {
+          _allActivities.activities.add(widget.activity);
+        });
+      }
+
   }
 
   @override
@@ -74,13 +94,10 @@ class _DetailScreenState extends State<DetailScreen> {
             // will want to pass the activity back?
             // or, only if the activity was edited? comparison?
             // need to do hero everywhere to ensure pop back to right place?
-            // Navigator.pop(context, activity);
-            
-            // TODO: see if this works?
-            setState(() {
-            Navigator.of(context).pop();  
-            });
-            
+            // Navigator.pop(context, activity)            
+
+              // this is not right if adding but is if editing.
+              Navigator.of(context).pop();            
           },
           child: Stack(
             children: <Widget>[
@@ -132,7 +149,6 @@ class _DetailScreenState extends State<DetailScreen> {
       );
     }
 
-    
     Widget titleSection = Container(
       padding: const EdgeInsets.all(32),
       child: Row(
@@ -253,13 +269,13 @@ class _DetailScreenState extends State<DetailScreen> {
       ),
     );
 
-    Widget viewSection =  ListView(
-        children: [
-          imageSection,
-          buttonSection,
-          titleSection,
-          textSection,
-        ],
+    Widget viewSection = ListView(
+      children: [
+        imageSection,
+        buttonSection,
+        titleSection,
+        textSection,
+      ],
     );
 
     return viewSection;
