@@ -48,13 +48,13 @@ class ListScreenState extends State<ListScreen> {
 
   // this is massively unnecessary, right?
   /// i couldn't immediately see why scaffold of context in the FAB didn't work, with snack behavior set to floating though.
-  GlobalKey<ScaffoldState> scaffoldState;
+  //GlobalKey<ScaffoldState> scaffoldState;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    scaffoldState = GlobalKey();
+    //scaffoldState = GlobalKey();
 
     // this part obviously doesn't go here, done every build, just testing
     // will come from db anyhow...
@@ -139,7 +139,7 @@ class ListScreenState extends State<ListScreen> {
                 // this is a "watch out" for pages where you can have more than 1 of the same Activity
                 // and a "watch out" here for more than one Activities having the same image (imgPath)
                 // also an obvious "here's why" for separating e.g. MVC, we want to reuse this in a different screen but w/o  / w/ different actions
-                tag: AssetImage(_activities[index].imgPath),
+                tag: AssetImage(_activities[index].imgPath), //Text(_activities[index].imgPath + index.toString()),
                 child: Material(
                   // transparent enhances hero animation
                   color: Colors.transparent,
@@ -328,20 +328,20 @@ class ListScreenState extends State<ListScreen> {
         _selectedActivities.clear();
       });
 
-      scaffoldState.currentState.showSnackBar(snack);
+      //scaffoldState.currentState.showSnackBar(snack);
     }
 
-    return 
-       Scaffold(
-        key: scaffoldState,
+    return viewSection;
+       //Scaffold(
+        //key: scaffoldState,
         //backgroundColor: Color(0xffE49273),
         //Color(0xFF7180AC),
         //Theme.of(context).primaryColorLight.withOpacity(0.9),
-        body: viewSection,
+        //body: viewSection,
         // consider extended, with an icon and text, instead. e.g. "add to today"
         // still not sold on approach here. might prefer bottomNav with no add button...
         // in fact probably will do that!
-        floatingActionButton: Container(
+        /*floatingActionButton: Container(
           height: 80,
           width: 90,
           child: FloatingActionButton(
@@ -350,7 +350,7 @@ class ListScreenState extends State<ListScreen> {
             child: Icon(Icons.add),
             elevation: 12,
           ),
-        ),        
-    );
+        ),  */      
+    //);
   }
 }

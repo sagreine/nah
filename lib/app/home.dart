@@ -14,7 +14,7 @@ class MyHome extends StatefulWidget {
 class _MyHomeState extends State<MyHome> {
   final PageController _pageController = PageController(
     initialPage: 0,
-    viewportFraction: 0.8,
+    viewportFraction: 0.95,
     keepPage: true,
   );
   int bottomSelectedIndex = 0;
@@ -22,8 +22,7 @@ class _MyHomeState extends State<MyHome> {
   List<BottomNavigationBarItem> buildBottomNavBarItems() {
     return [
       BottomNavigationBarItem(
-          icon: Icon(FontAwesomeIcons.edit), 
-          title: Text("Create Activity")),
+          icon: Icon(FontAwesomeIcons.edit), title: Text("Create Activity")),
       BottomNavigationBarItem(
           icon: Icon(FontAwesomeIcons.truckPickup),
           title: Text("Pick Activities")),
@@ -42,13 +41,11 @@ class _MyHomeState extends State<MyHome> {
         pageChanged(index);
       },
       children: <Widget>[
-        /*
         DetailScreen(
-            activity: null,
-        ),*/
+          activity: null,
+        ),
         ListScreen(),
-        TodayScreen(),
-        
+        new TodayScreen(),
       ],
     );
   }
@@ -77,36 +74,33 @@ class _MyHomeState extends State<MyHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       appBar: AppBar(
-         title: Text("nah. a to-do-less app"),
-         leading: Padding(
-            padding: EdgeInsets.all(3),
-            child: Image.asset("assets/images/ic_launcher.png"),
-          ),
-          actions: <Widget>[
-
-
-                          IconButton(
-                  icon: const Icon(Icons.settings),
-                  tooltip: 'Settings',
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                          builder: (BuildContext context) => Settings()),
-                    );
-                  },
-                ),
-          ],
+      appBar: AppBar(
+        title: Text("nah. a to-do-less app"),
+        leading: Padding(
+          padding: EdgeInsets.all(3),
+          child: Image.asset("assets/images/ic_launcher.png"),
         ),
-              
-        body: buildPageView(),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: bottomSelectedIndex,
-          onTap: (index) {
-            bottomTapped(index);
-          },
-          items: buildBottomNavBarItems(),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.settings),
+            tooltip: 'Settings',
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                    builder: (BuildContext context) => Settings()),
+              );
+            },
           ),
+        ],
+      ),
+      body: buildPageView(),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: bottomSelectedIndex,
+        onTap: (index) {
+          bottomTapped(index);
+        },
+        items: buildBottomNavBarItems(),
+      ),
     );
   }
 }
@@ -136,8 +130,6 @@ class _MyHomeState extends State<MyHome> {
         ),
         */
 
-
-
 /*void _navToday() {
       Navigator.push(
         context,
@@ -149,14 +141,13 @@ class _MyHomeState extends State<MyHome> {
         ),
 
         //MaterialPageRoute<void>(builder: (context) => TodayScreen()),
-      );*/ 
+      );*/
 
-
-    // push a new activity to detail screen and update the list of activities if you get one back
-    // managed through e.g. PageView in future? (e.g., bottom nav bar navigation to Detail on Today needs very similar code to update _activities)
-    // though with consideration of how exactly would you do that given you can go Today->new Detail. for now assume PageView has magic.
-    // or _activities is singleton... or just manage it all from home since PageView creates them anyway.. -> use a builder if we want different
-    // or just to learn how to do it...
+// push a new activity to detail screen and update the list of activities if you get one back
+// managed through e.g. PageView in future? (e.g., bottom nav bar navigation to Detail on Today needs very similar code to update _activities)
+// though with consideration of how exactly would you do that given you can go Today->new Detail. for now assume PageView has magic.
+// or _activities is singleton... or just manage it all from home since PageView creates them anyway.. -> use a builder if we want different
+// or just to learn how to do it...
 /*    
     void _navDetail() async {
       final result = await Navigator.push(

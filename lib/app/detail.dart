@@ -20,7 +20,8 @@ import 'dart:io';
 class DetailScreen extends StatefulWidget {
   final Activity activity;
   // this.activity was required, but let's not require it for a new on. or pass blank one?
-  const DetailScreen({Key key, @required this.activity}) : super(key: key);
+  // deal with a blank one here..
+  DetailScreen({Key key, @required this.activity}) : super(key: key);
 
   @override
   _DetailScreenState createState() => _DetailScreenState();
@@ -31,6 +32,7 @@ class _DetailScreenState extends State<DetailScreen> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _lifePointsController = TextEditingController();
+  Activity _activity;
 
 // this parameter is unnecessary and stupid of course. just build a camera with gallery overlay...
 // https://medium.com/@richard.ng/whatsapp-clone-with-flutter-in-a-week-part-2-d5e394e76b22
@@ -39,8 +41,9 @@ class _DetailScreenState extends State<DetailScreen> {
     final pickedFile = await picker.getImage(source: imageSource);
     setState(() {
       // if they picked a file :)
+      // widget.activity vs. _activity this should work but is sloppy for sure
       if (pickedFile != null) {
-        widget.activity.imgPath = pickedFile.path.toString();
+        _activity.imgPath = pickedFile.path.toString();
       }
     });
   }
@@ -57,13 +60,28 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _titleController.text = widget.activity.title;
-    _descriptionController.text = widget.activity.description;
+    // if passed null activity, populate with a default one
+    // this seems like a really bad idea.    
+
+    if (widget.activity == null) {
+     _activity = new Activity(
+          'assets/images/default.jpg',
+          "Add a title to this activity",
+          "Add a subtitle to this activity",
+          "Add an activity description!",
+          0);
+    }
+    else {
+      _activity = widget.activity;
+    }
+
+    _titleController.text = _activity.title;
+    _descriptionController.text = _activity.description;
     // do we want this different for new vs edit? cuz it'll never be null for the TextFormField, if we care..
-    _lifePointsController.text = widget.activity.lifepoints.toString();
+    _lifePointsController.text = _activity.lifepoints.toString();
 
     Widget imageSection = Hero(
-      tag: AssetImage(widget.activity.imgPath),
+      tag: AssetImage(_activity.imgPath),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
@@ -81,13 +99,13 @@ class _DetailScreenState extends State<DetailScreen> {
               Container(
                 decoration: BoxDecoration(
                   border: Border.all(
-                      color: widget.activity.lifepoints < 0
+                      color: _activity.lifepoints < 0
                           ? Colors.greenAccent
                           : Colors.redAccent),
                 ),
                 child: FadeInImage(
                   placeholder: MemoryImage(kTransparentImage),
-                  image: AssetImage(widget.activity.imgPath),
+                  image: AssetImage(_activity.imgPath),
                 ),
               ),
               Row(
@@ -122,7 +140,6 @@ class _DetailScreenState extends State<DetailScreen> {
       );
     }
 
-    
     Widget titleSection = Container(
       padding: const EdgeInsets.all(32),
       child: Row(
@@ -138,7 +155,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 // doesn't do what i thought it did :(
                 expands: false,
                 onSubmitted: (value) {
-                  widget.activity.title = value;
+                  _activity.title = value;
                 },
               ),
             ),
@@ -148,17 +165,17 @@ class _DetailScreenState extends State<DetailScreen> {
             padding: EdgeInsets.all(0),
             // this isn't an inconbutton anymore though...
             child: IconButton(
-                icon: (widget.activity.lifepoints < 0
+                icon: (_activity.lifepoints < 0
                     ? Icon(FontAwesomeIcons.levelUpAlt)
                     : Icon(
                         FontAwesomeIcons.levelDownAlt,
                       )),
-                color: (widget.activity.lifepoints < 0
+                color: (_activity.lifepoints < 0
                     ? Colors.green[500]
                     : Colors.red[500]),
                 onPressed: () {
                   setState(() {
-                    widget.activity.lifepoints = -widget.activity.lifepoints;
+                    _activity.lifepoints = -_activity.lifepoints;
                   });
                 }),
           ),
@@ -196,8 +213,8 @@ class _DetailScreenState extends State<DetailScreen> {
               onSubmitted: (String value) {
                 setState(
                   () {
-                    widget.activity.lifepoints = int.parse(value);
-                    print(widget.activity.lifepoints.toString());
+                    _activity.lifepoints = int.parse(value);
+                    print(_activity.lifepoints.toString());
                   },
                 );
                 // update bool for is positive? or have that pull from activity and update automatically.
@@ -227,7 +244,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
     Widget textSection = Container(
       padding: const EdgeInsets.all(32),
-      color: widget.activity.getLifePointsColor(),
+      color: _activity.getLifePointsColor(),
       child: TextField(
         controller: _descriptionController,
         style: TextStyle(
@@ -238,7 +255,7 @@ class _DetailScreenState extends State<DetailScreen> {
         maxLines: 5,
         // TODO: don't do this. add a submit button.
         onChanged: (value) {
-          widget.activity.description = value;
+          _activity.description = value;
         },
       ),
     );
@@ -257,100 +274,24 @@ class _DetailScreenState extends State<DetailScreen> {
       // consider function for state.....
       child: ListView(
         children: [
-          imageSection,
-          buttonSection,
+          imageSection,          
           titleSection,
           textSection,
+          buttonSection,
         ],
       ),
     );
 
-    return MaterialApp(
-      title: widget.activity.title,
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text("View and Edit Detail for Activity"),
-                    actions: <Widget>[
+    return viewSection;
 
-
-                          IconButton(
-                  icon: const Icon(Icons.settings),
-                  tooltip: 'Settings',
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                          builder: (BuildContext context) => Settings()),
-                    );
-                  },
-                ),
-          ],
-        ),
-        body: viewSection,
-        floatingActionButton: Container(
-          height: 80,
-          width: 90,
+          /*
           child: FloatingActionButton(
             onPressed: () {
               Navigator.of(context).pop(widget.activity);
             },
-            tooltip: 'Back previous',
-            child: Icon(Icons.done),
-            elevation: 12,
-          ),
-        ),
-        bottomNavigationBar: BottomAppBar(
-          shape: CircularNotchedRectangle(),
-          color: Colors.blueGrey,
-          notchMargin: 3.5,
-          clipBehavior: Clip.antiAlias,
-          child: BottomNavigationBar(
-              currentIndex: _currentIndex,
-              onTap: (int index) {
-                /*
-                setState(() {
-                  _currentIndex = index;                  
-                  if (_currentIndex == 2) {
-                    // N/A, we're here already...
-                  } 
-                  else if (_currentIndex == 1)
-                  {
-                    Navigator.of(context).pop();
-                  }
-                  else {
-                    Navigator.of(context).push(MaterialPageRoute<void>(
-                      builder: (context) => DetailScreen(
-                        //default is a 0 score activity
-                        activity: Activity(
-                          Image.asset('assets/images/default.jpg'),
-                          "Add a title to this activity",
-                          "Add a subtitle to this activity",
-                          "Add an activity description!",
-                          0,
-                        ),
-                      ),
-                    ));
-                  }
-                });
-                */
-                //_navigateToScreens(index);
-              },
-              items: [
-                BottomNavigationBarItem(
-                    icon: Icon(FontAwesomeIcons.edit),
-                    title: Text("Create Activity")),
-                BottomNavigationBarItem(
-                    icon: Icon(FontAwesomeIcons.truckPickup),
-                    title: Text("Pick Activities")),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.view_day),
-                  title: Text("View Today"),
-                  // pass _activitiesToAdd...?
-                ),
-              ]),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      ),
-    );
+            ),
+            */
+      
   }
 
   // builds bottom buttons on edit page..

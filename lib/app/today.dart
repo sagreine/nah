@@ -187,30 +187,7 @@ class TodayScreenState extends State<TodayScreen> {
       ),
     );
 
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          // TODO: add a clear all button
-          title: Text("Today's Activitiies"),
-          leading: Padding(
-            padding: EdgeInsets.all(3),
-            child: Image.asset("assets/images/ic_launcher.png"),
-          ),
-          actions: <Widget>[
-
-
-                          IconButton(
-                  icon: const Icon(Icons.settings),
-                  tooltip: 'Settings',
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                          builder: (BuildContext context) => Settings()),
-                    );
-                  },
-                ),
-          ],
-        ),
+    return  Scaffold(        
         body: viewSection,
         floatingActionButton: Container(
           height: 80,
@@ -225,54 +202,8 @@ class TodayScreenState extends State<TodayScreen> {
             child: Icon(FontAwesomeIcons.arrowLeft),
             elevation: 12,
           ),
-        ),
-        bottomNavigationBar: BottomAppBar(
-          shape: CircularNotchedRectangle(),
-          color: Colors.blueGrey,
-          notchMargin: 3.5,
-          clipBehavior: Clip.antiAlias,
-          child: BottomNavigationBar(
-              currentIndex: _currentIndex,
-              onTap: (int index) {
-                setState(() {
-                  _currentIndex = index;
-                  if (_currentIndex == 2) {
-                    // N/A, we're here already...
-                  } else if (_currentIndex == 1) {
-                    Navigator.of(context).pop();
-                  } else {
-                    Navigator.of(context).push(MaterialPageRoute<void>(
-                      builder: (context) => DetailScreen(
-                        //default is a 0 score activity - this should be done in activity.dart as blank constructor...
-                        activity: Activity(
-                          'assets/images/default.jpg',
-                          "Add a title to this activity",
-                          "Add a subtitle to this activity",
-                          "Add an activity description!",
-                          0,
-                        ),
-                      ),
-                    ));
-                  }
-                });
-                //_navigateToScreens(index);
-              },
-              items: [
-                BottomNavigationBarItem(
-                    icon: Icon(FontAwesomeIcons.edit),
-                    title: Text("Create Activity")),
-                BottomNavigationBarItem(
-                    icon: Icon(FontAwesomeIcons.truckPickup),
-                    title: Text("Pick Activities")),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.view_day),
-                  title: Text("View Today"),
-                  // pass _activitiesToAdd...?
-                ),
-              ]),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      ),
+        ),    
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,      
     );
   }
 }
