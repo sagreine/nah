@@ -1,19 +1,129 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:nah/app/list.dart';
-import 'package:video_player/video_player.dart';
-import 'dart:async';
-import 'package:flutter/widgets.dart';
 
 // borrowed here: https://github.com/syonip/flutter_login_video/blob/master/lib/sign_in.dart
 
-class MyApp extends StatelessWidget {
-  @override
-  //MyAppState createState() => MyAppState();
-  Widget build(BuildContext context) {
-    return MaterialApp(home: MyHome());
+enum ScreenIndex { detail, list, today }
+
+/*
+List<BottomNavigationBarItem> buildBottomNavBarItems() {
+    return [
+      BottomNavigationBarItem(
+          icon: Icon(FontAwesomeIcons.edit), title: Text("Create Activity")),
+      BottomNavigationBarItem(
+          icon: Icon(FontAwesomeIcons.truckPickup),
+          title: Text("Pick Activities")),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.view_day),
+        title: Text("View Today"),
+        // pass _activitiesToAdd...?
+      ),
+    ];
   }
-}
+
+  Icon buildFABIcon() {
+    if (bottomSelectedIndex == ScreenIndex.list.index) {
+      // list icon
+      return Icon(Icons.add);
+      // detail icon
+    } else if (bottomSelectedIndex == ScreenIndex.detail.index) {
+      return Icon(Icons.done);
+      // today icon
+    } else {
+      return Icon(FontAwesomeIcons.arrowLeft);
+    }
+  }
+
+  FloatingActionButtonLocation buildFABlocation ()
+  {
+    if (bottomSelectedIndex == ScreenIndex.list.index) {
+      // list icon
+      return FloatingActionButtonLocation.centerDocked;
+      // detail icon
+    } else if (bottomSelectedIndex == ScreenIndex.detail.index) {
+      return FloatingActionButtonLocation.centerFloat;
+      // today icon
+    } else {
+      return FloatingActionButtonLocation.endFloat;
+    }
+
+  }
+
+  void pageChanged(int index) {
+    setState(() {
+      bottomSelectedIndex = index;
+    });
+  }
+
+  void bottomTapped(int index) {
+    if ((bottomSelectedIndex - index).abs() == 1) {
+      _pageController.animateToPage(index,
+          duration: const Duration(milliseconds: 300), curve: Curves.ease);
+    } else {
+      _pageController.jumpToPage(index);
+    }
+  }
+
+
+appBar: AppBar(
+        title: Text("nah. a to-do-less app"),
+        leading: Padding(
+          padding: EdgeInsets.all(3),
+          child: Image.asset("assets/images/ic_launcher.png"),
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.settings),
+            tooltip: 'Settings',
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                    builder: (BuildContext context) => Settings()),
+              );
+            },
+          ),
+        ],
+      ),
+
+ bottomNavigationBar: BottomNavigationBar(
+        currentIndex: bottomSelectedIndex,
+        onTap: (index) {
+          bottomTapped(index);
+        },
+        items: buildBottomNavBarItems(),
+      ),
+
+
+            Navigator.push(
+        context,
+        AwesomePageRoute(
+          transitionDuration: Duration(milliseconds: 600),
+          exitPage: widget,
+          enterPage: TodayScreen(),
+          transition: ParallaxTransition(),
+
+void _navDetail() async {
+      final result = await Navigator.push(
+          context,
+          // Create the SelectionScreen in the next step.
+          MaterialPageRoute(
+            builder: (context) => DetailScreen(
+                activity: Activity(
+              'assets/images/default.jpg',
+              "Add a title to this activity",
+              "Add a subtitle to this activity",
+              "Add an activity description!",
+              0,
+            )),
+          ));
+      if (result != null) {
+        setState(() {
+          _activities.add(result);
+        });
+      }
+    }      
+
+
+  */
 
 class MyHome extends StatefulWidget {
   MyHome({Key, key}) : super(key: key);
@@ -21,40 +131,8 @@ class MyHome extends StatefulWidget {
   State<StatefulWidget> createState() => _MyHomeState();
 }
 
-class _MyHomeState extends State<MyHome> {
-  VideoPlayerController _controller;
-  bool _visible = false;
-
-  @override
-  void initState() {
-    super.initState();
-// this might not be a good idea, need to update every other tab....
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-    ]);
-
-    _controller = VideoPlayerController.asset("assets/videos/science2.mp4");
-    _controller.initialize().then((_) {
-      _controller.setLooping(true);
-      Timer(Duration(milliseconds: 100), () {
-        setState(() {
-          _controller.setVolume(0);
-          _controller.play();
-          _visible = true;
-        });
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    if (_controller != null) {
-      _controller.dispose();
-      _controller = null;
-    }
-  }
-
+class _MyHomeState extends State<MyHome> {  
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -62,98 +140,10 @@ class _MyHomeState extends State<MyHome> {
         body: Center(
           child: Stack(
             children: <Widget>[
-              _getVideoBackground(),
-              _getBackgroundColor(),
-              _getContent(),
             ],
           ),
         ),
       ),
     );
-  }
-
-  _getVideoBackground() {
-    return AnimatedOpacity(
-      opacity: _visible ? 1.0 : 0.0,
-      duration: Duration(milliseconds: 1000),
-      child: VideoPlayer(_controller),
-    );
-  }
-
-  _getBackgroundColor() {
-    return Container(
-      color: Colors.blue.withAlpha(120),
-    );
-  }
-
-  _getContent() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        SizedBox(
-          height: 50.0,
-        ),
-        Image(
-          image: AssetImage("assets/images/ic_launcher.png"),
-          width: 150.0,
-        ),
-        Text(
-          "nah",
-          style: TextStyle(color: Colors.white, fontSize: 40),
-        ),
-        Container(
-          margin: const EdgeInsets.only(left: 30.0, right: 30.0, top: 40.0),
-          alignment: Alignment.center,
-          child: Text(
-            "do less, be happier",
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.white, fontSize: 20),
-          ),
-        ),
-        Spacer(),
-        ..._getLoginButtons()
-      ],
-    );
-  }
-
-  _getLoginButtons() {
-    return <Widget>[
-      Container(
-        margin: const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 45),
-        width: double.infinity,
-        child: FlatButton(
-          color: Colors.blueAccent,
-          padding: const EdgeInsets.only(top: 15.0, bottom: 5.0),
-          child: const Text(
-            'Log in',
-            style: TextStyle(color: Colors.white),
-          ),
-          onPressed: () async {
-            // so this would change if we needed to verify login...
-
-            // essentially, go back to auto mode after this...
-            SystemChrome.setPreferredOrientations([
-              DeviceOrientation.landscapeRight,
-              DeviceOrientation.landscapeLeft,
-              DeviceOrientation.portraitUp,
-              DeviceOrientation.portraitDown,
-            ]);
-
-            // close if you back out after logging in
-            // right now just avoids video running issues on login page (running after logged in)
-            // dispose, but then no video on back. otherwise, video runs in background
-            // easy to fix but ... why
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute<void>(builder: (BuildContext context) {
-                return Scaffold(
-                  body: Container(child: ListScreen()),
-                );
-              }),
-            );
-          },
-        ),
-      ),
-    ];
   }
 }

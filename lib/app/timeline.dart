@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:nah/app/today.dart';
 import 'package:nah/app/activity.dart';
+import 'package:nah/app/singletons.dart';
 
 // heavily borrows from the timeline_tile provided sample
 

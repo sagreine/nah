@@ -126,7 +126,7 @@ class _DetailScreenState extends State<DetailScreen> {
       );
     }
 
-    ;
+    
     Widget titleSection = Container(
       padding: const EdgeInsets.all(32),
       child: Row(
