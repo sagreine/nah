@@ -7,6 +7,7 @@ import 'package:nah/app/timeline_insert.dart';
 import 'package:nah/app/settings.dart';
 import 'package:awesome_page_transitions/awesome_page_transitions.dart';
 import 'package:nah/app/singletons.dart';
+import 'package:nah/app/app_bars.dart';
 
 /// TODO: custom timeline rather than reorderable list? more fun :)
 /// TODO: animated list? much more fun especially for deletion sweep :)
@@ -166,25 +167,7 @@ class TodayScreenState extends State<TodayScreen> {
 
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          // TODO: add a clear all button
-          title: Text("Today's Activitiies"),
-          leading: Image.asset("assets/images/ic_launcher.png"),
-          actions: <Widget>[
-
-
-                          IconButton(
-                  icon: const Icon(Icons.settings),
-                  tooltip: 'Settings',
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                          builder: (BuildContext context) => Settings()),
-                    );
-                  },
-                ),
-          ],
-        ),
+        appBar: AppBarNah.getAppBar(context, "Today's activities"),
         body: viewSection,
         floatingActionButton: Container(
           height: 80,

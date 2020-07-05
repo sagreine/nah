@@ -8,8 +8,7 @@ import 'package:nah/app/settings.dart';
 import "package:nah/app/state_container.dart";
 import 'package:awesome_page_transitions/awesome_page_transitions.dart';
 import 'package:nah/app/singletons.dart';
-
-
+import 'package:nah/app/app_bars.dart';
 
 ///// Generally thinking go away from strict navigator and prefer
 ///   bottomNavBar and PageView, managed out of home, for simplicity...
@@ -62,44 +61,50 @@ class ListScreenState extends State<ListScreen> {
 
     // this part obviously doesn't go here, done every build, just testing
     // will come from db anyhow...
-    _allActivities.activities.add(Activity(
-        'assets/images/yoga.jpg',
-        "Yoga!",
-        "a Yoga subtitle",
-        "This is doing yoga, not teaching it. Yoga is a great way to relax. Try doing it in the park! Or with a goat! Or a beer.",
-        -2));
-    _allActivities.activities.add(Activity(
-        'assets/images/work.jpg',
-        "work...!",
-        "a work subtitle",
-        "Work. Can't live with it, can't live without it! Luckily they pay you, which is pretty cool I guess. It takes a lot though!",
-        3));
-    _allActivities.activities.add(Activity(
-        'assets/images/write.jpg',
-        "write...!",
-        "a write subtitle",
-        "Writing is fun. Try doing it with crayons to be silly. edit: DON'T eat the crayons.",
-        -2));
-    _allActivities.activities.add(Activity('assets/images/tv.jpg', "tv...!", "a tv subtitle",
-        "Of course by 'TV' I mean 'Netflix'. It isn't 1996.", 0));
-    _allActivities.activities.add(Activity(
-        'assets/images/eat.jpg',
-        "eat...!",
-        "an eating subtitle",
-        "Eating is amazing. I do it almost every day. I recommend 1 large pizza every 12-18 hours for best results.",
-        0));
-    _allActivities.activities.add(Activity(
-        'assets/images/teach.jpg',
-        "teach...!",
-        "a teaching subtitle",
-        "This can be teaching anything. Yoga, programming, even eating. Mmm, eating.",
-        1));
-    _allActivities.activities.add(Activity(
-        'assets/images/chores.jpg',
-        "chores...!",
-        "a chores subtitle",
-        "Everyone hates chores but everyone has to do them. Unless you're rich. In which case, please buy me a coffee",
-        2));
+    if (_allActivities.activities.length == 0) {
+      _allActivities.activities.add(Activity(
+          'assets/images/yoga.jpg',
+          "Yoga!",
+          "a Yoga subtitle",
+          "This is doing yoga, not teaching it. Yoga is a great way to relax. Try doing it in the park! Or with a goat! Or a beer.",
+          -2));
+      _allActivities.activities.add(Activity(
+          'assets/images/work.jpg',
+          "work...!",
+          "a work subtitle",
+          "Work. Can't live with it, can't live without it! Luckily they pay you, which is pretty cool I guess. It takes a lot though!",
+          3));
+      _allActivities.activities.add(Activity(
+          'assets/images/write.jpg',
+          "write...!",
+          "a write subtitle",
+          "Writing is fun. Try doing it with crayons to be silly. edit: DON'T eat the crayons.",
+          -2));
+      _allActivities.activities.add(Activity(
+          'assets/images/tv.jpg',
+          "tv...!",
+          "a tv subtitle",
+          "Of course by 'TV' I mean 'Netflix'. It isn't 1996.",
+          0));
+      _allActivities.activities.add(Activity(
+          'assets/images/eat.jpg',
+          "eat...!",
+          "an eating subtitle",
+          "Eating is amazing. I do it almost every day. I recommend 1 large pizza every 12-18 hours for best results.",
+          0));
+      _allActivities.activities.add(Activity(
+          'assets/images/teach.jpg',
+          "teach...!",
+          "a teaching subtitle",
+          "This can be teaching anything. Yoga, programming, even eating. Mmm, eating.",
+          1));
+      _allActivities.activities.add(Activity(
+          'assets/images/chores.jpg',
+          "chores...!",
+          "a chores subtitle",
+          "Everyone hates chores but everyone has to do them. Unless you're rich. In which case, please buy me a coffee",
+          2));
+    }
   }
 
   @override
@@ -184,18 +189,24 @@ class ListScreenState extends State<ListScreen> {
                       }
                       setState(() {
                         // unselect and remove
-                        if (_selectedActivities.contains(_allActivities.activities[index])) {
-                          _selectedActivities.remove(_allActivities.activities[index]);
-                          _currentScore -= _allActivities.activities[index].lifepoints;
+                        if (_selectedActivities
+                            .contains(_allActivities.activities[index])) {
+                          _selectedActivities
+                              .remove(_allActivities.activities[index]);
+                          _currentScore -=
+                              _allActivities.activities[index].lifepoints;
                           print("removed!");
                           print(toString());
                           print(_currentScore.toString());
                         } else {
                           // select if not going over the limit
-                          if (_currentScore + _allActivities.activities[index].lifepoints <=
+                          if (_currentScore +
+                                  _allActivities.activities[index].lifepoints <=
                               appSettings.lifePointsCeilling) {
-                            _selectedActivities.add(_allActivities.activities[index]);
-                            _currentScore += _allActivities.activities[index].lifepoints;
+                            _selectedActivities
+                                .add(_allActivities.activities[index]);
+                            _currentScore +=
+                                _allActivities.activities[index].lifepoints;
                             print("added!");
                             print(appSettings.lifePointsCeilling.toString());
                             print(_currentScore.toString());
@@ -208,7 +219,8 @@ class ListScreenState extends State<ListScreen> {
                               // unsure -> banner may be more approriate here
                               content: Text(
                                   "Nah, you're doing too much! Do less :) This is " +
-                                      (_allActivities.activities[index].lifepoints +
+                                      (_allActivities.activities[index]
+                                                  .lifepoints +
                                               _currentScore -
                                               appSettings.lifePointsCeilling)
                                           .toString() +
@@ -250,8 +262,9 @@ class ListScreenState extends State<ListScreen> {
                                 //color: Colors.transparent,
 
                                 padding: const EdgeInsets.all(16.0),
-                                child:
-                                    DetailScreen(activity: _allActivities.activities[index])),
+                                child: DetailScreen(
+                                    activity:
+                                        _allActivities.activities[index])),
                           );
                         }),
                       );
@@ -260,68 +273,71 @@ class ListScreenState extends State<ListScreen> {
                     // straightforward adaptation breaks things though..
                     // only remaining 'issue' is checkbox is transparent, could just not use a transparent icon...
                     // well it's also very ugly. Switch to icons instead of images generally?
-                      child: GridTile(
-                        child:
-                            // want image to fill the box so use infinity..
-                            ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: Image(
-                              height: double.infinity,
-                              width: double.infinity,
-                              image: AssetImage(_allActivities.activities[index].imgPath),
-                              fit: BoxFit.cover),
-                        ),
-                        header: Icon(
-                          Icons.check_circle,
-                          size: 100.0,
-                          color:
-                              _selectedActivities.contains(_allActivities.activities[index])
-                                  ? Color(0xffA8D0DB)
-                                  : Colors.transparent,
-                        ),
-                        footer: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: <Widget>[
-                            Expanded(child: 
-                            Container(
+                    child: GridTile(
+                      child:
+                          // want image to fill the box so use infinity..
+                          ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: Image(
+                            height: double.infinity,
+                            width: double.infinity,
+                            image: AssetImage(
+                                _allActivities.activities[index].imgPath),
+                            fit: BoxFit.cover),
+                      ),
+                      header: Icon(
+                        Icons.check_circle,
+                        size: 100.0,
+                        color: _selectedActivities
+                                .contains(_allActivities.activities[index])
+                            ? Color(0xffA8D0DB)
+                            : Colors.transparent,
+                      ),
+                      footer: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          Expanded(
+                            child: Container(
                               //width: double.infinity,
                               height: 45,
                               padding: EdgeInsets.all(5),
-                              color: Colors.blueGrey.withOpacity(.8),//Theme.of(context).primaryColor.withOpacity(.8),
-                              
+                              color: Colors.blueGrey.withOpacity(
+                                  .8), //Theme.of(context).primaryColor.withOpacity(.8),
+
                               //alignment: Alignment.centerLeft,
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: <Widget>[                                
-                               Text(
-                                  _allActivities.activities[index].title ,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  )),
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(_allActivities.activities[index].title,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      )),
                                   Text(
-                                  _allActivities.activities[index].lifepoints.toString() ,
-                                  textAlign: TextAlign.right,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  )),
-                                      
-                              ],
+                                      _allActivities
+                                          .activities[index].lifepoints
+                                          .toString(),
+                                      textAlign: TextAlign.right,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                ],
                               ),
                             ),
-                            ),
-                            //Text(_activities[index].lifepoints.toString(),
-                            //textAlign: TextAlign.end,
-                            //),
-                          ],
-                        ),
+                          ),
+                          //Text(_activities[index].lifepoints.toString(),
+                          //textAlign: TextAlign.end,
+                          //),
+                        ],
                       ),
-                      //border: Colors.red,
                     ),
+                    //border: Colors.red,
                   ),
                 ),
+              ),
             );
           },
           childCount: _allActivities.activities.length,
@@ -334,7 +350,8 @@ class ListScreenState extends State<ListScreen> {
       onPanUpdate: (details) {
         // swipe left to look at today
         if (details.delta.dx < 0) {
-          Navigator.push(context,
+          Navigator.push(
+            context,
             AwesomePageRoute(
               transitionDuration: Duration(milliseconds: 600),
               exitPage: widget,
@@ -342,10 +359,7 @@ class ListScreenState extends State<ListScreen> {
               transition: CubeTransition(),
             ),
 
-
             //MaterialPageRoute<void>(builder: (context) => TodayScreen()),
-
-
           );
         }
         // swipe right to add a new activity
@@ -357,28 +371,7 @@ class ListScreenState extends State<ListScreen> {
       // the Activities you can select from
       child: CustomScrollView(
         primary: false,
-        slivers: <Widget>[
-          SliverAppBar(
-              //expandedHeight: 75.0,
-              floating: false,
-              pinned: true,
-              snap: false,
-              leading: Image.asset("assets/images/ic_launcher.png"),
-              flexibleSpace: const FlexibleSpaceBar(
-                title: Text('Activities'),
-              ),
-              actions: <Widget>[
-                IconButton(
-                  icon: const Icon(Icons.settings),
-                  tooltip: 'Settings',
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                          builder: (BuildContext context) => Settings()),
-                    );
-                  },
-                ),
-              ]),
+        slivers: <Widget>[          
           _buildViewSection(),
         ],
       ),
@@ -415,6 +408,7 @@ class ListScreenState extends State<ListScreen> {
         //backgroundColor: Color(0xffE49273),
         //Color(0xFF7180AC),
         //Theme.of(context).primaryColorLight.withOpacity(0.9),
+        appBar: AppBarNah.getAppBar(context, "Add some activities!"),
         body: viewSection,
         // consider extended, with an icon and text, instead. e.g. "add to today"
         // still not sold on approach here. might prefer bottomNav with no add button...

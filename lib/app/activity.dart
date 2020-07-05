@@ -5,6 +5,7 @@ class Activity {
   // pls no do this way, btw, if storing in db...
   //https://api.flutter.dev/flutter/widgets/UniqueKey-class.html
   // also
+  // also this is unnecessary? given object keys exist...
   final UniqueKey activityID = new UniqueKey();
   // these will be set and read
   String imgPath;

@@ -5,8 +5,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nah/app/today.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:nah/app/settings.dart';
-import 'dart:io';
+import 'package:nah/app/app_bars.dart';
+
+
 
 /// TODO: SliverAnimatedList instead? much more fun. also explicit animations instead of roll your own.. :)
 /// also also, naturally lends to the coming reorganziation/state-conscious editing of the code
@@ -272,23 +273,8 @@ class _DetailScreenState extends State<DetailScreen> {
     return MaterialApp(
       title: widget.activity.title,
       home: Scaffold(
-        appBar: AppBar(
-          title: Text("View and Edit Detail for Activity"),
-                    actions: <Widget>[
-
-
-                          IconButton(
-                  icon: const Icon(Icons.settings),
-                  tooltip: 'Settings',
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                          builder: (BuildContext context) => Settings()),
-                    );
-                  },
-                ),
-          ],
-        ),
+        // if we know if this is 'Add' or 'Edit' can say that + activity title
+        appBar: AppBarNah.getAppBar(context, "Add/Edit Activity"),
         body: viewSection,
         floatingActionButton: Container(
           height: 80,
