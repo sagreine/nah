@@ -3,7 +3,7 @@ import 'package:nah/app/list.dart';
 import 'package:nah/app/today.dart';
 import 'package:nah/app/detail.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:nah/app/activity.dart'; // remove once no pass blank Activity..
+import 'package:nah/app/settings.dart'; // remove once no pass blank Activity..
 
 class MyHome extends StatefulWidget {
   MyHome({Key key}) : super(key: key);
@@ -79,8 +79,26 @@ class _MyHomeState extends State<MyHome> {
     return Scaffold(
        appBar: AppBar(
          title: Text("nah. a to-do-less app"),
-       ),
-        
+         leading: Padding(
+            padding: EdgeInsets.all(3),
+            child: Image.asset("assets/images/ic_launcher.png"),
+          ),
+          actions: <Widget>[
+
+
+                          IconButton(
+                  icon: const Icon(Icons.settings),
+                  tooltip: 'Settings',
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                          builder: (BuildContext context) => Settings()),
+                    );
+                  },
+                ),
+          ],
+        ),
+              
         body: buildPageView(),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: bottomSelectedIndex,
@@ -117,3 +135,47 @@ class _MyHomeState extends State<MyHome> {
               ),
         ),
         */
+
+
+
+/*void _navToday() {
+      Navigator.push(
+        context,
+        AwesomePageRoute(
+          transitionDuration: Duration(milliseconds: 600),
+          exitPage: widget,
+          enterPage: TodayScreen(),
+          transition: ParallaxTransition(),
+        ),
+
+        //MaterialPageRoute<void>(builder: (context) => TodayScreen()),
+      );*/ 
+
+
+    // push a new activity to detail screen and update the list of activities if you get one back
+    // managed through e.g. PageView in future? (e.g., bottom nav bar navigation to Detail on Today needs very similar code to update _activities)
+    // though with consideration of how exactly would you do that given you can go Today->new Detail. for now assume PageView has magic.
+    // or _activities is singleton... or just manage it all from home since PageView creates them anyway.. -> use a builder if we want different
+    // or just to learn how to do it...
+/*    
+    void _navDetail() async {
+      final result = await Navigator.push(
+          context,
+          // Create the SelectionScreen in the next step.
+          MaterialPageRoute(
+            builder: (context) => DetailScreen(
+                activity: Activity(
+              'assets/images/default.jpg',
+              "Add a title to this activity",
+              "Add a subtitle to this activity",
+              "Add an activity description!",
+              0,
+            )),
+          ));
+      if (result != null) {
+        setState(() {
+          _activities.add(result);
+        });
+      }
+    }      
+*/

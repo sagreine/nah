@@ -109,46 +109,7 @@ class ListScreenState extends State<ListScreen> {
     _selectedActivities.forEach((element) {
       _currentScore += element.lifepoints;
     });
-
-    // push a new activity to detail screen and update the list of activities if you get one back
-    // managed through e.g. PageView in future? (e.g., bottom nav bar navigation to Detail on Today needs very similar code to update _activities)
-    // though with consideration of how exactly would you do that given you can go Today->new Detail. for now assume PageView has magic.
-    // or _activities is singleton...
-    void _navDetail() async {
-      final result = await Navigator.push(
-          context,
-          // Create the SelectionScreen in the next step.
-          MaterialPageRoute(
-            builder: (context) => DetailScreen(
-                activity: Activity(
-              'assets/images/default.jpg',
-              "Add a title to this activity",
-              "Add a subtitle to this activity",
-              "Add an activity description!",
-              0,
-            )),
-          ));
-      if (result != null) {
-        setState(() {
-          _activities.add(result);
-        });
-      }
-    }
-
-    void _navToday() {
-      Navigator.push(
-        context,
-        AwesomePageRoute(
-          transitionDuration: Duration(milliseconds: 600),
-          exitPage: widget,
-          enterPage: TodayScreen(),
-          transition: ParallaxTransition(),
-        ),
-
-        //MaterialPageRoute<void>(builder: (context) => TodayScreen()),
-      );
-    }
-
+        
     Widget _buildViewSection() {
       // may eventually return to just one column....
       // this is a grid of slivers that will hold our activities
@@ -338,49 +299,13 @@ class ListScreenState extends State<ListScreen> {
     }
 
     // just swipting = no additions happened (stop handling this here :))
-    Widget viewSection = GestureDetector(
-      onPanUpdate: (details) {
-        // swipe left to look at today
-        if (details.delta.dx < 0) {
-          _navToday();
-        }
-        // swipe right to add a new activity
-        else {
-          _navDetail();
-        }
-      },
-      // the Activities you can select from
-      child: CustomScrollView(
+    Widget viewSection =  
+    CustomScrollView(
         primary: false,
         slivers: <Widget>[
-          SliverAppBar(
-              //expandedHeight: 75.0,
-              floating: false,
-              pinned: true,
-              snap: false,
-              leading: Padding(
-                padding: EdgeInsets.all(3),
-                child: Image.asset("assets/images/ic_launcher.png"),
-              ),
-              flexibleSpace: const FlexibleSpaceBar(
-                title: Text('Activities'),
-              ),
-              actions: <Widget>[
-                IconButton(
-                  icon: const Icon(Icons.settings),
-                  tooltip: 'Settings',
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                          builder: (BuildContext context) => Settings()),
-                    );
-                  },
-                ),
-              ]),
           _buildViewSection(),
         ],
-      ),
-    );
+      );
 
     void _onPressedFAB() {
       // tell the user it worked then clear everyting.
@@ -406,9 +331,8 @@ class ListScreenState extends State<ListScreen> {
       scaffoldState.currentState.showSnackBar(snack);
     }
 
-    return MaterialApp(
-      title: 'nah',
-      home: Scaffold(
+    return 
+       Scaffold(
         key: scaffoldState,
         //backgroundColor: Color(0xffE49273),
         //Color(0xFF7180AC),
@@ -426,41 +350,7 @@ class ListScreenState extends State<ListScreen> {
             child: Icon(Icons.add),
             elevation: 12,
           ),
-        ),
-
-        bottomNavigationBar: BottomAppBar(
-          shape: CircularNotchedRectangle(),
-          color: Colors.blueGrey,
-          notchMargin: 3.5,
-          clipBehavior: Clip.antiAlias,
-          child: BottomNavigationBar(
-              currentIndex: _currentIndex,
-              onTap: (int index) {
-                _currentIndex = index;
-                // this will change when we add PageView
-                // but, nav to the other screens this way basically
-                if (_currentIndex == 1) {
-                  _navToday();
-                } else {
-                  _navDetail();
-                }
-              },
-
-              //_navigateToScreens(index);
-
-              items: [
-                BottomNavigationBarItem(
-                    icon: Icon(FontAwesomeIcons.edit),
-                    title: Text("Create Activity")),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.view_day),
-                  title: Text("View Today"),
-                  // pass _activitiesToAdd...?
-                ),
-              ]),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      ),
+        ),        
     );
   }
 }
