@@ -5,15 +5,17 @@ import "package:nah/app/state_container.dart";
 
 // order of next things a.k.a. why you should use Jira not comments 
 //
-// how do we want to deal wtih 3 days at bottom nav bar? add activity, pick activites, today's activities... pageview? manual? UI? - fix bottomnav, no more pop() there.
+// common FAB button dealing-with
+// Add activity image adder is broken, maybe edit imager too.
+// hero uses image as tag....so will crash if they upload multiple of the same image! -> variable in todaysActivities or something for composite tag?
+// actually use getColor and etc. and decide if negative lifepoints is good or bad haha. 
 // fancy timelines ---- mostly just up to UI tweaks at this point. -> running totla of lifepoints on left? total used at top?
-///// https://pub.dev/packages/timeline_tile
-// where does _activities live? singleton? managed by pageview? perm delete activity on Today or Detail udpates how?
 // color palette consistency / more fun logo, e.g. for splash
 // better splash screen
 // setup onboarding screens, through settings setup
 // sliveraninmated list for adding activities? if didn't already for Adding/Editing
-// hero uses image as tag....so will crash if they upload multiple of the same image!
+
+// constants.dart or similar for routing/pageview indexes
 
 // longer term persistence aka DB or even google cloud
 // can they put a Gif in, screencap for usual but shows Gif on detail page? would be fun

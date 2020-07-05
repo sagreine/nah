@@ -1,9 +1,14 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:nah/app/list.dart';
 import 'package:nah/app/today.dart';
 import 'package:nah/app/detail.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nah/app/settings.dart'; // remove once no pass blank Activity..
+import 'package:nah/app/singletons.dart';
+
+// pls no do this, when this is not what this means. just do it right.
+enum ScreenIndex { detail, list, today }
 
 class MyHome extends StatefulWidget {
   MyHome({Key key}) : super(key: key);
@@ -17,8 +22,32 @@ class _MyHomeState extends State<MyHome> {
     viewportFraction: 0.95,
     keepPage: true,
   );
-  int bottomSelectedIndex = 0;
 
+  //what page do we want to start on
+  int bottomSelectedIndex = ScreenIndex.detail.index;
+  AllActivities _allActivities = AllActivities();
+
+   ListScreen ourList = ListScreen();
+   TodayScreen ourDay = TodayScreen();
+
+/*
+  // instead of string, generate a list of valid screens?
+  // way overkill for now in any case...
+  int generateIndex(String page) {
+    switch (page) {
+      case '/':
+        return Home();
+      case '/feed':
+        return MaterialPageRoute(builder: (_) => Feed());
+      default:
+        return MaterialPageRoute(
+            builder: (_) => Scaffold(
+                  body: Center(
+                      child: Text('No route defined for ${settings.name}')),
+                ));
+    }
+  }
+*/
   List<BottomNavigationBarItem> buildBottomNavBarItems() {
     return [
       BottomNavigationBarItem(
@@ -34,18 +63,82 @@ class _MyHomeState extends State<MyHome> {
     ];
   }
 
+  // but do we want a different icon for Detail[add new] vs Detail[edit] ?
+  Icon buildFABIcon() {
+    if (bottomSelectedIndex == ScreenIndex.list.index) {
+      // list icon
+      return Icon(Icons.add);
+      // detail icon
+    } else if (bottomSelectedIndex == ScreenIndex.detail.index) {
+      return Icon(Icons.done);
+      // today icon
+    } else {
+      return Icon(FontAwesomeIcons.arrowLeft);
+    }
+  }
+
+  FloatingActionButtonLocation buildFABlocation ()
+  {
+    if (bottomSelectedIndex == ScreenIndex.list.index) {
+      // list icon
+      return FloatingActionButtonLocation.centerDocked;
+      // detail icon
+    } else if (bottomSelectedIndex == ScreenIndex.detail.index) {
+      return FloatingActionButtonLocation.centerFloat;
+      // today icon
+    } else {
+      return FloatingActionButtonLocation.endFloat;
+    }
+
+  }
+
+  void buildFABOnPressed () {
+    // detail
+    // context aware? was this a hero or an Add activity screen
+    // orrrr do we make a new Add screen that just displays a detail UI screen?
+    
+    // list
+    if (bottomSelectedIndex == ScreenIndex.list.index) {
+      SnackBar snack = SnackBar(
+        content: Text("Added these to your day!"),
+        elevation: 8,
+        behavior: SnackBarBehavior.floating,
+        duration: Duration(seconds: 4),
+        action: SnackBarAction(
+          // TODO: undo add to day
+          label: 'Undo',
+          onPressed: () {},
+        ),
+      );
+
+      // add this selection to Today then clear selected
+      // this is abuse of a lot of things and dangerous -> would need to enforce only one ourList (list) to rely on this....
+      // routing and creating a new one and handling it within that class is a much safer way to do this (and internal list of selectedActivities is way better)
+      // this is fine for a very simple app i guess though. but i'll probably just use routing in the future.
+      _allActivities.activities.addAll(ourList.selectedActivities);
+      setState(() {
+        ourList.selectedActivities.clear();
+      });
+    }
+
+      //scaffoldState.currentState.showSnackBar(snack);
+    // today
+  }
+
   Widget buildPageView() {
     return PageView(
       controller: _pageController,
       onPageChanged: (index) {
         pageChanged(index);
       },
+      // for sustainability, tie this and the enum together explicitly not this "trust me" nonsense ...
       children: <Widget>[
         DetailScreen(
           activity: null,
         ),
-        ListScreen(),
-        new TodayScreen(),
+        ourList,
+        ourDay,
+
       ],
     );
   }
@@ -101,6 +194,18 @@ class _MyHomeState extends State<MyHome> {
         },
         items: buildBottomNavBarItems(),
       ),
+      floatingActionButton: Container(
+        height: 80,
+        width: 90,
+        child: FloatingActionButton(
+          onPressed: () {buildFABOnPressed();},
+          tooltip: 'Add to Day',
+          child: buildFABIcon(),
+
+          elevation: 12,
+        ),
+      ),
+      floatingActionButtonLocation: buildFABlocation(),
     );
   }
 }

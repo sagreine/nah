@@ -5,35 +5,13 @@ import 'package:nah/app/detail.dart';
 import 'package:nah/app/timeline.dart';
 import 'package:nah/app/timeline_insert.dart';
 import 'package:nah/app/settings.dart';
+import 'package:nah/app/singletons.dart';
 
 /// TODO: custom timeline rather than reorderable list? more fun :)
 /// TODO: animated list? much more fun especially for deletion sweep :)
 ///
 
 // Singleton for the day. trying it out. not sure why it is in this file though.
-class DayOfActivities {
-  //extends ExampleStateBase {
-  static final DayOfActivities _instance = DayOfActivities._internal();
-
-  List<Activity> activities;
-  //int currentScore;
-
-  factory DayOfActivities() {
-    return _instance;
-  }
-
-  int getLifePointsSum() {
-    int tmp = 0;
-    activities.forEach((element) {
-      tmp += element.lifepoints;
-    });
-    return tmp;
-  }
-
-  DayOfActivities._internal() {
-    activities = List<Activity>();
-  }
-}
 
 class TodayScreen extends StatefulWidget {
   @override

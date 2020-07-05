@@ -7,6 +7,7 @@ import 'package:nah/app/today.dart';
 import 'package:nah/app/settings.dart';
 import "package:nah/app/state_container.dart";
 import 'package:awesome_page_transitions/awesome_page_transitions.dart';
+import 'package:nah/app/singletons.dart';
 
 ///// Generally thinking go away from strict navigator and prefer
 ///   bottomNavBar and PageView, managed out of home, for simplicity...
@@ -26,6 +27,7 @@ import 'package:awesome_page_transitions/awesome_page_transitions.dart';
 // TODO: Positioned.fill for stack for background?
 
 class ListScreen extends StatefulWidget {
+  List<Activity> selectedActivities;
   @override
   ListScreenState createState() => ListScreenState();
 }
@@ -36,13 +38,12 @@ class ListScreenState extends State<ListScreen> {
   // these should be maps. but also when look at state again,
   // because we should be able to delete them on the next page if we don't like them - maybe, anyway? could just make them come back here...
   // think: are these of state or statefulwidget
-  final List<Activity> _activities = List<Activity>();
+  
   //List<Activity> _activitiesToAdd = List<Activity>();
-  final List<Activity> _selectedActivities = List<Activity>();
+  
+  // this is sloppy taking advantage of threading..
   DayOfActivities thisDay = DayOfActivities();
-
-// this will change when we use PageView but for now used to tell which page we're on and pick the next one
-  int _currentIndex = 0;
+  AllActivities _allActivities = AllActivities();
 
   AppSettings appSettings;
 
@@ -52,45 +53,46 @@ class ListScreenState extends State<ListScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    // TODO: implement initState to actually pull activities.
     super.initState();
     //scaffoldState = GlobalKey();
+    widget.selectedActivities = List<Activity>();
 
     // this part obviously doesn't go here, done every build, just testing
     // will come from db anyhow...
-    _activities.add(Activity(
+    _allActivities.activities.add(Activity(
         'assets/images/yoga.jpg',
         "Yoga!",
         "a Yoga subtitle",
         "This is doing yoga, not teaching it. Yoga is a great way to relax. Try doing it in the park! Or with a goat! Or a beer.",
         -2));
-    _activities.add(Activity(
+    _allActivities.activities.add(Activity(
         'assets/images/work.jpg',
         "work...!",
         "a work subtitle",
         "Work. Can't live with it, can't live without it! Luckily they pay you, which is pretty cool I guess. It takes a lot though!",
         3));
-    _activities.add(Activity(
+    _allActivities.activities.add(Activity(
         'assets/images/write.jpg',
         "write...!",
         "a write subtitle",
         "Writing is fun. Try doing it with crayons to be silly. edit: DON'T eat the crayons.",
         -2));
-    _activities.add(Activity('assets/images/tv.jpg', "tv...!", "a tv subtitle",
+    _allActivities.activities.add(Activity('assets/images/tv.jpg', "tv...!", "a tv subtitle",
         "Of course by 'TV' I mean 'Netflix'. It isn't 1996.", 0));
-    _activities.add(Activity(
+    _allActivities.activities.add(Activity(
         'assets/images/eat.jpg',
         "eat...!",
         "an eating subtitle",
         "Eating is amazing. I do it almost every day. I recommend 1 large pizza every 12-18 hours for best results.",
         0));
-    _activities.add(Activity(
+    _allActivities.activities.add(Activity(
         'assets/images/teach.jpg',
         "teach...!",
         "a teaching subtitle",
         "This can be teaching anything. Yoga, programming, even eating. Mmm, eating.",
         1));
-    _activities.add(Activity(
+    _allActivities.activities.add(Activity(
         'assets/images/chores.jpg',
         "chores...!",
         "a chores subtitle",
@@ -106,7 +108,7 @@ class ListScreenState extends State<ListScreen> {
     // activities to the day right away.
     // however, don't keep this here. only here to force recalc every setState()
     int _currentScore = thisDay.getLifePointsSum();
-    _selectedActivities.forEach((element) {
+    widget.selectedActivities.forEach((element) {
       _currentScore += element.lifepoints;
     });
         
@@ -139,7 +141,7 @@ class ListScreenState extends State<ListScreen> {
                 // this is a "watch out" for pages where you can have more than 1 of the same Activity
                 // and a "watch out" here for more than one Activities having the same image (imgPath)
                 // also an obvious "here's why" for separating e.g. MVC, we want to reuse this in a different screen but w/o  / w/ different actions
-                tag: AssetImage(_activities[index].imgPath), //Text(_activities[index].imgPath + index.toString()),
+                tag: AssetImage(_allActivities.activities[index].imgPath), //Text(_activities[index].imgPath + index.toString()),
                 child: Material(
                   // transparent enhances hero animation
                   color: Colors.transparent,
@@ -155,18 +157,18 @@ class ListScreenState extends State<ListScreen> {
                       }
                       setState(() {
                         // unselect and remove
-                        if (_selectedActivities.contains(_activities[index])) {
-                          _selectedActivities.remove(_activities[index]);
-                          _currentScore -= _activities[index].lifepoints;
+                        if (widget.selectedActivities.contains(_allActivities.activities[index])) {
+                          widget.selectedActivities.remove(_allActivities.activities[index]);
+                          _currentScore -= _allActivities.activities[index].lifepoints;
                           print("removed!");
                           print(toString());
                           print(_currentScore.toString());
                         } else {
                           // select if not going over the limit
-                          if (_currentScore + _activities[index].lifepoints <=
+                          if (_currentScore + _allActivities.activities[index].lifepoints <=
                               appSettings.lifePointsCeilling) {
-                            _selectedActivities.add(_activities[index]);
-                            _currentScore += _activities[index].lifepoints;
+                            widget.selectedActivities.add(_allActivities.activities[index]);
+                            _currentScore += _allActivities.activities[index].lifepoints;
                             print("added!");
                             print(appSettings.lifePointsCeilling.toString());
                             print(_currentScore.toString());
@@ -179,7 +181,7 @@ class ListScreenState extends State<ListScreen> {
                               // unsure -> banner may be more approriate here
                               content: Text(
                                   "Nah, you're doing too much! Do less :) This is " +
-                                      (_activities[index].lifepoints +
+                                      (_allActivities.activities[index].lifepoints +
                                               _currentScore -
                                               appSettings.lifePointsCeilling)
                                           .toString() +
@@ -222,7 +224,7 @@ class ListScreenState extends State<ListScreen> {
 
                                 padding: const EdgeInsets.all(16.0),
                                 child:
-                                    DetailScreen(activity: _activities[index])),
+                                    DetailScreen(activity: _allActivities.activities[index])),
                           );
                         }),
                       );
@@ -239,13 +241,13 @@ class ListScreenState extends State<ListScreen> {
                         child: Image(
                             height: double.infinity,
                             width: double.infinity,
-                            image: AssetImage(_activities[index].imgPath),
+                            image: AssetImage(_allActivities.activities[index].imgPath),
                             fit: BoxFit.cover),
                       ),
                       header: Icon(
                         Icons.check_circle,
                         size: 100.0,
-                        color: _selectedActivities.contains(_activities[index])
+                        color: widget.selectedActivities.contains(_allActivities.activities[index])
                             ? Color(0xffA8D0DB)
                             : Colors.transparent,
                       ),
@@ -265,13 +267,13 @@ class ListScreenState extends State<ListScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
-                                  Text(_activities[index].title,
+                                  Text(_allActivities.activities[index].title,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                       )),
-                                  Text(_activities[index].lifepoints.toString(),
+                                  Text(_allActivities.activities[index].lifepoints.toString(),
                                       textAlign: TextAlign.right,
                                       style: TextStyle(
                                         color: Colors.white,
@@ -293,7 +295,7 @@ class ListScreenState extends State<ListScreen> {
               ),
             );
           },
-          childCount: _activities.length,
+          childCount: _allActivities.activities.length,
         ),
       );
     }
@@ -307,30 +309,6 @@ class ListScreenState extends State<ListScreen> {
         ],
       );
 
-    void _onPressedFAB() {
-      // tell the user it worked then clear everyting.
-      // don't need to create then dispose every time....
-      SnackBar snack = SnackBar(
-        content: Text("Added these to your day!"),
-        elevation: 8,
-        behavior: SnackBarBehavior.floating,
-        duration: Duration(seconds: 4),
-        action: SnackBarAction(
-          // TODO: undo add to day
-          label: 'Undo',
-          onPressed: () {},
-        ),
-      );
-
-      // add this selection to Today then clear selected
-      thisDay.activities.addAll(_selectedActivities);
-      setState(() {
-        _selectedActivities.clear();
-      });
-
-      //scaffoldState.currentState.showSnackBar(snack);
-    }
-
     return viewSection;
        //Scaffold(
         //key: scaffoldState,
@@ -342,14 +320,7 @@ class ListScreenState extends State<ListScreen> {
         // still not sold on approach here. might prefer bottomNav with no add button...
         // in fact probably will do that!
         /*floatingActionButton: Container(
-          height: 80,
-          width: 90,
-          child: FloatingActionButton(
-            onPressed: _onPressedFAB,
-            tooltip: 'Add to Day',
-            child: Icon(Icons.add),
-            elevation: 12,
-          ),
+          
         ),  */      
     //);
   }

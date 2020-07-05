@@ -28,7 +28,6 @@ class DetailScreen extends StatefulWidget {
 }
 
 class _DetailScreenState extends State<DetailScreen> {
-  int _currentIndex = 0;
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _lifePointsController = TextEditingController();
@@ -44,6 +43,7 @@ class _DetailScreenState extends State<DetailScreen> {
       // widget.activity vs. _activity this should work but is sloppy for sure
       if (pickedFile != null) {
         _activity.imgPath = pickedFile.path.toString();
+        print("lallala");
       }
     });
   }
@@ -61,17 +61,16 @@ class _DetailScreenState extends State<DetailScreen> {
   @override
   Widget build(BuildContext context) {
     // if passed null activity, populate with a default one
-    // this seems like a really bad idea.    
+    // this seems like a really bad idea.
 
     if (widget.activity == null) {
-     _activity = new Activity(
+      _activity = new Activity(
           'assets/images/default.jpg',
           "Add a title to this activity",
           "Add a subtitle to this activity",
           "Add an activity description!",
           0);
-    }
-    else {
+    } else {
       _activity = widget.activity;
     }
 
@@ -260,38 +259,24 @@ class _DetailScreenState extends State<DetailScreen> {
       ),
     );
 
-    Widget viewSection = GestureDetector(
-      onPanUpdate: (details) {
-        // swipe left to look at today
-        if (details.delta.dx < 0) {
-          Navigator.of(context).pop();
-          /*Navigator.of(context).push(
-            MaterialPageRoute<void>(builder: (context) => TodayScreen(selectedActivities: _selectedActivities)),*/
-        }
-        // should we async await then save? what if they change their mind...
-      },
-      // the Activities for today...
-      // consider function for state.....
-      child: ListView(
-        children: [
-          imageSection,          
-          titleSection,
-          textSection,
-          buttonSection,
-        ],
-      ),
+    Widget viewSection = ListView(
+      children: [
+        imageSection,
+        titleSection,
+        textSection,
+        buttonSection,
+      ],
     );
 
     return viewSection;
 
-          /*
+    /*
           child: FloatingActionButton(
             onPressed: () {
               Navigator.of(context).pop(widget.activity);
             },
             ),
             */
-      
   }
 
   // builds bottom buttons on edit page..

@@ -10,8 +10,9 @@ import 'package:nah/app/activity.dart';
 class AppSettings {
   int lifePointsCeilling;
   List<Activity> todaysActivities;
+  
 
-  AppSettings(this.lifePointsCeilling, this.todaysActivities);
+  AppSettings(this.lifePointsCeilling);
 
 }
 
@@ -67,7 +68,7 @@ class StateContainerState extends State<StateContainer> {
   // Widgets in the app that rely on the state you've changed.
   void updateAppSettings(lifePointsCeiling) {
     if (appSettings == null) {
-      appSettings = new AppSettings(lifePointsCeiling, null);
+      appSettings = new AppSettings(lifePointsCeiling);
       setState(() {
         appSettings = appSettings;
       });
