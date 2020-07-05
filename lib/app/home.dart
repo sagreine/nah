@@ -6,6 +6,7 @@ import 'package:nah/app/detail.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nah/app/settings.dart'; // remove once no pass blank Activity..
 import 'package:nah/app/singletons.dart';
+import 'package:nah/app/activity.dart';
 
 // pls no do this, when this is not what this means. just do it right.
 enum ScreenIndex { detail, list, today }
@@ -130,6 +131,28 @@ class _MyHomeState extends State<MyHome> {
       //
     // today
   }
+/*
+      void _navDetail() async {
+      final result = await Navigator.push(
+          context,
+          // Create the SelectionScreen in the next step.
+          MaterialPageRoute(
+            builder: (context) => DetailScreen(
+                activity: Activity(
+              'assets/images/default.jpg',
+              "Add a title to this activity",
+              "Add a subtitle to this activity",
+              "Add an activity description!",
+              0,
+            )),
+          ));
+          // now doesn't do this automatically? waits until setState() is called again, it looks like....
+      if (result != null) {
+        setState(() {
+          _allActivities.activities.add(result);
+        });
+      }
+    }*/
 
   Widget buildPageView() {
     return PageView(
@@ -139,9 +162,15 @@ class _MyHomeState extends State<MyHome> {
       },
       // for sustainability, tie this and the enum together explicitly not this "trust me" nonsense ...
       children: <Widget>[
-        /*DetailScreen(
-          activity: null,
-        ),*/
+        DetailScreen(
+          activity: Activity(
+              'assets/images/default.jpg',
+              "Add a title to this activity",
+              "Add a subtitle to this activity",
+              "Add an activity description!",
+              0,
+          //activity: null,
+        )),
         TodayScreen(),
         ListScreen(controller: _listController),
         TodayScreen(),
@@ -162,6 +191,17 @@ class _MyHomeState extends State<MyHome> {
     } else {
       _pageController.jumpToPage(index);
     }
+/*
+          Navigator.push(
+            context,
+            AwesomePageRoute(
+              transitionDuration: Duration(milliseconds: 600),
+              exitPage: widget,
+              enterPage: TodayScreen(),
+              transition: CubeTransition(),
+            ),
+*/
+
   }
 
   @override

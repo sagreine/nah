@@ -4,11 +4,8 @@ import 'package:nah/app/login.dart';
 
 
 // order of next things a.k.a. why you should use Jira not comments 
-//
-// how do we want to deal wtih 3 days at bottom nav bar? add activity, pick activites, today's activities... pageview? manual? UI? - fix bottomnav, no more pop() there.
-// fancy timelines ---- mostly just up to UI tweaks at this point.
-///// https://pub.dev/packages/timeline_tile
-// where does _activities live? singleton? managed by pageview? perm delete activity on Today or Detail udpates how?
+// add new activity -> handle it gracefully. 
+// perm delete activity on Today or Detail udpates how?
 // color palette consistency / more fun logo, e.g. for splash
 // better splash screen
 // setup onboarding screens, through settings setup

@@ -75,7 +75,12 @@ class _DetailScreenState extends State<DetailScreen> {
             // or, only if the activity was edited? comparison?
             // need to do hero everywhere to ensure pop back to right place?
             // Navigator.pop(context, activity);
-            Navigator.of(context).pop();
+            
+            // TODO: see if this works?
+            setState(() {
+            Navigator.of(context).pop();  
+            });
+            
           },
           child: Stack(
             children: <Widget>[
@@ -248,26 +253,13 @@ class _DetailScreenState extends State<DetailScreen> {
       ),
     );
 
-    Widget viewSection = GestureDetector(
-      onPanUpdate: (details) {
-        // swipe left to look at today
-        if (details.delta.dx < 0) {
-          Navigator.of(context).pop();
-          /*Navigator.of(context).push(
-            MaterialPageRoute<void>(builder: (context) => TodayScreen(selectedActivities: _selectedActivities)),*/
-        }
-        // should we async await then save? what if they change their mind...
-      },
-      // the Activities for today...
-      // consider function for state.....
-      child: ListView(
+    Widget viewSection =  ListView(
         children: [
           imageSection,
-          //buttonSection,
+          buttonSection,
           titleSection,
           textSection,
         ],
-      ),
     );
 
     return viewSection;

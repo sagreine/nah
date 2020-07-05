@@ -132,6 +132,7 @@ class ListScreenState extends State<ListScreen> {
     // activities to the day right away.
     // however, don't keep this here. only here to force recalc every setState()
     int _currentScore = thisDay.getLifePointsSum();
+    
     _selectedActivities.forEach((element) {
       _currentScore += element.lifepoints;
     });
@@ -140,26 +141,7 @@ class ListScreenState extends State<ListScreen> {
     // managed through e.g. PageView in future? (e.g., bottom nav bar navigation to Detail on Today needs very similar code to update _activities)
     // though with consideration of how exactly would you do that given you can go Today->new Detail. for now assume PageView has magic.
     // or _activities is singleton...
-    void _navDetail() async {
-      final result = await Navigator.push(
-          context,
-          // Create the SelectionScreen in the next step.
-          MaterialPageRoute(
-            builder: (context) => DetailScreen(
-                activity: Activity(
-              'assets/images/default.jpg',
-              "Add a title to this activity",
-              "Add a subtitle to this activity",
-              "Add an activity description!",
-              0,
-            )),
-          ));
-      if (result != null) {
-        setState(() {
-          _allActivities.activities.add(result);
-        });
-      }
-    }
+
 
     Widget _buildViewSection() {
       // may eventually return to just one column....
@@ -258,15 +240,15 @@ class ListScreenState extends State<ListScreen> {
                             Scaffold.of(context).showSnackBar(snackBar);
                           }
                         }
-                        // update border, may have to put onTap on the container....
-                        // alreadyAdded ? Colors.red : null;
                       });
                     },
-                    onDoubleTap: () {
+                    onDoubleTap: () {                      
                       Navigator.of(context).push(
                         MaterialPageRoute<void>(
                             builder: (BuildContext context) {
                           timeDilation = 2.5;
+                          // why is a scaffold necessary?
+                          // TODO: this doesn't set state, even when this is wrapped in setState. only after it is rebuilt again..
                           return Scaffold(
                             body: Container(
                                 // if we want it small with the same background, do that here
@@ -281,15 +263,12 @@ class ListScreenState extends State<ListScreen> {
                                 padding: const EdgeInsets.all(16.0),
                                 child: DetailScreen(
                                     activity:
-                                        _allActivities.activities[index])),
+                                        _allActivities.activities[index]),
+                          ),
                           );
                         }),
-                      );
+                      );                                          
                     },
-                    // this is dumb. use a listTile... but image isn't great as it is too small
-                    // straightforward adaptation breaks things though..
-                    // only remaining 'issue' is checkbox is transparent, could just not use a transparent icon...
-                    // well it's also very ugly. Switch to icons instead of images generally?
                     child: GridTile(
                       child:
                           // want image to fill the box so use infinity..
@@ -345,13 +324,9 @@ class ListScreenState extends State<ListScreen> {
                               ),
                             ),
                           ),
-                          //Text(_activities[index].lifepoints.toString(),
-                          //textAlign: TextAlign.end,
-                          //),
                         ],
                       ),
                     ),
-                    //border: Colors.red,
                   ),
                 ),
               ),
@@ -363,35 +338,11 @@ class ListScreenState extends State<ListScreen> {
     }
 
     // just swipting = no additions happened (stop handling this here :))
-    Widget viewSection = GestureDetector(
-      onPanUpdate: (details) {
-        // swipe left to look at today
-        if (details.delta.dx < 0) {
-          Navigator.push(
-            context,
-            AwesomePageRoute(
-              transitionDuration: Duration(milliseconds: 600),
-              exitPage: widget,
-              enterPage: TodayScreen(),
-              transition: CubeTransition(),
-            ),
-
-            //MaterialPageRoute<void>(builder: (context) => TodayScreen()),
-          );
-        }
-        // swipe right to add a new activity
-        // should we async await then save? what if they change their mind...
-        else {
-          _navDetail();
-        }
-      },
-      // the Activities you can select from
-      child: CustomScrollView(
+    Widget viewSection = CustomScrollView(
         primary: false,
         slivers: <Widget>[
           _buildViewSection(),
         ],
-      ),
     );
     return viewSection;
   }
