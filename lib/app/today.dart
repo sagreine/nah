@@ -20,151 +20,21 @@ class TodayScreen extends StatefulWidget {
 
 class TodayScreenState extends State<TodayScreen> {
   DayOfActivities thisDay = DayOfActivities();
-  int _currentIndex = 2;
-
+  
   @override
   Widget build(BuildContext context) {
-    Widget _buildViewSection() {
-      return ReorderableListView(
-          //shrinkWrap: true,
-          padding: const EdgeInsets.all(8),
-          onReorder: (_oldIndex, _newIndex) {
-            setState(() {
-              if (_newIndex > _oldIndex) {
-                _newIndex -= 1;
-              }
-              thisDay.activities
-                  .insert(_newIndex, thisDay.activities.removeAt(_oldIndex));
-            });
-          },
-          header: Text("Drag to reorder"),
-          children: <Widget>[
-            for (final activity in thisDay.activities)
-              // populated card, detail screen on long press
-              Card(
-                key: UniqueKey(), //ObjectKey(activity.activityID),
-                shadowColor: Theme.of(context).primaryColorDark,
-                child: InkWell(
-                  splashColor: Theme.of(context).primaryColor.withAlpha(30),
-                  onDoubleTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute<void>(builder: (BuildContext context) {
-                        return Scaffold(
-                          body: Container(
-                              // if we want it small with the same background, do that here
-                              // but be consistent across ways to get this screen
-                              // just here for now as an example / another way to look at it.
-                              alignment: Alignment.center,
-                              color: Colors.transparent,
-                              padding: const EdgeInsets.all(16.0),
-                              child: DetailScreen(activity: activity)),
-                        );
-                      }),
-                    );
-                  },
-                  child: Dismissible(
-                    // Each Dismissible must contain a Key. Keys allow Flutter to
-                    // uniquely identify widgets.
-                    // this isn't unique though... UniqueKey()
-                    key: Key(activity.activityID.toString()),
-                    // Provide a function that tells the app
-                    // what to do after an item has been swiped away.
-                    onDismissed: (direction) {
-                      // Remove the item from the data source.
-                      setState(() {
-                        thisDay.activities.remove(activity);
-                      });
-
-                      // Then show a snackbar.
-                      // needs scaffold (use builder or global key)
-                      /*
-                              Scaffold.of(context).showSnackBar(SnackBar(
-                                  content: Text(
-                                      activity.title + " removed from today")));
-                                      */
-                    },
-                    // Show a red background as the item is swiped away.
-                    background: Container(color: Colors.red),
-
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        Expanded(
-                          //child: ListTile(title: Text('$item')),
-
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              // so they don't get huge when dragging..
-                              mainAxisSize: MainAxisSize.min,
-
-                              // do we want these cards to be the same size? height?
-                              // same as other page, same as each other, something else?
-
-                              children: [
-                                Image(
-                                    height: 100,
-                                    image: AssetImage(activity.imgPath)),
-                                Text(activity.title,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.black.withOpacity(0.9),
-                                    )),
-                              ]),
-                        ),
-                        InkWell(
-                          child: Icon(
-                            Icons.delete_sweep,
-                            color: Colors.red,
-                            size: 35,
-                          ),
-                          // TODO: make this exectute dismiss instead of just delete...
-                          onTap: () {
-                            setState(() {
-                              thisDay.activities.remove(activity);
-                              // Then show a snackbar.
-                              // needs scaffold (use builder or global key)
-                              /*
-                              Scaffold.of(context).showSnackBar(SnackBar(
-                                  content: Text(
-                                      activity.title + " removed from today")));
-                                      */
-                            });
-                            print(thisDay.activities.length);
-                          },
-                        ),
-
-                        //selectedActivities.removeAt(index),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-          ]);
-      //separatorBuilder: (BuildContext context, int index) => const Divider(),
-    }
+    
 
 // change this to horizontal only, too easy to mix it up with moving thing.
-    Widget viewSection = GestureDetector(
-      onPanUpdate: (details) {
-        // swipe left to look at today
-        if (details.delta.dx > 0) {
-          Navigator.of(context).pop();
-        }
-      },
-      // the Activities for today...
-      child: Row(
+    Widget viewSection = Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Expanded(child: 
           TimelineInsert(),),
-          /*Expanded(
-            child: _buildViewSection(),
-          ),*/
-        ],
-      ),
+        ],      
     );
 
     return viewSection;
   }
 }
+

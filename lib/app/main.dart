@@ -4,7 +4,9 @@ import 'package:nah/app/login.dart';
 
 
 // order of next things a.k.a. why you should use Jira not comments 
-// add new activity -> handle it gracefully. 
+// fix image editing/adding, completely broken now
+// when update an activity -> setState isn't effectively called on List
+
 // perm delete activity on Today or Detail udpates how?
 // color palette consistency / more fun logo, e.g. for splash
 // better splash screen

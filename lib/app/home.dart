@@ -23,8 +23,8 @@ class MyHome extends StatefulWidget {
 
 class _MyHomeState extends State<MyHome> {
   final PageController _pageController = PageController(
-    initialPage: 0,
-    viewportFraction: 0.95,
+    //initialPage: 1,
+    //viewportFraction: 0.95,
     keepPage: true,
   );
   final FABController _listFabController = FABController();
@@ -32,7 +32,7 @@ class _MyHomeState extends State<MyHome> {
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
 
   //what page do we want to start on
-  int bottomSelectedIndex = ScreenIndex.list.index;
+  int bottomSelectedIndex = ScreenIndex.detail.index;
   /*
   // instead of string, generate a list of valid screens?
   // way overkill for now in any case...
@@ -123,6 +123,7 @@ class _MyHomeState extends State<MyHome> {
 
     }
 
+    // detail
     else if (bottomSelectedIndex == ScreenIndex.detail.index) {
        // snackbaer
        _detailFabController.onFab();
@@ -133,24 +134,6 @@ class _MyHomeState extends State<MyHome> {
     //
     // today
   }
-/*
-      void _navDetail() async {
-      final result = await Navigator.push(
-          context,
-          // Create the SelectionScreen in the next step.
-          MaterialPageRoute(
-            builder: (context) => DetailScreen(
-                activity: Activity(
-              'assets/images/default.jpg',
-              "Add a title to this activity",
-              "Add a subtitle to this activity",
-              "Add an activity description!",
-              0,
-            )),
-          ));
-          // now doesn't do this automatically? waits until setState() is called again, it looks like....
-      
-    }*/
 
   Widget buildPageView() {
     return PageView(
@@ -167,7 +150,6 @@ class _MyHomeState extends State<MyHome> {
             "Add a subtitle to this activity",
             "Add an activity description!",
             0,
-
             //activity: null,
           ),
           controller: _detailFabController,
