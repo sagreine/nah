@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nah/app/activity.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nah/app/home.dart';
+import 'package:nah/app/list.dart';
 import 'package:nah/app/singletons.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:image_picker/image_picker.dart';
@@ -20,9 +23,10 @@ import 'package:image_picker/image_picker.dart';
 class DetailScreen extends StatefulWidget {
   final Activity activity;
   final FABController controller;
+  final Function callback;
 
   // this.activity was required, but let's not require it for a new on. or pass blank one?
-  const DetailScreen({Key key, @required this.activity, this.controller})
+  const DetailScreen({Key key, @required this.activity, this.controller, this.callback})
       : super(key: key);
 
   @override
@@ -56,12 +60,14 @@ class _DetailScreenState extends State<DetailScreen> {
 
   // what happens when they submit this image?
   // this should save it, but mind that this is a state and we're doing widget.activity.....
+  // note that this is only what happens on this page, other things can happen on other pages, see controller definition
+  // specifically, no need to set state on this page since it does nothing to the Detail page.
   void onFab() {
     if (widget.activity != null) {
-      setState(() {
+      //setState(() {
         _allActivities.activities.add(widget.activity);
-      });
-    }
+      //});
+    }    
   }
 
   @override
@@ -93,8 +99,12 @@ class _DetailScreenState extends State<DetailScreen> {
             // need to do hero everywhere to ensure pop back to right place?
             // Navigator.pop(context, activity)
 
-            // this is not right if adding but is if editing.
-            Navigator.of(context).pop();
+            // this is not right if adding but is if editing.            
+            //Navigator.of(context).setState(() {context});            
+            //Navigator.of(context).build(context);  
+            widget.callback();
+            Navigator.of(context).pop();     
+
           },
           child: Stack(
             children: <Widget>[
@@ -109,10 +119,8 @@ class _DetailScreenState extends State<DetailScreen> {
                           ? Colors.greenAccent
                           : Colors.redAccent),
                 ),
-                child: FadeInImage(
-                  placeholder: MemoryImage(kTransparentImage),
-                  image: AssetImage(widget.activity.imgPath),
-                ),
+                // fadeinimage but seems broken.
+                child: Image.asset(widget.activity.imgPath),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,

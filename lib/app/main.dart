@@ -4,15 +4,17 @@ import 'package:nah/app/login.dart';
 
 
 // order of next things a.k.a. why you should use Jira not comments 
-// fix image editing/adding, completely broken now
 // when update an activity -> setState isn't effectively called on List
+// when you start on Add Activity and add it and navigate via FAB, list screen isn't initialized for some reason?
+// fix the edit activity page that jumps when editing text
 
-// perm delete activity on Today or Detail udpates how?
+// perm delete activity on Today or Detail udpates - how?
 // color palette consistency / more fun logo, e.g. for splash
 // better splash screen
 // setup onboarding screens, through settings setup
 // sliveraninmated list for adding activities? if didn't already for Adding/Editing
 // hero uses image as tag....so will crash if they upload multiple of the same image!
+///// for now we just don't let them look at details from that page..
 
 // actually use getColor and etc. and decide if negative lifepoints is good or bad haha. 
 // fancy timelines ---- mostly just up to UI tweaks at this point. -> running totla of lifepoints on left? total used at top?

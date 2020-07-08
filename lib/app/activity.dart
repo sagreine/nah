@@ -8,7 +8,7 @@ class Activity {
   // also this is unnecessary? given object keys exist...
   final UniqueKey activityID = new UniqueKey();
   // these will be set and read
-  String imgPath;
+  String imgPath; // why not Path? who cares i guess for now.
   String title;
   String subtitle;
   String description;

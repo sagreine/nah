@@ -127,6 +127,8 @@ class _MyHomeState extends State<MyHome> {
     else if (bottomSelectedIndex == ScreenIndex.detail.index) {
        // snackbaer
        _detailFabController.onFab();
+       // return to the list page -> do we always want this? or just for now
+       // and later change if we get a hero animation from the timeline page
        bottomTapped(ScreenIndex.list.index);
     }
 

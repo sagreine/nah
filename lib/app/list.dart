@@ -32,6 +32,7 @@ import 'package:nah/app/singletons.dart';
 class ListScreen extends StatefulWidget {
   final FABController controller;
 
+
   ListScreen({this.controller});
 
   @override
@@ -50,6 +51,10 @@ class ListScreenState extends State<ListScreen> {
   // may need to also override didUpdateWidget.
   ListScreenState(FABController _controller) {
     _controller.onFab = onFab;
+  }
+
+  void callback() {
+    setState(() {});
   }
 
   void onFab() {
@@ -240,32 +245,31 @@ class ListScreenState extends State<ListScreen> {
                     },
                     onDoubleTap: () {
                       Navigator.of(context).push(
-                        MaterialPageRoute<void>(
-                            builder: (BuildContext context) {
-                          timeDilation = 2.5;
-                          // why is a scaffold necessary?
-                          // TODO: this doesn't set state, even when this is wrapped in setState. only after it is rebuilt again..
-                          return Scaffold(
-                            body: Container(
-                              // if we want it small with the same background, do that here
-                              // but be consistent across ways to get this screen
-                              // just here for now as an example / another way to look at it.
-                              alignment: Alignment.center,
+                            MaterialPageRoute<void>(
+                                builder: (BuildContext context) {
+                              timeDilation = 2.5;
+                              // why is a scaffold necessary?
+                              // TODO: this doesn't set state, even when this is wrapped in setState. only after it is rebuilt again..
+                              return Scaffold(
+                                body: Container(
+                                  // if we want it small with the same background, do that here
+                                  // but be consistent across ways to get this screen
+                                  // just here for now as an example / another way to look at it.
+                                  alignment: Alignment.center,
 
-                              // this feels like transparent should show what's behind it, but it doesn't..
-                              color: Color(0xffE49273),
-                              //color: Colors.transparent,
+                                  // this feels like transparent should show what's behind it, but it doesn't..
+                                  color: Color(0xffE49273),
+                                  //color: Colors.transparent,
 
-                              padding: const EdgeInsets.all(16.0),
-                              child: DetailScreen(
-                                  activity: _allActivities.activities[index],
-                                  // this is NOT a thing we should do and it doesn't worki :)
-                                  //controller: new FABController()
-                                  ),
-                            ),
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: DetailScreen(
+                                    activity: _allActivities.activities[index], callback: callback),                                
+                                    // this is NOT a thing we should do and it doesn't worki :)
+                                    //controller: new FABController()
+                                  ),                              
+                              );
+                            }),                          
                           );
-                        }),
-                      );
                     },
                     child: GridTile(
                       child:
