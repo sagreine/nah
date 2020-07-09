@@ -26,7 +26,8 @@ class DetailScreen extends StatefulWidget {
   final Function callback;
 
   // this.activity was required, but let's not require it for a new on. or pass blank one?
-  const DetailScreen({Key key, @required this.activity, this.controller, this.callback})
+  const DetailScreen(
+      {Key key, @required this.activity, this.controller, this.callback})
       : super(key: key);
 
   @override
@@ -64,10 +65,8 @@ class _DetailScreenState extends State<DetailScreen> {
   // specifically, no need to set state on this page since it does nothing to the Detail page.
   void onFab() {
     if (widget.activity != null) {
-      //setState(() {
-        _allActivities.activities.add(widget.activity);
-      //});
-    }    
+      _allActivities.activities.add(widget.activity);
+    }
   }
 
   @override
@@ -94,17 +93,11 @@ class _DetailScreenState extends State<DetailScreen> {
         child: InkWell(
           // doubletap may be inappropriate material.io here, user expecting Tap instead...
           onDoubleTap: () {
-            // will want to pass the activity back?
-            // or, only if the activity was edited? comparison?
-            // need to do hero everywhere to ensure pop back to right place?
-            // Navigator.pop(context, activity)
-
-            // this is not right if adding but is if editing.            
-            //Navigator.of(context).setState(() {context});            
-            //Navigator.of(context).build(context);  
-            widget.callback();
-            Navigator.of(context).pop();     
-
+            // double tap sets the state of list then pops -> real bad on Add though so don't do that. 
+            if (widget.callback != null) {
+              widget.callback();
+              Navigator.of(context).pop();
+            }            
           },
           child: Stack(
             children: <Widget>[

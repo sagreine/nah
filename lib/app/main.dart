@@ -3,11 +3,9 @@ import "package:nah/app/state_container.dart";
 import 'package:nah/app/login.dart';
 
 
-// order of next things a.k.a. why you should use Jira not comments 
-// when update an activity -> setState isn't effectively called on List
+////////////// order of next things a.k.a. why you should use Jira not comments 
 // when you start on Add Activity and add it and navigate via FAB, list screen isn't initialized for some reason?
-// fix the edit activity page that jumps when editing text
-
+// actually use getColor and etc. and decide if negative lifepoints is good or bad haha. 
 // perm delete activity on Today or Detail udpates - how?
 // color palette consistency / more fun logo, e.g. for splash
 // better splash screen
@@ -15,8 +13,9 @@ import 'package:nah/app/login.dart';
 // sliveraninmated list for adding activities? if didn't already for Adding/Editing
 // hero uses image as tag....so will crash if they upload multiple of the same image!
 ///// for now we just don't let them look at details from that page..
+// on timeline page you can't swipe left to go to the previous screen except at the bottom - Dismissible eats it. pass one direction's swipe up somehow.
 
-// actually use getColor and etc. and decide if negative lifepoints is good or bad haha. 
+
 // fancy timelines ---- mostly just up to UI tweaks at this point. -> running totla of lifepoints on left? total used at top?
 
 // longer term persistence aka DB or even google cloud

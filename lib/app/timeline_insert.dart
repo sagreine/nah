@@ -96,7 +96,9 @@ class _TimelineInsertState extends State<TimelineInsert> {
                         for (int i = 0; i < thisDay.activities.length; i++)
                           Container(
                             key: UniqueKey(),
+                            
                             child: Dismissible(
+                              direction: DismissDirection.endToStart,
                               // Each Dismissible must contain a Key. Keys allow Flutter to
                               // uniquely identify widgets.
                               // this isn't unique though... UniqueKey()
