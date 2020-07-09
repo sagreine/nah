@@ -32,7 +32,7 @@ class _MyHomeState extends State<MyHome> {
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
 
   //what page do we want to start on
-  int bottomSelectedIndex = ScreenIndex.detail.index;
+  int bottomSelectedIndex = ScreenIndex.list.index;
   /*
   // instead of string, generate a list of valid screens?
   // way overkill for now in any case...
@@ -152,10 +152,11 @@ class _MyHomeState extends State<MyHome> {
             "Add a subtitle to this activity",
             "Add an activity description!",
             0,
-            //activity: null,
+            //activity: null, // the rightest way but annoying to handle in detail
           ),
-          controller: _detailFabController,
+          controller: _detailFabController,          
         ),
+        // this doesn't initialize though? apparently not given FAB push is broken
         ListScreen(controller: _listFabController),
         TodayScreen(),
       ],

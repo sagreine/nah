@@ -96,7 +96,7 @@ class _TimelineInsertState extends State<TimelineInsert> {
                         for (int i = 0; i < thisDay.activities.length; i++)
                           Container(
                             key: UniqueKey(),
-                            
+                            // just handle the dismiss direction explicitly
                             child: Dismissible(
                               direction: DismissDirection.endToStart,
                               // Each Dismissible must contain a Key. Keys allow Flutter to

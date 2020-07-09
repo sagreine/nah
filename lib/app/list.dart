@@ -52,7 +52,9 @@ class ListScreenState extends State<ListScreen> {
   ListScreenState(FABController _controller) {
     _controller.onFab = onFab;
   }
-
+ 
+  // used to update this screen, typically because _allActivities has been updated and we've popped context back here
+  // ^that might be unnecessary if i were a better programmer :)
   void callback() {
     setState(() {});
   }
@@ -70,59 +72,104 @@ class ListScreenState extends State<ListScreen> {
 
   AppSettings appSettings;
 
-  // this is massively unnecessary, right?
-  /// i couldn't immediately see why scaffold of context in the FAB didn't work, with snack behavior set to floating though.
-
+  
   @override
   void initState() {
-    // TODO: implement initState
+    // TODO: implement initState correctly e.g. database pull
     super.initState();
 
-    // this part obviously doesn't go here, done every build, just testing
-    // will come from db anyhow...
+    // think about this If -> if we start on Add New they'll only have their own. preference?
     if (_allActivities.activities.length == 0) {
       _allActivities.activities.add(Activity(
           'assets/images/yoga.jpg',
-          "Yoga!",
+          "Yoga",
           "a Yoga subtitle",
           "This is doing yoga, not teaching it. Yoga is a great way to relax. Try doing it in the park! Or with a goat! Or a beer.",
           -2));
       _allActivities.activities.add(Activity(
           'assets/images/work.jpg',
-          "work...!",
+          "Work",
           "a work subtitle",
           "Work. Can't live with it, can't live without it! Luckily they pay you, which is pretty cool I guess. It takes a lot though!",
           3));
       _allActivities.activities.add(Activity(
           'assets/images/write.jpg',
-          "write...!",
+          "Write",
           "a write subtitle",
           "Writing is fun. Try doing it with crayons to be silly. edit: DON'T eat the crayons.",
           -2));
       _allActivities.activities.add(Activity(
           'assets/images/tv.jpg',
-          "tv...!",
+          "TV",
           "a tv subtitle",
           "Of course by 'TV' I mean 'Netflix'. It isn't 1996.",
           0));
       _allActivities.activities.add(Activity(
           'assets/images/eat.jpg',
-          "eat...!",
+          "Eat",
           "an eating subtitle",
           "Eating is amazing. I do it almost every day. I recommend 1 large pizza every 12-18 hours for best results.",
           0));
       _allActivities.activities.add(Activity(
           'assets/images/teach.jpg',
-          "teach...!",
+          "Teach",
           "a teaching subtitle",
           "This can be teaching anything. Yoga, programming, even eating. Mmm, eating.",
           1));
       _allActivities.activities.add(Activity(
           'assets/images/chores.jpg',
-          "chores...!",
+          "Chores",
           "a chores subtitle",
-          "Everyone hates chores but everyone has to do them. Unless you're rich. In which case, please buy me a coffee",
+          "Everyone hates chores but everyone has to do them. Unless you're rich. In which case, please buy me a coffee.",
           2));
+                _allActivities.activities.add(Activity(
+          'assets/images/create.jpg',
+          "Create",
+          "a create subtitle",
+          "Creating can be creating anything. Painting, drawing, making a low-quality time management app...anything!",          
+          -1));
+      _allActivities.activities.add(Activity(
+          'assets/images/learn.jpg',
+          "Learn",
+          "a learn subtitle",
+          "Learning is hard, but rewarding. You migth even learn how to make an app!",
+          1));   
+      _allActivities.activities.add(Activity(
+          'assets/images/tarot.jpg',
+          "Tarot",
+          "a tarot subtitle",
+          "Pretty pictures, fun mystery. Reading or making your own! Hope you can draw better than I can program.",
+          -1));   
+      _allActivities.activities.add(Activity(
+          'assets/images/scoial.jpg',
+          "Social",
+          "a social subtitle",
+          "Are you an introvert or an extrovert? Either way, you should probably socialize some. Yes, even you, introverts.",
+          1));                        
+      _allActivities.activities.add(Activity(
+          'assets/images/workout.jpg',
+          "Workout",
+          "a workout subtitle",
+          "Do you bench press 300 pounds? Me neither. But I can bench press more than I used to, and stronger people are harder to kill.",
+          1));          
+      _allActivities.activities.add(Activity(
+          'assets/images/selfcare.jpg',
+          "Self-Care",
+          "a self-care subtitle",
+          "Your happy place. Maybe it's the beach, maybe it's programming a free time management app. Either way, indulge in some bliss now and again, my friend.",
+          -2));          
+      _allActivities.activities.add(Activity(
+          'assets/images/walk.jpg',
+          "Walk",
+          "a walk subtitle",
+          "You have two legs. Or, maybe you don't, hell I don't know you. Either way, think about walking as a way to relax. Or at least a way to talk to food. Both, if you're lucky",
+          -1));          
+      _allActivities.activities.add(Activity(
+          'assets/images/videogames.jpg',
+          "Video Games",
+          "a video games subtitle",
+          "Are you killing zombies? Building simulated houses and people? Either way I recommend ordering and eating a pizza while you do it.",
+          0));          
     }
   }
 
