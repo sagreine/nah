@@ -60,7 +60,7 @@ class _TimelineInsertState extends State<TimelineInsert> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
+      /*decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -69,7 +69,7 @@ class _TimelineInsertState extends State<TimelineInsert> {
             Color(0xFFFFA578),
           ],
         ),
-      ),
+      ),*/
       child: Theme(
         data: Theme.of(context).copyWith(
           accentColor: const Color(0xFFFCB69F).withOpacity(0.2),
@@ -218,67 +218,5 @@ class _TimelineStepsChild extends StatelessWidget {
       ),
       ),
     );
-
-/*
-    return Padding(
-      padding: isLeftAlign
-          ? const EdgeInsets.only(right: 32, top: 16, bottom: 16, left: 10)
-          : const EdgeInsets.only(left: 32, top: 16, bottom: 16, right: 10),
-      child: Column(
-        crossAxisAlignment:
-            isLeftAlign ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Text(
-            title,
-            textAlign: isLeftAlign ? TextAlign.right : TextAlign.left,
-            style: GoogleFonts.acme(
-              fontSize: 22,
-              color: const Color(0xFFB96320),
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            subtitle,
-            textAlign: isLeftAlign ? TextAlign.right : TextAlign.left,
-            style: GoogleFonts.architectsDaughter(
-              fontSize: 16,
-              color: const Color(0xFFB96320),
-            ),
-          ),
-        ],
-      ),
-    );*/
   }
 }
-/*
-class _Header extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.5),
-        borderRadius: const BorderRadius.all(Radius.circular(8)),
-      ),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: Text(
-              'Your day in order',
-              textAlign: TextAlign.center,
-              style: GoogleFonts.architectsDaughter(
-                fontSize: 26,
-                color: const Color(0xFFB96320),
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-*/

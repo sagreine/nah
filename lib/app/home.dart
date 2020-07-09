@@ -23,7 +23,7 @@ class MyHome extends StatefulWidget {
 
 class _MyHomeState extends State<MyHome> {
   final PageController _pageController = PageController(
-    //initialPage: 1,
+    initialPage: ScreenIndex.list.index,
     //viewportFraction: 0.95,
     keepPage: true,
   );
@@ -105,11 +105,11 @@ class _MyHomeState extends State<MyHome> {
         elevation: 8,
         behavior: SnackBarBehavior.floating,
         duration: Duration(seconds: 4),
-        action: SnackBarAction(
+        /*action: SnackBarAction(
           // TODO: undo add to day
           label: 'Undo',
           onPressed: () {},
-        ),
+        ),*/
       );
 
       //Scaffold.of(context).showSnackBar(snack);
@@ -242,65 +242,3 @@ class _MyHomeState extends State<MyHome> {
   }
 }
 
-/*
-   bottomNavigationBar: BottomAppBar(
-          shape: CircularNotchedRectangle(),
-          color: Colors.blueGrey,
-          notchMargin: 3.5,
-          clipBehavior: Clip.antiAlias,
-          child: BottomNavigationBar(
-              currentIndex: _currentIndex,
-              onTap: (int index) {
-                _currentIndex = index;
-                // this will change when we add PageView
-                // but, nav to the other screens this way basically
-                if (_currentIndex == 1) {
-                  _navToday();
-                } else {
-                  _navDetail();
-                }
-              },
-              //_navigateToScreens(index);
-              ),
-        ),
-        */
-
-/*void _navToday() {
-      Navigator.push(
-        context,
-        AwesomePageRoute(
-          transitionDuration: Duration(milliseconds: 600),
-          exitPage: widget,
-          enterPage: TodayScreen(),
-          transition: ParallaxTransition(),
-        ),
-        //MaterialPageRoute<void>(builder: (context) => TodayScreen()),
-      );*/
-
-// push a new activity to detail screen and update the list of activities if you get one back
-// managed through e.g. PageView in future? (e.g., bottom nav bar navigation to Detail on Today needs very similar code to update _activities)
-// though with consideration of how exactly would you do that given you can go Today->new Detail. for now assume PageView has magic.
-// or _activities is singleton... or just manage it all from home since PageView creates them anyway.. -> use a builder if we want different
-// or just to learn how to do it...
-/*    
-    void _navDetail() async {
-      final result = await Navigator.push(
-          context,
-          // Create the SelectionScreen in the next step.
-          MaterialPageRoute(
-            builder: (context) => DetailScreen(
-                activity: Activity(
-              'assets/images/default.jpg',
-              "Add a title to this activity",
-              "Add a subtitle to this activity",
-              "Add an activity description!",
-              0,
-            )),
-          ));
-      if (result != null) {
-        setState(() {
-          _activities.add(result);
-        });
-      }
-    }      
-*/

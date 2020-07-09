@@ -1,20 +1,15 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nah/app/activity.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nah/app/home.dart';
-import 'package:nah/app/list.dart';
 import 'package:nah/app/singletons.dart';
-import 'package:transparent_image/transparent_image.dart';
 import 'package:image_picker/image_picker.dart';
 
 /// TODO: SliverAnimatedList instead? much more fun. also explicit animations instead of roll your own.. :)
 /// also also, naturally lends to the coming reorganziation/state-conscious editing of the code
 /// Existing activities: do we want editable by default, or click edit button to edit?
 /// new activities default to editable. then after pressed, are they or not?
-/// TODO: fix animation and etc on textfield editing.
 /// TODO: add submit button on description editing instead of hack
 
 // if we want to know if adding or editing, make that a parameter of the screen
@@ -93,11 +88,11 @@ class _DetailScreenState extends State<DetailScreen> {
         child: InkWell(
           // doubletap may be inappropriate material.io here, user expecting Tap instead...
           onDoubleTap: () {
-            // double tap sets the state of list then pops -> real bad on Add though so don't do that. 
+            // double tap sets the state of list then pops -> real bad on Add though so don't do that.
             if (widget.callback != null) {
               widget.callback();
               Navigator.of(context).pop();
-            }            
+            }
           },
           child: Stack(
             children: <Widget>[
@@ -108,9 +103,8 @@ class _DetailScreenState extends State<DetailScreen> {
               Container(
                 decoration: BoxDecoration(
                   border: Border.all(
-                      color: widget.activity.lifepoints < 0
-                          ? Colors.greenAccent
-                          : Colors.redAccent),
+                    color: widget.activity.getLifePointsColor(),
+                  ),
                 ),
                 // fadeinimage but seems broken.
                 child: Image.asset(widget.activity.imgPath),
@@ -132,20 +126,6 @@ class _DetailScreenState extends State<DetailScreen> {
         ),
       ),
     );
-
-    Container _lifePointsWidget() {
-      return Container(
-        // margin seems incorrect here -> add in the row, not here?
-        margin: const EdgeInsets.all(30.0),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.blueAccent, width: 1),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [],
-        ),
-      );
-    }
 
     Widget titleSection = Container(
       padding: const EdgeInsets.all(32),
@@ -177,9 +157,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     : Icon(
                         FontAwesomeIcons.levelDownAlt,
                       )),
-                color: (widget.activity.lifepoints < 0
-                    ? Colors.green[500]
-                    : Colors.red[500]),
+                color: (widget.activity.getLifePointsColor()),
                 onPressed: () {
                   setState(() {
                     widget.activity.lifepoints = -widget.activity.lifepoints;

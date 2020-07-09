@@ -7,7 +7,6 @@ import 'package:nah/app/home.dart';
 import 'package:nah/app/today.dart';
 import 'package:nah/app/settings.dart';
 import "package:nah/app/state_container.dart";
-import 'package:awesome_page_transitions/awesome_page_transitions.dart';
 import 'package:nah/app/singletons.dart';
 
 //import 'home.dart';
@@ -141,7 +140,7 @@ class ListScreenState extends State<ListScreen> {
           "Pretty pictures, fun mystery. Reading or making your own! Hope you can draw better than I can program.",
           -1));   
       _allActivities.activities.add(Activity(
-          'assets/images/scoial.jpg',
+          'assets/images/social.jpg',
           "Social",
           "a social subtitle",
           "Are you an introvert or an extrovert? Either way, you should probably socialize some. Yes, even you, introverts.",
@@ -305,7 +304,7 @@ class ListScreenState extends State<ListScreen> {
                                   alignment: Alignment.center,
 
                                   // this feels like transparent should show what's behind it, but it doesn't..
-                                  color: Color(0xffE49273),
+                                  //color: Color(0xffE49273),
                                   //color: Colors.transparent,
 
                                   padding: const EdgeInsets.all(16.0),

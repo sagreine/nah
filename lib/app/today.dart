@@ -1,17 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:nah/app/activity.dart';
-import 'package:nah/app/detail.dart';
-import 'package:nah/app/timeline.dart';
 import 'package:nah/app/timeline_insert.dart';
-import 'package:nah/app/settings.dart';
-import 'package:awesome_page_transitions/awesome_page_transitions.dart';
 import 'package:nah/app/singletons.dart';
 
 
-/// TODO: custom timeline rather than reorderable list? more fun :)
-/// TODO: animated list? much more fun especially for deletion sweep :)
-///
+/// why do we have this code at all again?
 
 class TodayScreen extends StatefulWidget {
   @override
