@@ -208,35 +208,60 @@ class _TimelineStepsChild extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return
+    Card(
       elevation: 5,
       child: Container(
-        // here we explicitly set the size of our tiles
-        height: 200,
         padding: const EdgeInsets.all(16.0),
-        child: Stack(
-          children: <Widget>[
-            // to round the borders
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
-              child: Image(
-                  // want image to fill the box so use infinity..
-                  height: double.infinity,
-                  width: double.infinity,
-                  image: AssetImage(activity.imgPath),
-                  fit: BoxFit.cover),
-            ),
-            Container(
-              alignment: Alignment.bottomCenter,
-              child: Text(activity.title + " " + activity.lifepoints.toString(),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.black.withOpacity(0.9),
-                  )),
-            ),
-          ],
-        ),
+      height: 200,
+        child: GridTile(
+                      child:
+                          // want image to fill the box so use infinity..
+                          ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: Image(
+                            height: double.infinity,
+                            width: double.infinity,
+                            image: AssetImage(activity.imgPath),
+                            fit: BoxFit.cover),
+                      ),
+                      footer: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          Expanded(
+                            child: Container(
+                              //width: double.infinity,
+                              height: 45,
+                              padding: EdgeInsets.all(5),
+                              color: Colors.blueGrey.withOpacity(
+                                  .8), //Theme.of(context).primaryColor.withOpacity(.8),
+
+                              //alignment: Alignment.centerLeft,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(activity.title,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                  Text(
+                                     activity.lifepoints.toString(),
+                                      textAlign: TextAlign.right,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
       ),
-    );
+    );    
   }
 }
