@@ -51,8 +51,11 @@ class ListScreenState extends State<ListScreen> {
  
   // used to update this screen, typically because _allActivities has been updated and we've popped context back here
   // ^that might be unnecessary if i were a better programmer :)
-  void callback() {
+  void callbackDetail(SnackBar snack) {
     setState(() {});
+    
+    Scaffold.of(context).showSnackBar(snack);
+
   }
 
   void onFab() {
@@ -306,7 +309,7 @@ class ListScreenState extends State<ListScreen> {
 
                                   padding: const EdgeInsets.all(16.0),
                                   child: DetailScreen(
-                                    activity: _allActivities.activities[index], callback: callback),                                
+                                    activity: _allActivities.activities[index], callbackDetail: callbackDetail),                                
                                     // this is NOT a thing we should do and it doesn't worki :)
                                     //controller: new FABController()
                                   ),                              

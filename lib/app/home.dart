@@ -181,6 +181,7 @@ class _MyHomeState extends State<MyHome> {
   }
 
   // this is of course garbage. we've got bidirectional communication and bad names...
+  // this is called by Timeline page to go back on swipe, but when swiped a dismissible
   void callback() {
     bottomTapped(ScreenIndex.list.index);
   }

@@ -18,11 +18,11 @@ import 'package:image_picker/image_picker.dart';
 class DetailScreen extends StatefulWidget {
   final Activity activity;
   final FABController controller;
-  final Function callback;
+  final Function callbackDetail;
 
   // this.activity was required, but let's not require it for a new on. or pass blank one?
   const DetailScreen(
-      {Key key, @required this.activity, this.controller, this.callback})
+      {Key key, @required this.activity, this.controller, this.callbackDetail})
       : super(key: key);
 
   @override
@@ -81,6 +81,18 @@ class _DetailScreenState extends State<DetailScreen> {
     // do we want this different for new vs edit? cuz it'll never be null for the TextFormField, if we care..
     _lifePointsController.text = widget.activity.lifepoints.toString();
 
+    SnackBar snack = SnackBar(
+      content: Text(widget.activity.title + " edits saved"),
+      elevation: 8,
+      behavior: SnackBarBehavior.floating,
+      duration: Duration(seconds: 4),
+      /*action: SnackBarAction(
+          // TODO: undo add to day
+          label: 'Undo',
+          onPressed: () {},
+        ),*/
+    );
+
     Widget imageSection = Hero(
       tag: AssetImage(widget.activity.imgPath),
       child: Material(
@@ -89,8 +101,8 @@ class _DetailScreenState extends State<DetailScreen> {
           // doubletap may be inappropriate material.io here, user expecting Tap instead...
           onDoubleTap: () {
             // double tap sets the state of list then pops -> real bad on Add though so don't do that.
-            if (widget.callback != null) {
-              widget.callback();
+            if (widget.callbackDetail != null) {
+              widget.callbackDetail(snack);
               Navigator.of(context).pop();
             }
           },
@@ -222,7 +234,13 @@ class _DetailScreenState extends State<DetailScreen> {
           // do we have that info?
           //_buildButtonColumn(color, Icons.add_circle_outline, 'ADD'),
           //_buildButtonColumn(color, Icons.edit_attributes, 'Edit'),
-          _buildButtonColumn(color, Icons.delete_forever, 'DELETE'),
+
+          _buildButtonColumn(
+              _allActivities.activities.contains(widget.activity)
+                  ? Colors.red
+                  : Colors.transparent,
+              Icons.delete_forever,
+              'DELETE FOREVER')
         ],
       ),
     );
@@ -260,15 +278,36 @@ class _DetailScreenState extends State<DetailScreen> {
   // builds bottom buttons on edit page..
   // do we want differences based on Add vs Edit? e.g. no/transparent delete button..
   Column _buildButtonColumn(Color color, IconData icon, String label) {
+    SnackBar snack = SnackBar(
+      content: Text("Deleted " + widget.activity.title + " activity"),
+      elevation: 8,
+      behavior: SnackBarBehavior.floating,
+      duration: Duration(seconds: 4),
+      /*action: SnackBarAction(
+          // TODO: undo add to day
+          label: 'Undo',
+          onPressed: () {},
+        ),*/
+    );
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        //iconButton
         InkWell(
           child: Icon(icon, color: color, size: 36),
-          // TODO: delete this activity somehow? or we can just not have this icon on the page at all of course
           // it would exit the tab. so we could return to listScreen (should you be able to permanently delete activity from Today?)
-          onTap: () {},
+          onTap: () {
+            // well obviously bad form here....
+            _allActivities.activities.contains(widget.activity)
+                ? {
+                    _allActivities.activities.remove(widget.activity),
+                    widget.callbackDetail(snack),
+                    Navigator.of(context).pop(),
+                  }
+                : null;
+          },
         ),
         Container(
           margin: const EdgeInsets.only(top: 8),

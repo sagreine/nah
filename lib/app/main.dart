@@ -3,8 +3,7 @@ import "package:nah/app/state_container.dart";
 import 'package:nah/app/login.dart';
 
 
-// add the text protection and etc. to timeline
-// perm delete activity on Today or Detail udpates - how? Detail, longpress on Activity?
+// perm delete activity on Today<no> or Detail udpates - how? Detail, longpress on Activity?
 // FAB on detail page should first Submit text box if active, then add activity..
 // FABs - if they're gonna snack, do it right or at least pass "did add" or "didn't add" so we can do the right one...
 // capture exception for if they add 2 identical images - ideally when they add the image.
