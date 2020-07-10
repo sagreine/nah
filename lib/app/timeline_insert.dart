@@ -105,9 +105,9 @@ class _TimelineInsertState extends State<TimelineInsert> {
                                   i++)
                                 Container(
                                   key: UniqueKey(),
-                                  // just handle the dismiss direction explicitly
-                                  child: Dismissible(
-                                    //direction: DismissDirection.endToStart,
+                                  
+                                  child: Dismissible(  
+                                    direction: DismissDirection.endToStart,
                                     // Each Dismissible must contain a Key. Keys allow Flutter to
                                     // uniquely identify widgets.
                                     // this isn't unique though... UniqueKey()
@@ -116,16 +116,19 @@ class _TimelineInsertState extends State<TimelineInsert> {
                                     // what to do after an item has been swiped away.
                                     onDismissed: (direction) {
                                       // Remove the item from the data source.
+                                      
                                       if (direction ==
                                           DismissDirection.endToStart) {
                                         setState(() {
                                           thisDay.activities.removeAt(i);
                                           // show snakcbar
                                         });
-                                      // TODO: this still dismisses, so stop that!  
-                                      } else {
-                                        widget.callback();
-                                      }
+                                      // this would be after it already dismisses, so stop that!  
+                                      // https://gist.github.com/Nash0x7E2/08acca529096d93f3df0f60f9c034056
+                                      } 
+                                      //else {
+                                        //widget.callback();
+                                      //}
                                     },
                                     // Show a red background as the item is swiped away.
                                     background: Container(color: Colors.red),
