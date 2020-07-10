@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import "package:nah/app/state_container.dart";
 import 'package:nah/app/login.dart';
 
-// actually use getColor and etc. and decide if negative lifepoints is good or bad haha. 
 // // just handle the dismiss direction explicitly on timeline
 // add the text protection and etc. to timeline
-// perm delete activity on Today or Detail udpates - how?
+// perm delete activity on Today or Detail udpates - how? Detail, longpress on Activity?
 // FAB on detail page should first Submit text box if active, then add activity..
 // capture exception for if they add 2 identical images - ideally when they add the image.
 // setup onboarding screens, through settings setup
@@ -18,7 +17,8 @@ import 'package:nah/app/login.dart';
 // fancy flip boxes
 
 // only if we really, really want to:
-// better splash screen - see below link
+// better splash screen - see below link. loads faster?
+// running total of lifepoints left on the left? fun to deal with it after deletion.
 // FAB on edit detail screen.
 // add background colors, fonts, etc.
 // probably have too much statefulness, more than necessary

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import 'package:nah/app/timeline_insert.dart';
 import 'package:nah/app/singletons.dart';
 
@@ -18,15 +18,8 @@ class TodayScreenState extends State<TodayScreen> {
     
 
 // change this to horizontal only, too easy to mix it up with moving thing.
-    Widget viewSection = Row(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Expanded(child: 
-          TimelineInsert(),),
-        ],      
-    );
 
-    return viewSection;
   }
 }
 
+*/

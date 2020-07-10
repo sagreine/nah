@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:nah/app/list.dart';
+import 'package:nah/app/timeline_insert.dart';
 import 'package:nah/app/today.dart';
 import 'package:nah/app/detail.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nah/app/settings.dart'; // remove once no pass blank Activity..
-import 'package:nah/app/singletons.dart';
 import 'package:nah/app/activity.dart';
 
 // pls no do this, when this is not what this means. just do it right.
@@ -125,16 +125,18 @@ class _MyHomeState extends State<MyHome> {
 
     // detail
     else if (bottomSelectedIndex == ScreenIndex.detail.index) {
-       // snackbaer
-       _detailFabController.onFab();
-       // return to the list page -> do we always want this? or just for now
-       // and later change if we get a hero animation from the timeline page
-       bottomTapped(ScreenIndex.list.index);
+      // snackbaer
+      _detailFabController.onFab();
+      // return to the list page -> do we always want this? or just for now
+      // and later change if we get a hero animation from the timeline page
+      bottomTapped(ScreenIndex.list.index);
     }
-
 
     //
     // today
+    else {
+      bottomTapped(ScreenIndex.list.index);
+    }
   }
 
   Widget buildPageView() {
@@ -154,11 +156,11 @@ class _MyHomeState extends State<MyHome> {
             0,
             //activity: null, // the rightest way but annoying to handle in detail
           ),
-          controller: _detailFabController,          
+          controller: _detailFabController,
         ),
         // this doesn't initialize though? apparently not given FAB push is broken
         ListScreen(controller: _listFabController),
-        TodayScreen(),
+        TimelineInsert(callback: callback),
       ],
     );
   }
@@ -176,16 +178,11 @@ class _MyHomeState extends State<MyHome> {
     } else {
       _pageController.jumpToPage(index);
     }
-/*
-          Navigator.push(
-            context,
-            AwesomePageRoute(
-              transitionDuration: Duration(milliseconds: 600),
-              exitPage: widget,
-              enterPage: TodayScreen(),
-              transition: CubeTransition(),
-            ),
-*/
+  }
+
+  // this is of course garbage. we've got bidirectional communication and bad names...
+  void callback() {
+    bottomTapped(ScreenIndex.list.index);
   }
 
   @override
@@ -241,4 +238,3 @@ class _MyHomeState extends State<MyHome> {
     );
   }
 }
-

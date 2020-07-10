@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nah/app/activity.dart';
 import 'package:nah/app/detail.dart';
 import 'package:nah/app/home.dart';
-import 'package:nah/app/today.dart';
-import 'package:nah/app/settings.dart';
 import "package:nah/app/state_container.dart";
 import 'package:nah/app/singletons.dart';
 
