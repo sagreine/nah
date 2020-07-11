@@ -6,7 +6,6 @@ import 'package:nah/app/login.dart';
 
 // capture exception for if they add 2 identical images? - ideally when they add the image.
 // setup onboarding screens, through settings setup
-// login colors..
 // release
 
 

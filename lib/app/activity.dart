@@ -37,7 +37,7 @@ class Activity {
       case -1:
         return Colors.green[200];
       case 0:
-        return Colors.white;
+        return Colors.blueGrey[200];
       case 1:
         return Colors.red[200];
       case 2:
