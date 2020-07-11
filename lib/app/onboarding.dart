@@ -4,8 +4,6 @@ import 'package:nah/app/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
-
-
 //https://stackoverflow.com/questions/50654195/flutter-one-time-intro-screen
 class Splash extends StatefulWidget {
   Splash({Key key}) : super(key: key);
@@ -17,9 +15,9 @@ class SplashState extends State<Splash> {
   Future checkFirstSeen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     // update this for debugging...
-    bool _seen = 
-    false;
-    //(prefs.getBool('seen') ?? false);
+    bool _seen =
+        //false;
+        (prefs.getBool('seen') ?? false);
 
     if (_seen) {
       return MyHome.id;
@@ -109,7 +107,7 @@ class IntroScreen extends StatelessWidget {
 
   void _markPrefsDone() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('seen', true);
+    await prefs.setBool('seen', true);
   }
 
   @override
@@ -119,7 +117,16 @@ class IntroScreen extends StatelessWidget {
         pages: listPagesViewModel,
         onDone: () {
           _markPrefsDone();
+          //return MyHome.id: (context) => MyHome()
+          //Route()
           // When done button is press
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute<void>(builder: (BuildContext context) {
+              return Scaffold(
+                body: Container(child: MyHome()),
+              );
+            }),
+          ); //initialRoute: snapshot.data
         },
         //onSkip: () {
         // You can also override onSkip callback
