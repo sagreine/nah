@@ -31,19 +31,19 @@ class Activity {
   Color getLifePointsColor() {
     switch (getLifePointsCategory()) {
       case -3:
-        return Colors.red[600];
+        return Colors.green[600];
       case -2:
-        return Colors.red[400];
+        return Colors.green[400];
       case -1:
-        return Colors.red[200];
+        return Colors.green[200];
       case 0:
         return Colors.white;
       case 1:
-        return Colors.green[200];
+        return Colors.red[200];
       case 2:
-        return Colors.green[400];
+        return Colors.red[400];
       case 3:
-        return Colors.green[600];
+        return Colors.red[600];
     }
     return Colors.black;
   }

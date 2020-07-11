@@ -255,7 +255,7 @@ class _DetailScreenState extends State<DetailScreen> {
         minLines: 1,*/
         maxLines: null,
         // TODO: don't do this. add a submit button.
-        onSubmitted : (value) {
+        onSubmitted: (value) {
           widget.activity.description = value;
         },
       ),

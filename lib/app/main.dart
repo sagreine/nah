@@ -3,21 +3,22 @@ import "package:nah/app/state_container.dart";
 import 'package:nah/app/login.dart';
 
 
-// FAB on detail page should first Submit text box if active, then add activity..
-// FABs - if they're gonna snack, do it right or at least pass "did add" or "didn't add" so we can do the right one...
-// capture exception for if they add 2 identical images - ideally when they add the image.
-// setup onboarding screens, through settings setup
-// enable pick from gallery
-// login vertical or horizontal
-// remove FAB from Today or do something with it.
-///// release
 
-// fancy timelines ---- mostly just up to UI tweaks at this point. -> running totla of lifepoints on left? total used at top?
+// capture exception for if they add 2 identical images? - ideally when they add the image.
+// setup onboarding screens, through settings setup
+// login colors..
+// release
+
+
 // fancy flip boxes
 
 // only if we really, really want to:
+// login vertical or horizontal
 // make them actually submit before moving on, on Detail.
+//  timelines -> running total of lifepoints on left? total used at top?
+// enable pick from gallery?
 // better splash screen - see below link. loads faster?
+// FAB on detail page should first Submit text box if active, then add activity..
 // custom dismissible or multi-gesture-detection
 // running total of lifepoints left on the left? fun to deal with it after deletion.
 // FAB on edit detail screen.

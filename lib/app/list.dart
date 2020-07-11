@@ -285,6 +285,7 @@ class ListScreenState extends State<ListScreen> {
                         }
                       });
                     },
+                    // this is pretty dumb but ok.
                     onDoubleTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute<void>(
@@ -298,31 +299,35 @@ class ListScreenState extends State<ListScreen> {
                               // just here for now as an example / another way to look at it.
                               alignment: Alignment.center,
 
-                              // this feels like transparent should show what's behind it, but it doesn't..
-                              //color: Color(0xffE49273),
-                              //color: Colors.transparent,
-
                               padding: const EdgeInsets.all(16.0),
                               child: DetailScreen(
                                   activity: _allActivities.activities[index],
                                   callbackDetail: callbackDetail),
-                              // this is NOT a thing we should do and it doesn't worki :)
-                              //controller: new FABController()
                             ),
                             floatingActionButton: Container(
                               height: 80,
                               width: 90,
-                              child: FloatingActionButton(                                
+                              child: FloatingActionButton(
                                 onPressed: () {
-                                  setState((){});
+                                  setState(() {});
                                   Navigator.pop(context);
+                                  
+                                  Scaffold.of(context).showSnackBar(SnackBar(
+                                    content: Text(
+                                        _allActivities.activities[index].title +
+                                            " edits saved"),
+                                    elevation: 8,
+                                    behavior: SnackBarBehavior.floating,
+                                    duration: Duration(seconds: 4),                                   
+                                  ));
                                 },
                                 tooltip: 'Save and close',
                                 child: Icon(Icons.save),
                                 elevation: 12,
                               ),
                             ),
-                            floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+                            floatingActionButtonLocation:
+                                FloatingActionButtonLocation.centerFloat,
                           );
                         }),
                       );
