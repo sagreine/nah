@@ -143,9 +143,7 @@ class IntroScreen extends StatelessWidget {
       title: "View and rearrange your day",
       body:
           "Long press and drag to rearrange, or swipe to remove. You can always add more to the day by going back to the list page!",
-      image: Center(
-        child: Container(color: Color(0xFFFd3bbf2).withAlpha(120), child:
-        Image.asset('assets/images/organize.jpg'))),
+      image: Center(child: Image.asset('assets/images/organize.jpg')),
       footer: RaisedButton(
         onPressed: () {
           // On button presed
