@@ -4,10 +4,10 @@ import 'package:nah/app/login.dart';
 
 
 
-// setup onboarding screens, through settings setup
+// setup onboarding screens, through settings setup - still not functional, plus not yet decorated.
+// persistence on-device -
 // release
 
-// persistence on-device -
 // fancy flip boxes
 // only if we really, really want to:
 // login vertical or horizontal

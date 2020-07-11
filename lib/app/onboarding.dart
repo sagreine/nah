@@ -16,6 +16,7 @@ class Splash extends StatefulWidget {
 class SplashState extends State<Splash> {
   Future checkFirstSeen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    // update this for debugging...
     bool _seen = 
     false;
     //(prefs.getBool('seen') ?? false);
@@ -96,7 +97,7 @@ class IntroScreen extends StatelessWidget {
       title: "View and rearrange your day",
       body:
           "Long press and drag to rearrange, or swipe to remove. You can always add more to the day by going back to the list page!",
-      image: const Center(child: Icon(Icons.android)),
+      image: const Center(child: Icon(Icons.attach_money)),
       footer: RaisedButton(
         onPressed: () {
           // On button presed

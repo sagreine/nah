@@ -109,7 +109,7 @@ class _MyHomeState extends State<MyHome> {
   }
 
   void buildFABOnPressed() {
-    // detail
+    
     // context aware? was this a hero or an Add activity screen
     // orrrr do we make a new Add screen that just displays a detail UI screen?
 
