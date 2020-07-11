@@ -11,7 +11,7 @@ import 'package:nah/app/activity.dart';
 enum ScreenIndex { detail, list, today }
 
 class FABController {
-  void Function() onFab;
+  Function() onFab;
 }
 
 class MyHome extends StatefulWidget {
@@ -110,7 +110,7 @@ class _MyHomeState extends State<MyHome> {
           onPressed: () {},
         ),*/
       );
-      
+
       scaffoldState.currentState.showSnackBar(snack);
       _listFabController.onFab();
 
@@ -122,10 +122,11 @@ class _MyHomeState extends State<MyHome> {
     // detail
     else if (bottomSelectedIndex == ScreenIndex.detail.index) {
       // snackbar
-      _detailFabController.onFab();
-      // return to the list page -> do we always want this? or just for now
-      // and later change if we get a hero animation from the timeline page
-      bottomTapped(ScreenIndex.list.index);
+      if (_detailFabController.onFab()) {
+        // return to the list page -> do we always want this? or just for now
+        // and later change if we get a hero animation from the timeline page
+        bottomTapped(ScreenIndex.list.index);
+      }
     }
     //
     // today

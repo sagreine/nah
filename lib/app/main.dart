@@ -4,18 +4,16 @@ import 'package:nah/app/login.dart';
 
 
 
-// capture exception for if they add 2 identical images? - ideally when they add the image.
 // setup onboarding screens, through settings setup
 // release
 
 
 // fancy flip boxes
-
 // only if we really, really want to:
 // login vertical or horizontal
 // make them actually submit before moving on, on Detail.
 //  timelines -> running total of lifepoints on left? total used at top?
-// enable pick from gallery?
+// enable pick from gallery? need to check duplicates elsewhere if so...
 // better splash screen - see below link. loads faster?
 // FAB on detail page should first Submit text box if active, then add activity..
 // custom dismissible or multi-gesture-detection

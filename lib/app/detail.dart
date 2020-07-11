@@ -49,6 +49,7 @@ class _DetailScreenState extends State<DetailScreen> {
     setState(() {
       // if they picked a file :)
       if (pickedFile != null) {
+        // inefficient but does it. check if any other Activity has this exact imagePath and fail if so.
         widget.activity.imgPath = pickedFile.path.toString();
       }
     });
@@ -58,10 +59,23 @@ class _DetailScreenState extends State<DetailScreen> {
   // this should save it, but mind that this is a state and we're doing widget.activity.....
   // note that this is only what happens on this page, other things can happen on other pages, see controller definition
   // specifically, no need to set state on this page since it does nothing to the Detail page.
-  void onFab() {
+  bool onFab() {
+    /// this fab function is for the Home FAB, for adding, not the Detail FAB for editing. this is very stupid of course
     if (widget.activity != null) {
+      // check if another activity already has this image (breaks Hero animation). if so, return false
+      for (int i = 0; i < _allActivities.activities.length; ++i) {
+        if (_allActivities.activities[i].imgPath == widget.activity.imgPath) {
+          Scaffold.of(context).showSnackBar(SnackBar(
+            content: Text("Another activity has this image. Try again"),
+          ));
+          return false;
+        }
+      }
+      // otherwise add this activity and return true
       _allActivities.activities.add(widget.activity);
+      return true;
     }
+    return false;
   }
 
   @override
