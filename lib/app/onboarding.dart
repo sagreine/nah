@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:nah/app/home.dart';
+import 'package:nah/app/state_container.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
@@ -50,108 +52,148 @@ class SplashState extends State<Splash> {
   }
 }
 
-class IntroScreen extends StatelessWidget {
+class IntroScreen extends StatefulWidget {
+  IntroScreen({Key key}) : super(key: key);
   static String id = 'IntroScreen';
 
-  final List<PageViewModel> listPagesViewModel = [
-    PageViewModel(
-      decoration: const PageDecoration(
-        boxDecoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFFFCCCA9),
-              Color(0xFFFFA278),
-            ],
+  @override
+  State<StatefulWidget> createState() => IntroScreenState();
+}
+
+class IntroScreenState extends State<IntroScreen> {
+  final _lifePointsController = TextEditingController();
+
+  List<PageViewModel> listPagesViewModel(StateContainerState container) {
+    return [
+      PageViewModel(
+        decoration: const PageDecoration(
+          boxDecoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFFFCCCA9),
+                Color(0xFFFFA278),
+              ],
+            ),
           ),
         ),
-      ),
-      title: "Start with a little setup",
-      body:
-          "Each activity takes life energy (positive) or gives it back (negative). You pick how many lifepoints you have to spend in a day, and pick what activities you want and in what order.",
-      image: Center(child: Image.asset('assets/images/settings.jpg')),
-      footer: RaisedButton(
+        title: "Start with a little setup",
+        body:
+            "Each activity takes life energy (positive) or gives it back (negative). You pick how many lifepoints you have to spend in a day, and pick what activities you want and in what order.",
+        image: Center(child: Image.asset('assets/images/settings.jpg')),
+        footer: 
+        // should we make them enter something? tbd... have a failesafe though. but confusing if you don't 'submit'
+        Container(height:80, child: 
+        TextField(
+          decoration: new InputDecoration(
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.blueGrey[200],
+                width: 1.0,
+                style: BorderStyle.solid,
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.blueGrey, width: 1.0),
+            ),
+            labelText: container.appSettings == null
+                ? "Enter Your LifePoints"
+                : "Edit Your LifePoints",
+          ),
+          keyboardType: TextInputType.number,
+          inputFormatters: <TextInputFormatter>[
+            WhitelistingTextInputFormatter.digitsOnly,
+          ],
+          controller: _lifePointsController,
+          onSubmitted: (String value) {
+            container.updateAppSettings(int.parse(value));
+          },
+        ),
+        ),
+
+        /*RaisedButton(
         onPressed: () {
           // On button presed
         },
         child: const Text("Let's Go !"),
+      ),*/
       ),
-    ),
-    PageViewModel(
-      decoration: const PageDecoration(
-        boxDecoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFFFFd7fada),
-              Color(0xFFFFa7f2ae),
-            ],
+      PageViewModel(
+        decoration: const PageDecoration(
+          boxDecoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFFFFd7fada),
+                Color(0xFFFFa7f2ae),
+              ],
+            ),
           ),
         ),
-      ),
-      title: "Add the activities you might ever do",
-      body:
-          "We've preloaded some activities for you. You can add your own by clicking Create Activity or edit ours by double tapping from the Pick activities page. Double tap anytime for details.",
-      image: Center(child: Image.asset('assets/images/construction.jpg')),
-      footer: RaisedButton(
-        onPressed: () {
-          // On button presed
-        },
-        child: const Text("Let's Go !"),
-      ),
-    ),
-    PageViewModel(
-      decoration: const PageDecoration(
-        boxDecoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFFFc6e8f5),
-              Color(0xFFFF65cff7),
-            ],
-          ),
+        title: "Add the activities you might ever do",
+        body:
+            "We've preloaded some activities for you. You can add your own by clicking Create Activity or edit ours by double tapping from the Pick activities page. Double tap anytime for details.",
+        image: Center(child: Image.asset('assets/images/construction.jpg')),
+        footer: RaisedButton(
+          onPressed: () {
+            // On button presed
+          },
+          child: const Text("Let's Go !"),
         ),
       ),
-      title:
-          "Once you have activities you might do in a day, pick the ones you want to do today",
-      body:
-          "Once you've added some activities, single tap on activities you want to do today. Add them to your day using the main button on the page.",
-      image: Center(child: Image.asset('assets/images/yourday.jpg')),
-      footer: RaisedButton(
-        onPressed: () {
-          // On button presed
-        },
-        child: const Text("Let's Go !"),
-      ),
-    ),
-    PageViewModel(
-      decoration: const PageDecoration(
-        boxDecoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFFFd3bbf2),
-              Color(0xFFFFc7a4f5),
-            ],
+      PageViewModel(
+        decoration: const PageDecoration(
+          boxDecoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFFFc6e8f5),
+                Color(0xFFFF65cff7),
+              ],
+            ),
           ),
         ),
+        title:
+            "Once you have activities you might do in a day, pick the ones you want to do today",
+        body:
+            "Single tap on activities you want to do today. Add them to your day using the main button on the page.",
+        image: Center(child: Image.asset('assets/images/yourday.jpg')),
+        footer: RaisedButton(
+          onPressed: () {
+            // On button presed
+          },
+          child: const Text("Let's Go !"),
+        ),
       ),
-      title: "View and rearrange your day",
-      body:
-          "Long press and drag to rearrange, or swipe to remove. You can always add more to the day by going back to the list page!",
-      image: Center(child: Image.asset('assets/images/organize.jpg')),
-      footer: RaisedButton(
-        onPressed: () {
-          // On button presed
-        },
-        child: const Text("Let's Go !"),
+      PageViewModel(
+        decoration: const PageDecoration(
+          boxDecoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFFFd3bbf2),
+                Color(0xFFFFc7a4f5),
+              ],
+            ),
+          ),
+        ),
+        title: "View and rearrange your day",
+        body:
+            "Long press and drag to rearrange, or swipe to remove. You can always add more to the day by going back to the list page!",
+        image: Center(child: Image.asset('assets/images/organize.jpg')),
+        footer: RaisedButton(
+          onPressed: () {
+            // On button presed
+          },
+          child: const Text("Let's Go !"),
+        ),
       ),
-    ),
-  ];
+    ];
+  }
 
   void _markPrefsDone() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -160,9 +202,10 @@ class IntroScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final container = StateContainer.of(context);    
     return new Scaffold(
       body: IntroductionScreen(
-        pages: listPagesViewModel,
+        pages: listPagesViewModel(container),
         onDone: () {
           _markPrefsDone();
           //return MyHome.id: (context) => MyHome()
