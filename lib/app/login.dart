@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:nah/app/home.dart';
+import 'package:nah/app/onboarding.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:async';
 import 'package:flutter/widgets.dart';
+
+
 
 // borrowed here: https://github.com/syonip/flutter_login_video/blob/master/lib/sign_in.dart
 // and here: https://medium.com/@KarthikPonnam/flutter-pageview-withbottomnavigationbar-fb4c87580f6a
@@ -12,7 +14,9 @@ class MyApp extends StatelessWidget {
   @override
   //MyAppState createState() => MyAppState();
   Widget build(BuildContext context) {
-    return MaterialApp(home: MyLogin());
+    return MaterialApp(
+      home: MyLogin()      
+      );
   }
 }
 
@@ -156,7 +160,7 @@ class _MyLoginState extends State<MyLogin> {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute<void>(builder: (BuildContext context) {
                 return Scaffold(
-                  body: Container(child: MyHome()),
+                  body: Container(child: Splash()),
                 );
               }),
             );
