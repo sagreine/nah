@@ -222,8 +222,6 @@ class _DetailScreenState extends State<DetailScreen> {
       ),
     );
 
-    Color color = Theme.of(context).primaryColor;
-
     Widget buttonSection = Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -253,11 +251,11 @@ class _DetailScreenState extends State<DetailScreen> {
         style: TextStyle(
           fontWeight: FontWeight.bold,
         ),
-        keyboardType: TextInputType.multiline,
-        minLines: 1,
-        maxLines: 5,
+        /*keyboardType: TextInputType.multiline,
+        minLines: 1,*/
+        maxLines: null,
         // TODO: don't do this. add a submit button.
-        onChanged: (value) {
+        onSubmitted : (value) {
           widget.activity.description = value;
         },
       ),

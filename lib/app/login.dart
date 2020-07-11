@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nah/app/home.dart';
-import 'package:nah/app/list.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:async';
 import 'package:flutter/widgets.dart';

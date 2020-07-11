@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:nah/app/activity.dart';
 import 'package:nah/app/singletons.dart';
-import 'package:nah/app/home.dart';
 
 // heavily borrows from the timeline_tile provided sample
 
@@ -105,8 +104,7 @@ class _TimelineInsertState extends State<TimelineInsert> {
                                   i++)
                                 Container(
                                   key: UniqueKey(),
-                                  
-                                  child: Dismissible(  
+                                  child: Dismissible(
                                     direction: DismissDirection.endToStart,
                                     // Each Dismissible must contain a Key. Keys allow Flutter to
                                     // uniquely identify widgets.
@@ -116,18 +114,18 @@ class _TimelineInsertState extends State<TimelineInsert> {
                                     // what to do after an item has been swiped away.
                                     onDismissed: (direction) {
                                       // Remove the item from the data source.
-                                      
+
                                       if (direction ==
                                           DismissDirection.endToStart) {
                                         setState(() {
                                           thisDay.activities.removeAt(i);
                                           // show snakcbar
                                         });
-                                      // this would be after it already dismisses, so stop that!  
-                                      // https://gist.github.com/Nash0x7E2/08acca529096d93f3df0f60f9c034056
-                                      } 
+                                        // this would be after it already dismisses, so stop that!
+                                        // https://gist.github.com/Nash0x7E2/08acca529096d93f3df0f60f9c034056
+                                      }
                                       //else {
-                                        //widget.callback();
+                                      //widget.callback();
                                       //}
                                     },
                                     // Show a red background as the item is swiped away.
@@ -144,8 +142,7 @@ class _TimelineInsertState extends State<TimelineInsert> {
                                             Icons.delete_sweep,
                                             color: Colors.red,
                                             size: 35,
-                                          ),
-                                          // TODO: make this exectute dismiss instead of just delete...
+                                          ),                                      
                                           //onTap: () {
                                           //setState(() {
                                           //thisDay.activities.removeAt(i);
@@ -208,60 +205,57 @@ class _TimelineStepsChild extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return
-    Card(
+    return Card(
       elevation: 5,
       child: Container(
         padding: const EdgeInsets.all(16.0),
-      height: 200,
+        height: 200,
         child: GridTile(
-                      child:
-                          // want image to fill the box so use infinity..
-                          ClipRRect(
-                        borderRadius: BorderRadius.circular(8.0),
-                        child: Image(
-                            height: double.infinity,
-                            width: double.infinity,
-                            image: AssetImage(activity.imgPath),
-                            fit: BoxFit.cover),
-                      ),
-                      footer: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: <Widget>[
-                          Expanded(
-                            child: Container(
-                              //width: double.infinity,
-                              height: 45,
-                              padding: EdgeInsets.all(5),
-                              color: Colors.blueGrey.withOpacity(
-                                  .8), //Theme.of(context).primaryColor.withOpacity(.8),
+          child:
+              // want image to fill the box so use infinity..
+              ClipRRect(
+            borderRadius: BorderRadius.circular(8.0),
+            child: Image(
+                height: double.infinity,
+                width: double.infinity,
+                image: AssetImage(activity.imgPath),
+                fit: BoxFit.cover),
+          ),
+          footer: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              Expanded(
+                child: Container(
+                  //width: double.infinity,
+                  height: 45,
+                  padding: EdgeInsets.all(5),
+                  color: Colors.blueGrey.withOpacity(
+                      .8), //Theme.of(context).primaryColor.withOpacity(.8),
 
-                              //alignment: Alignment.centerLeft,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Text(activity.title,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                  Text(
-                                     activity.lifepoints.toString(),
-                                      textAlign: TextAlign.right,
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                  //alignment: Alignment.centerLeft,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(activity.title,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          )),
+                      Text(activity.lifepoints.toString(),
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          )),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
-    );    
+    );
   }
 }

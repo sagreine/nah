@@ -23,11 +23,10 @@ import 'package:nah/app/singletons.dart';
 // just using list for now to not deal with it basically, iterable by index speed vs. math Set guarantees - not needed, though could be assumed so faster if searching non-index
 
 // TODO: Error by banner? or snackbar + brief red border highlight inkwell splash?
-// TODO: Positioned.fill for stack for background?
+//  Positioned.fill for stack for background?
 
 class ListScreen extends StatefulWidget {
   final FABController controller;
-
 
   ListScreen({this.controller});
 
@@ -48,14 +47,12 @@ class ListScreenState extends State<ListScreen> {
   ListScreenState(FABController _controller) {
     _controller.onFab = onFab;
   }
- 
+
   // used to update this screen, typically because _allActivities has been updated and we've popped context back here
   // ^that might be unnecessary if i were a better programmer :)
   void callbackDetail(SnackBar snack) {
     setState(() {});
-    
     Scaffold.of(context).showSnackBar(snack);
-
   }
 
   void onFab() {
@@ -71,7 +68,6 @@ class ListScreenState extends State<ListScreen> {
 
   AppSettings appSettings;
 
-  
   @override
   void initState() {
     // TODO: implement initState correctly e.g. database pull
@@ -121,54 +117,54 @@ class ListScreenState extends State<ListScreen> {
           "a chores subtitle",
           "Everyone hates chores but everyone has to do them. Unless you're rich. In which case, please buy me a coffee.",
           2));
-                _allActivities.activities.add(Activity(
+      _allActivities.activities.add(Activity(
           'assets/images/create.jpg',
           "Create",
           "a create subtitle",
-          "Creating can be creating anything. Painting, drawing, making a low-quality time management app...anything!",          
+          "Creating can be creating anything. Painting, drawing, making a low-quality time management app...anything!",
           -1));
       _allActivities.activities.add(Activity(
           'assets/images/learn.jpg',
           "Learn",
           "a learn subtitle",
           "Learning is hard, but rewarding. You migth even learn how to make an app!",
-          1));   
+          1));
       _allActivities.activities.add(Activity(
           'assets/images/tarot.jpg',
           "Tarot",
           "a tarot subtitle",
           "Pretty pictures, fun mystery. Reading or making your own! Hope you can draw better than I can program.",
-          -1));   
+          -1));
       _allActivities.activities.add(Activity(
           'assets/images/social.jpg',
           "Social",
           "a social subtitle",
           "Are you an introvert or an extrovert? Either way, you should probably socialize some. Yes, even you, introverts.",
-          1));                        
+          1));
       _allActivities.activities.add(Activity(
           'assets/images/workout.jpg',
           "Workout",
           "a workout subtitle",
           "Do you bench press 300 pounds? Me neither. But I can bench press more than I used to, and stronger people are harder to kill.",
-          1));          
+          1));
       _allActivities.activities.add(Activity(
           'assets/images/selfcare.jpg',
           "Self-Care",
           "a self-care subtitle",
           "Your happy place. Maybe it's the beach, maybe it's programming a free time management app. Either way, indulge in some bliss now and again, my friend.",
-          -2));          
+          -2));
       _allActivities.activities.add(Activity(
           'assets/images/walk.jpg',
           "Walk",
           "a walk subtitle",
           "You have two legs. Or, maybe you don't, hell I don't know you. Either way, think about walking as a way to relax. Or at least a way to talk to food. Both, if you're lucky",
-          -1));          
+          -1));
       _allActivities.activities.add(Activity(
           'assets/images/videogames.jpg',
           "Video Games",
           "a video games subtitle",
           "Are you killing zombies? Building simulated houses and people? Either way I recommend ordering and eating a pizza while you do it.",
-          0));          
+          0));
     }
   }
 
@@ -291,31 +287,45 @@ class ListScreenState extends State<ListScreen> {
                     },
                     onDoubleTap: () {
                       Navigator.of(context).push(
-                            MaterialPageRoute<void>(
-                                builder: (BuildContext context) {
-                              timeDilation = 2.5;
-                              // why is a scaffold necessary?
-                              // TODO: this doesn't set state, even when this is wrapped in setState. only after it is rebuilt again..
-                              return Scaffold(
-                                body: Container(
-                                  // if we want it small with the same background, do that here
-                                  // but be consistent across ways to get this screen
-                                  // just here for now as an example / another way to look at it.
-                                  alignment: Alignment.center,
+                        MaterialPageRoute<void>(
+                            builder: (BuildContext context) {
+                          timeDilation = 2.5;
+                          // why is a scaffold necessary?
+                          return Scaffold(
+                            body: Container(
+                              // if we want it small with the same background, do that here
+                              // but be consistent across ways to get this screen
+                              // just here for now as an example / another way to look at it.
+                              alignment: Alignment.center,
 
-                                  // this feels like transparent should show what's behind it, but it doesn't..
-                                  //color: Color(0xffE49273),
-                                  //color: Colors.transparent,
+                              // this feels like transparent should show what's behind it, but it doesn't..
+                              //color: Color(0xffE49273),
+                              //color: Colors.transparent,
 
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: DetailScreen(
-                                    activity: _allActivities.activities[index], callbackDetail: callbackDetail),                                
-                                    // this is NOT a thing we should do and it doesn't worki :)
-                                    //controller: new FABController()
-                                  ),                              
-                              );
-                            }),                          
+                              padding: const EdgeInsets.all(16.0),
+                              child: DetailScreen(
+                                  activity: _allActivities.activities[index],
+                                  callbackDetail: callbackDetail),
+                              // this is NOT a thing we should do and it doesn't worki :)
+                              //controller: new FABController()
+                            ),
+                            floatingActionButton: Container(
+                              height: 80,
+                              width: 90,
+                              child: FloatingActionButton(                                
+                                onPressed: () {
+                                  setState((){});
+                                  Navigator.pop(context);
+                                },
+                                tooltip: 'Save and close',
+                                child: Icon(Icons.save),
+                                elevation: 12,
+                              ),
+                            ),
+                            floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
                           );
+                        }),
+                      );
                     },
                     child: GridTile(
                       child:

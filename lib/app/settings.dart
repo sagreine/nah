@@ -32,8 +32,7 @@ class _SettingsState extends State<Settings> {
     // only actually want this run once? or does flutter handle that (text == text, so no need to repaint?)
     // also probably just not the right way to do this at all but yeah.
     // not incorrect display, anyway
-    // TODO: This is a default setting to not stop them in their tracks
-    // could push them directly to settings page, snackbar them to, even a flyin widget to edit it.
+
     if (appSettings != null) {
       _lifePointsController.text = appSettings.lifePointsCeilling.toString();
     }
@@ -86,6 +85,7 @@ class _SettingsState extends State<Settings> {
                 // update the global setting to the new value and print for debug
                 // TODO: this will break things if, e.g., they've select 97 things for today already
                 // and we're changing this to say 5. how will Today handle that? List?
+                // just ... not handling right now
                 onSubmitted: (String value) {
                   container.updateAppSettings(int.parse(value));
                   print(container.appSettings.lifePointsCeilling.toString());

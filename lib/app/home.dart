@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:nah/app/list.dart';
 import 'package:nah/app/timeline_insert.dart';
-import 'package:nah/app/today.dart';
 import 'package:nah/app/detail.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nah/app/settings.dart'; // remove once no pass blank Activity..
@@ -111,8 +110,7 @@ class _MyHomeState extends State<MyHome> {
           onPressed: () {},
         ),*/
       );
-
-      //Scaffold.of(context).showSnackBar(snack);
+      
       scaffoldState.currentState.showSnackBar(snack);
       _listFabController.onFab();
 
@@ -120,18 +118,15 @@ class _MyHomeState extends State<MyHome> {
       // this is abuse of a lot of things and dangerous -> would need to enforce only one ourList (list) to rely on this....
       // routing and creating a new one and handling it within that class is a much safer way to do this (and internal list of selectedActivities is way better)
       // this is fine for a very simple app i guess though. but i'll probably just use routing in the future.
-
     }
-
     // detail
     else if (bottomSelectedIndex == ScreenIndex.detail.index) {
-      // snackbaer
+      // snackbar
       _detailFabController.onFab();
       // return to the list page -> do we always want this? or just for now
       // and later change if we get a hero animation from the timeline page
       bottomTapped(ScreenIndex.list.index);
     }
-
     //
     // today
     else {
