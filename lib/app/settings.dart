@@ -47,9 +47,9 @@ class _SettingsState extends State<Settings> {
           // get lifepoints if you want
           Padding(
         padding: EdgeInsets.all(10),
-        child: Column(
-          //crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(          
           children: <Widget>[
+            // Row for editing lifepoints
             Row(
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
@@ -114,6 +114,7 @@ class _SettingsState extends State<Settings> {
                 ),
               ],
             ),
+            // let them rewatch onboarding from settings page
             Row(
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
@@ -137,23 +138,25 @@ class _SettingsState extends State<Settings> {
                           ),
                         ),
                         FlatButton(
-                            child: Container(
-                              alignment: Alignment.centerLeft,
-                              padding: const EdgeInsets.all(15),
-                              height: 50,
-                              width: 150,
-                              color: Colors.blueGrey[200],
-                              child: Text("See Instructions"),
-                            ),
-                            onPressed: () {
-                              print("pressed info!");
-                              Navigator.of(context).push(
-                        MaterialPageRoute<void>(
-                            builder: (BuildContext context) {
-                              return Scaffold(
-                                  body: Container(child: IntroScreen()));
-                            },),);
-                            },
+                          child: Container(
+                            alignment: Alignment.centerLeft,
+                            padding: const EdgeInsets.all(15),
+                            height: 50,
+                            width: 150,
+                            color: Colors.blueGrey[200],
+                            child: Text("See Instructions"),
+                          ),
+                          onPressed: () {
+                            print("pressed info!");
+                            Navigator.of(context).push(
+                              MaterialPageRoute<void>(
+                                builder: (BuildContext context) {
+                                  return Scaffold(
+                                      body: Container(child: IntroScreen()));
+                                },
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),
