@@ -4,15 +4,14 @@ import 'package:nah/app/login.dart';
 
 
 
-// persistence on-device -
-// look at direction of up/down arrows on detail
-// take them straight to settings?
+
 // test on ios
 // release
 
-// fancy flip boxes
 // only if we really, really want to:
-// login vertical or horizontal
+// fancy flip boxes
+// persistence on-device -
+// login vertical or horizontal - iceland video, plus sound, if horizontal!
 // make them actually submit before moving on, on Detail.
 //  timelines -> running total of lifepoints on left? total used at top?
 // enable pick from gallery? need to check duplicates elsewhere if so... (Edit page specifically)
